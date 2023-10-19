@@ -1,0 +1,92 @@
+import React, { useReducer } from "react";
+
+interface State {
+  userInfo: any;
+  cart: {
+    paymentMethod: string;
+    cartItems: any[];
+  };
+}
+
+type Action =
+  | { type: "CART_ADD_ITEM"; payload: any }
+  | { type: "CART_REMOVE_ITEM"; payload: { _id: string } }
+  | { type: "CART_CLEAR" }
+  | { type: "USER_SIGNIN"; payload: any }
+  | { type: "USER_SIGNOUT" }
+  | { type: "SAVE_PAYMENT_METHOD"; payload: string };
+
+const initialState: State = {
+  userInfo: localStorage.getItem("user_info")
+    ? //JSON.parse(localStorage.getItem("user_info") || '{}')
+      JSON.parse(localStorage.getItem("user_info")!)
+    : null,
+  cart: {
+    paymentMethod: localStorage.getItem("payment_method") || "",
+    cartItems: localStorage.getItem("cart_items")
+      ? JSON.parse(localStorage.getItem("cart_items")!)
+      : [],
+  },
+};
+
+function reducer(state: State, action: Action): State {
+  switch (action.type) {
+    case "CART_ADD_ITEM": {
+      // add to cart
+      const newItem = action.payload;
+      const existItem = state.cart.cartItems.find(
+        (item) => item._id === newItem._id
+      );
+      const cartItems = existItem
+        ? state.cart.cartItems.map((item) =>
+            item._id === existItem._id ? newItem : item
+          )
+        : [...state.cart.cartItems, newItem];
+      localStorage.setItem("cart_items", JSON.stringify(cartItems));
+      return {
+        ...state,
+        cart: { ...state.cart, cartItems },
+      };
+    }
+    case "CART_REMOVE_ITEM": {
+      const cartItems = state.cart.cartItems.filter(
+        (item) => item._id !== action.payload._id
+      );
+      localStorage.setItem("cart_items", JSON.stringify(cartItems));
+      return { ...state, cart: { ...state.cart, cartItems } };
+    }
+    case "CART_CLEAR":
+      return { ...state, cart: { ...state.cart, cartItems: [] } };
+    case "USER_SIGNIN":
+      return { ...state, userInfo: action.payload };
+    case "USER_SIGNOUT":
+      return {
+        ...state,
+        userInfo: null,
+        cart: {
+          cartItems: [],
+          paymentMethod: "",
+        },
+      };
+
+    case "SAVE_PAYMENT_METHOD":
+      return {
+        ...state,
+        cart: { ...state.cart, paymentMethod: action.payload },
+      };
+    default:
+      return state;
+  }
+}
+
+export const Store = React.createContext<
+  { state: State; dispatch: React.Dispatch<Action> } | undefined
+>(undefined);
+
+const StoreProvider = (props: { children: React.ReactNode }) => {
+  const [state, dispatch] = useReducer(reducer, initialState);
+  const value = { state, dispatch };
+  return <Store.Provider value={value}>{props.children}</Store.Provider>;
+};
+
+export default StoreProvider;
