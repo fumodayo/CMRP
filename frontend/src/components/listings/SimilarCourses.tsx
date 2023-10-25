@@ -1,15 +1,30 @@
-import { Courses } from "../../models/courses";
+import { useState, useEffect } from "react";
 import CourseCard from "./CourseCard";
+import { Course } from "../../types";
+import axios from "axios";
+import { courses } from "../../utils/data.sample";
 
 const SimilarCourses = () => {
+  const [coursesData, setCoursesData] = useState<Course[]>(courses);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const { data } = await axios.get("http://localhost:8080/api/course");
+      const { courses } = data;
+      setCoursesData(courses);
+    };
+    fetchData();
+  }, []);
+
   return (
     <div className="flex justify-between py-5">
-      {Courses.slice(0, 3).map((item) => (
+      {coursesData.slice(0, 4).map((item) => (
         <CourseCard
+          id={item._id}
           image={item.image}
-          time={item.time}
+          endDate={item.endDate}
           name={item.name}
-          type={item.type}
+          location={item.location}
           author={item.author}
           rating={item.rating}
           price={item.price}

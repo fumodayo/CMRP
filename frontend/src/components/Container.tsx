@@ -1,5 +1,5 @@
 const Container = ({ children }: { children: React.ReactNode }) => {
-  return <div className="mx-[200px] xl:[450px] my-5">{children}</div>;
+  return <div className="mx-[90px] 2xl:mx-[280px] my-5 min-h-[750px]">{children}</div>;
 };
 
 export default Container;

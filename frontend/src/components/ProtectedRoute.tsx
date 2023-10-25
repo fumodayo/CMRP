@@ -12,7 +12,11 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
   const userInfo = state?.userInfo;
   console.log("userInfo", userInfo);
 
-  return userInfo ? children : <Navigate to="/signin" />;
+  return userInfo && userInfo.role === "user" ? (
+    children
+  ) : (
+    <Navigate to="/signin" />
+  );
 };
 
 export default ProtectedRoute;

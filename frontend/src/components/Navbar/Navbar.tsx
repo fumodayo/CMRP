@@ -1,18 +1,36 @@
 import { useNavigate } from "react-router-dom";
 import { BiSearch } from "react-icons/bi";
 import { HiBell } from "react-icons/hi2";
-import { MdSettings } from "react-icons/md";
+import { MdLogout } from "react-icons/md";
 import { AiOutlineShoppingCart } from "react-icons/ai";
-import Container from "../Container";
+import { useContext, useState } from "react";
+import { Store } from "../../context/Store";
 
 const Navbar = () => {
-  const isHaveUser = false;
+  const { state, dispatch: ctxDispatch } = useContext(Store) || {};
+  const { cart, userInfo } = state;
+  const [search, setSearch] = useState("");
+
+  const handleSearchChange = (e: any) => {
+    setSearch(e.target.value);
+    ctxDispatch({
+      type: "SEARCH",
+      payload: e.target.value,
+    });
+  };
+
   const navigate = useNavigate();
 
+  const signoutHandler = () => {
+    ctxDispatch({ type: "USER_SIGNOUT" });
+    localStorage.removeItem("user_info");
+    window.location.href = "/signin";
+  };
+
   return (
-    <nav className="sticky z-50 top-0 bg-white h-[80px] w-full border border-b-slate-100 shadow-sm">
-      <Container>
-        <ul className="flex items-center justify-between my-5">
+    <nav className="sticky z-50 top-0 bg-white h-[80px] w-full border border-b-slate-100 shadow-sm cursor-pointer">
+      <div className="mx-[90px] 2xl:mx-[280px] my-5">
+        <ul className="flex items-center justify-between my-5 list-none">
           <li
             onClick={() => navigate("/")}
             className="text-slate-700 text-4xl font-bold"
@@ -28,23 +46,33 @@ const Navbar = () => {
             <div className="w-[520px] h-[40px] pl-6 pr-8 py-3 bg-neutral-100 rounded-2xl justify-start items-center gap-2 inline-flex">
               <BiSearch className="text-emerald-400" size={25} />
               <input
+                value={search}
                 className="bg-neutral-100 text-zinc-400 text-sm font-normal appearance-none focus:outline-none"
                 placeholder="Tìm kiếm khóa học..."
+                onChange={handleSearchChange}
               />
             </div>
           </li>
 
-          {isHaveUser ? (
+          {userInfo ? (
             <li className="flex justify-between items-center space-x-5">
               <div className="relative">
                 <HiBell className="relative text-zinc-400" size={25} />
                 <div className="w-[6px] h-[6px] rounded-xl right-0 top-0 absolute bg-emerald-500" />
               </div>
-              <div>
-                <MdSettings className="text-zinc-400" size={25} />
-              </div>
+              <MdLogout
+                onClick={signoutHandler}
+                className="text-zinc-400"
+                size={25}
+              />
               {/* USER PROFILE */}
-              <div className="w-[40px] h-[40px] bg-zinc-300 rounded-2xl" />
+              <img
+                className="relative w-[40px] h-[40px] rounded-2xl object-cover"
+                src={
+                  "https://cdn.lazi.vn/storage/uploads/users/avatar/273850_1571841685.jpg"
+                }
+                alt="course"
+              />
             </li>
           ) : (
             <li className="flex space-x-10 items-center justify-between">
@@ -75,7 +103,7 @@ const Navbar = () => {
             </li>
           )}
         </ul>
-      </Container>
+      </div>
     </nav>
   );
 };

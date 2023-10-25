@@ -1,12 +1,19 @@
 import { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Store } from "../context/Store";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { FaGoogle } from "react-icons/fa";
 import LoginSocial from "../components/inputs/LoginSocial";
 import { ClipLoader } from "react-spinners";
 import { HiArrowSmRight } from "react-icons/hi";
 import Input from "../components/inputs/Input";
+import axios from "axios";
+
+type User = {
+  email: string;
+  password: string;
+  role: string;
+};
 
 const SignUp = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -21,7 +28,20 @@ const SignUp = () => {
   const { state, dispatch: ctxDispatch } = useContext(Store) || {};
   const navigate = useNavigate();
 
-  const onSubmit = (data) => {
+  const { search } = useLocation();
+  const redirectUrl = new URLSearchParams(search).get("redirect");
+  const redirect = redirectUrl ? redirectUrl : "/";
+
+  const onSubmit = async (user: User) => {
+    const { email, password, role } = user;
+    const { data } = await axios.post("http://localhost:8080/api/user/signup", {
+      email,
+      password,
+      role,
+    });
+    ctxDispatch({ type: "USER_SIGNIN", payload: data });
+    localStorage.setItem("user_info", JSON.stringify(data));
+    navigate(redirect || "/");
     console.log(data);
   };
 
@@ -36,6 +56,12 @@ const SignUp = () => {
 
   return (
     <div className="w-full p-8 py-12 my-20 mx-auto sm:max-w-lg">
+      <h1
+        onClick={() => navigate("/")}
+        className="text-2xl font-semibold text-neutral-400 hover:underline cursor-pointer"
+      >
+        Logo
+      </h1>
       <h2 className="mb-2 text-3xl font-semibold text-neutral-900 font-display">
         Tạo tài khoản
       </h2>
@@ -78,6 +104,11 @@ const SignUp = () => {
                   /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[~`!@#$%^&*()--+={}\[\]|\\:;"'<>,.?_₹])/,
               }}
             />
+            <select {...register("role")}>
+              <option value="user">user</option>
+              <option value="admin">admin</option>
+              <option value="instructor">instructor</option>
+            </select>
             <span className="block mt-4 text-sm sm:text-xs text-neutral-600">
               By creating an account, you agree to our
               <a className="text-neutral-900 hover:underline font-medium mx-1">

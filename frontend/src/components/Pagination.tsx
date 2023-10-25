@@ -2,22 +2,24 @@ import { useState, useEffect } from "react";
 import { GrFormPrevious, GrFormNext } from "react-icons/gr";
 
 interface PaginationProps {
+  currentPage: number;
   totalPage: number;
   onCurrentPage: (currentPage: number) => void;
 }
 
 const Pagination: React.FC<PaginationProps> = ({
+  currentPage,
   totalPage,
   onCurrentPage,
 }) => {
-  const [currentPage, setCurrentPage] = useState(0);
+  const [current, setCurrentPage] = useState(currentPage);
 
   const handlePreviousPage = () => {
-    if (currentPage > 1) setCurrentPage(currentPage - 1);
+    if (current > 1) setCurrentPage(current - 1);
   };
 
   const handleNextPage = () => {
-    if (currentPage < totalPage) setCurrentPage(currentPage + 1);
+    if (current < totalPage) setCurrentPage(current + 1);
   };
 
   const pageNumbers = Array.from(
@@ -26,8 +28,8 @@ const Pagination: React.FC<PaginationProps> = ({
   );
 
   useEffect(() => {
-    onCurrentPage(currentPage);
-  }, [currentPage]);
+    onCurrentPage(current);
+  }, [current]);
 
   return (
     <div className="flex items-center justify-center space-x-3 cursor-pointer">

@@ -12,7 +12,7 @@ type CourseCard = {
 export const Courses: CourseCard[] = [
   {
     image: "/images/course.png",
-    time: "2023-10-11T00:00:00.000Z",
+    time: "2023-10-23T00:00:00.000Z",
     name: "Fullstack Developer",
     type: "Online",
     author: "Ths. Lê Thanh Sang",
@@ -22,7 +22,7 @@ export const Courses: CourseCard[] = [
   },
   {
     image: "/images/course.png",
-    time: "2023-10-10T00:00:00.000Z",
+    time: "2023-10-22T00:00:00.000Z",
     name: "Fullstack Developer",
     type: "Online",
     author: "Ths. Lê Thanh Sang",
@@ -32,7 +32,7 @@ export const Courses: CourseCard[] = [
   },
   {
     image: "/images/course.png",
-    time: "2023-10-17T00:00:00.000Z",
+    time: "2023-10-27T00:00:00.000Z",
     name: "Fullstack Developer",
     type: "Online",
     author: "Ths. Lê Thanh Sang",
@@ -42,7 +42,7 @@ export const Courses: CourseCard[] = [
   },
   {
     image: "/images/course.png",
-    time: "2023-10-17T00:00:00.000Z",
+    time: "2023-10-27T00:00:00.000Z",
     name: "Fullstack Developer",
     type: "Online",
     author: "Ths. Lê Thanh Sang",
@@ -52,7 +52,7 @@ export const Courses: CourseCard[] = [
   },
   {
     image: "/images/course.png",
-    time: "2023-10-17T00:00:00.000Z",
+    time: "2023-10-27T00:00:00.000Z",
     name: "Fullstack Developer",
     type: "Online",
     author: "Ths. Lê Thanh Sang",
@@ -62,7 +62,7 @@ export const Courses: CourseCard[] = [
   },
   {
     image: "/images/course.png",
-    time: "2023-10-17T00:00:00.000Z",
+    time: "2023-10-27T00:00:00.000Z",
     name: "Fullstack Developer",
     type: "Online",
     author: "Ths. Lê Thanh Sang",
@@ -72,7 +72,7 @@ export const Courses: CourseCard[] = [
   },
   {
     image: "/images/course.png",
-    time: "2023-10-17T00:00:00.000Z",
+    time: "2023-10-27T00:00:00.000Z",
     name: "Fullstack Developer",
     type: "Online",
     author: "Ths. Lê Thanh Sang",
@@ -82,7 +82,7 @@ export const Courses: CourseCard[] = [
   },
   {
     image: "/images/course.png",
-    time: "2023-10-17T00:00:00.000Z",
+    time: "2023-10-27T00:00:00.000Z",
     name: "Fullstack Developer",
     type: "Online",
     author: "Ths. Lê Thanh Sang",

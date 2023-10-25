@@ -1,4 +1,4 @@
-export function countdownDaysToEvent(eventDateISO: string) {
+export function countdownDaysToEvent(eventDateISO: string = "") {
   // Get the current date
   const currentDate = new Date();
 

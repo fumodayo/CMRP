@@ -119,7 +119,7 @@ const Input: React.FC<InputProps> = ({
             Mật khẩu không được dài hơn 24 ký tự.
           </p>
         )}
-        {(id === "email" || id === "password") && errorMessage && (
+        {(id === "email" || id === "password") && errorMessage && !error && (
           <p className="mt-1 text-sm text-red-400">
             Tài khoản hoặc mật khẩu không đúng.
           </p>

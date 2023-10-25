@@ -1,19 +1,20 @@
 import { Rating } from "@mui/material";
+import { formatDate } from "../../utils/formatDate";
 
 interface CommentProps {
-  name?: string;
+  user_name?: string;
   avatar?: string;
   rating: number;
-  time?: string;
-  content?: string;
+  createdAt?: string;
+  comment?: string;
 }
 
 const Comment: React.FC<CommentProps> = ({
-  name,
+  user_name,
   avatar,
   rating,
-  time,
-  content,
+  createdAt,
+  comment,
 }) => {
   return (
     <div className="space-y-5 ring-2 ring-emerald-200 p-5 shadow-xl rounded-xl">
@@ -29,7 +30,7 @@ const Comment: React.FC<CommentProps> = ({
           )}
         </div>
         <div>
-          <h3 className="text-slate-700 font-semibold">{name}</h3>
+          <h3 className="text-slate-700 font-semibold">{user_name}</h3>
           <div className="flex items-center space-x-2 text-slate-400">
             <span className="text-slate-700 font-medium">{rating}</span>
             <Rating
@@ -39,11 +40,11 @@ const Comment: React.FC<CommentProps> = ({
               readOnly
             />
             <span>|</span>
-            <span>{time}</span>
+            <span>{formatDate(createdAt)}</span>
           </div>
         </div>
       </div>
-      <p className="text-slate-700 font-medium">{content}</p>
+      <p className="text-slate-700 font-medium">{comment}</p>
     </div>
   );
 };

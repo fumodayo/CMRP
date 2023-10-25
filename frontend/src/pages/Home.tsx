@@ -1,10 +1,12 @@
-
 import UserLayout from "../layouts/UserLayout";
 import Chip from "../components/listings/Chip";
-import { Courses } from "../models/courses";
 import CourseCard from "../components/listings/CourseCard";
 import Pagination from "../components/Pagination";
 import Container from "../components/Container";
+import { useEffect, useState, useContext } from "react";
+import { Course } from "../types";
+import axios from "axios";
+import { Store } from "../context/Store";
 
 interface CourseField {
   name: string;
@@ -24,26 +26,25 @@ export const CourseField: React.FC<CourseField> = ({ name, active }) => {
 };
 
 const Home = () => {
+  const [coursesData, setCourseData] = useState<Course[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(1);
+  const [currentType, setCurrentType] = useState("");
+  const { state, dispatch: ctxDispatch } = useContext(Store);
+  const { search } = state;
+
   const type = [
     {
-      name: "Lập trình",
-      active: true,
+      name: "",
+    },
+    {
+      name: "vẽ",
     },
     {
       name: "Thiết kế",
-      active: false,
-    },
-    {
-      name: "Âm nhạc",
-      active: false,
-    },
-    {
-      name: "Nhiếp ảnh",
-      active: false,
     },
     {
       name: "Phát triển bản thân",
-      active: false,
     },
   ];
 
@@ -63,8 +64,25 @@ const Home = () => {
   ];
 
   const handlePageChange = (currentPage: number) => {
-    console.log(currentPage);
+    setCurrentPage(currentPage);
   };
+
+  const handleTypeChange = (item: string) => {
+    setCurrentType(item);
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const { data } = await axios.get(
+        `http://localhost:8080/api/course?type=${currentType}&page=${currentPage}&search=${search}`
+      );
+      const { courses, page, pages } = data;
+      setCourseData(courses);
+      setPageSize(pages);
+      setCurrentPage(page);
+    };
+    fetchData();
+  }, [currentPage, currentType, search]);
 
   return (
     <UserLayout>
@@ -75,7 +93,12 @@ const Home = () => {
           </h1>
           <div className="flex space-x-2">
             {type.map((item) => (
-              <Chip key={item.name} name={item.name} active={item.active} />
+              <Chip
+                key={item.name}
+                name={item.name}
+                currentType={currentType}
+                onCurrentType={handleTypeChange}
+              />
             ))}
           </div>
         </section>
@@ -86,13 +109,14 @@ const Home = () => {
             ))}
           </div>
           <hr className="w-full border" />
-          <div className="py-5 grid grid-cols-4 grid-flow-row gap-5">
-            {Courses.map((item) => (
+          <div className="min-h-[500px] py-5 grid grid-cols-4 grid-flow-row gap-5">
+            {coursesData.map((item) => (
               <CourseCard
+                id={item._id}
                 image={item.image}
-                time={item.time}
+                endDate={item.endDate}
                 name={item.name}
-                type={item.type}
+                location={item.location}
                 author={item.author}
                 rating={item.rating}
                 price={item.price}
@@ -101,7 +125,11 @@ const Home = () => {
             ))}
           </div>
         </section>
-        <Pagination totalPage={5} onCurrentPage={handlePageChange} />
+        <Pagination
+          currentPage={Number(currentPage)}
+          totalPage={pageSize}
+          onCurrentPage={handlePageChange}
+        />
       </Container>
     </UserLayout>
   );

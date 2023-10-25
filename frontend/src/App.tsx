@@ -3,16 +3,17 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Home from "./pages/Home";
 import ProtectedRoute from "./components/ProtectedRoute";
-import User from "./pages/User";
 import SignIn from "./pages/SignIn";
 import AdminRoute from "./components/AdminRoute";
-import Admin from "./pages/Admin";
+import Admin from "./pages/admin/Admin";
 import InstructorRoute from "./components/InstructorRoute";
-import Instructor from "./pages/Instructor";
+import Instructor from "./pages/instructor/Instructor";
 import NotFound from "./pages/NotFound";
 import SignUp from "./pages/SignUp";
 import Cart from "./pages/Cart";
 import DetailCourse from "./pages/DetailCourse";
+import Profile from "./pages/user/Profile";
+import Checkout from "./pages/Checkout";
 
 function App() {
   return (
@@ -23,14 +24,15 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/cart" element={<Cart />} />
+            <Route path="/checkout" element={<Checkout />} />
             <Route path="/signin" element={<SignIn />} />
             <Route path="/signup" element={<SignUp />} />
-            <Route path="/course/:slug" element={<DetailCourse />} />
+            <Route path="/course/:id" element={<DetailCourse />} />
             <Route
-              path="/user"
+              path="/profile"
               element={
                 <ProtectedRoute>
-                  <User />
+                  <Profile />
                 </ProtectedRoute>
               }
             />

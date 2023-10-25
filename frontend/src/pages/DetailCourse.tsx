@@ -1,5 +1,5 @@
-import { useParams } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect, useContext } from "react";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { FaCheckCircle } from "react-icons/fa";
 import { Tab } from "@headlessui/react";
 import { Rating } from "@mui/material";
@@ -15,6 +15,12 @@ import Reviews from "../components/listings/Reviews";
 
 import { countdownDaysToEvent } from "../utils/countdownDaysToEvent";
 import { formatPrice } from "../utils/formatPrice";
+import { Store } from "../context/Store";
+import { courses } from "../utils/data.sample";
+import { formatDate } from "../utils/formatDate";
+
+import { CartItem, Course } from "../types";
+import axios from "axios";
 
 function classNames(...classes: any) {
   return classes.filter(Boolean).join(" ");
@@ -22,13 +28,66 @@ function classNames(...classes: any) {
 
 const DetailCourse = () => {
   const params = useParams();
-  // console.log(params);
+  console.log(params);
+  const navigator = useNavigate();
 
-  const [rating, setRating] = useState(3.5);
+  const { state, dispatch: ctxDispatch } = useContext(Store) || "{}";
   const [isShowTitle, setShowTitle] = useState(true);
 
   const headerTabs = ["About", "Review"];
   const totalLesion = ["20 chuyên đề", "68 bài giảng", "Hơn 800 bài tập"];
+
+  const [courseData, setCourseData] = useState<Course>(courses[0]);
+  useEffect(() => {
+    const { id } = params;
+    const fetchData = async () => {
+      const { data } = await axios.get(
+        `http://localhost:8080/api/course/${id}`
+      );
+      setCourseData(data);
+    };
+    fetchData();
+  }, [params]);
+
+  const addToCartHandler = () => {
+    const courseItem: CartItem = {
+      _id: _id,
+      image: image,
+      endDate: endDate,
+      name: name,
+      author: author,
+      location: location,
+      rating: rating,
+      total_student: total_student,
+      price: price,
+    };
+    ctxDispatch({
+      type: "CART_ADD_ITEM",
+      payload: { ...courseItem },
+    });
+    navigator("/cart");
+  };
+
+  console.log(courseData);
+
+  const {
+    _id,
+    name,
+    author,
+    image,
+    syllabus,
+    description,
+    price,
+    rating,
+    thumbnail,
+    author_image,
+    total_student,
+    total_review,
+    createdAt,
+    startDate,
+    endDate,
+    location,
+  } = courseData;
 
   return (
     <UserLayout>
@@ -38,13 +97,9 @@ const DetailCourse = () => {
           <div className="flex space-x-5 pt-6 pb-10">
             <div className="w-1/2 space-y-5">
               <h1 className="text-slate-700 text-4xl font-bold">
-                Hoá học cơ bản - Thầy Vũ Khắc Ngọc
+                {name} - {author}
               </h1>
-              <p className="text-zinc-400">
-                Tham gia khóa PEN-I môn Hóa học của Thầy Vũ Khắc Ngọc, các em sẽ
-                có những phương pháp làm đề thi tốt nghiệp THPT môn Hóa học hay
-                nhất, giúp các em thành thạo mọi dạng bài thường gặp trong thi.
-              </p>
+              <p className="text-zinc-400">{syllabus}</p>
               <div className="text-zinc-400 flex space-x-3 items-center">
                 <div className="text-slate-700 font-medium">{rating}</div>
                 <Rating
@@ -54,19 +109,19 @@ const DetailCourse = () => {
                   readOnly
                 />
                 <span>|</span>
-                <div>Review (1K)</div>
+                <div>Review ({total_review})</div>
                 <span>|</span>
-                <div>10k Học viên</div>
+                <div>{total_student} Học viên</div>
               </div>
               <div className="flex space-x-3 items-center">
                 <div className="relative w-[45px] h-[35px] ">
                   <img
                     className="relative w-[45px] h-[35px] rounded-md object-cover"
-                    src="/images/avatar.png"
+                    src={author_image}
                     alt="author"
                   />
                 </div>
-                <span className="text-zinc-400">Thầy Vũ Khắc Ngọc</span>
+                <span className="text-zinc-400">{author}</span>
               </div>
               <Tab.Group>
                 <Tab.List className="flex w-full border-b-2 border-zinc-300">
@@ -87,7 +142,7 @@ const DetailCourse = () => {
                 </Tab.List>
                 <Tab.Panels>
                   <Tab.Panel>
-                    <Detail />
+                    <Detail description={description} />
                   </Tab.Panel>
                   <Tab.Panel>
                     <Reviews />
@@ -100,25 +155,23 @@ const DetailCourse = () => {
                 <div className="relative">
                   <YouTube
                     iframeClassName="relative rounded-2xl w-[500px] h-[300px]"
-                    videoId={"9vJRopau0g0"}
+                    videoId={thumbnail}
                     onPlay={() => setShowTitle(false)}
                     onPause={() => setShowTitle(true)}
                   />
                   {isShowTitle && (
                     <div className="absolute bottom-0 rounded-bl-xl rounded-tr-xl bg-red-500 px-6 py-4 text-sm text-white">
-                      {countdownDaysToEvent(
-                        "Tue Oct 10 2023 21:55:12 GMT+0700"
-                      )}
+                      {countdownDaysToEvent(startDate)}
                     </div>
                   )}
                 </div>
                 <h2 className="text-3xl text-slate-700 font-bold">
-                  {formatPrice(1000000)}
+                  {formatPrice(price)}
                   <span className="text-emerald-400">đ</span>
                 </h2>
                 <div className="space-y-3">
                   <h3 className="font-medium text-slate-700 text-lg">
-                    What will you learn:
+                    Khóa học bao gồm:
                   </h3>
                   {totalLesion.map((item) => (
                     <div className="flex text-slate-700 text-sm items-center">
@@ -131,19 +184,32 @@ const DetailCourse = () => {
                   ))}
                 </div>
                 <div className="flex space-x-3">
-                  <h3 className="font-medium text-slate-700 text-lg">Time:</h3>
+                  <h3 className="font-medium text-slate-700 text-lg">
+                    Thời gian:
+                  </h3>
                   <div className=" text-slate-700 text-sm space-y-5 pt-1">
-                    <p>Ngày bắt đầu học theo lộ trình: 6/12/2023</p>
-                    <p>Ngày bắt đầu đăng kí: 8/10/2023 - Hạn: 20/11/2023</p>
-                    <p>Ngày bế giảng: 31/8/2024</p>
+                    <p>
+                      Ngày bắt đầu học theo lộ trình: {formatDate(startDate)}
+                    </p>
+                    <p>
+                      Ngày bắt đầu đăng kí: {formatDate(createdAt)} - Hạn:
+                      {formatDate(startDate)}
+                    </p>
+                    <p>Ngày bế giảng: {formatDate(endDate)}</p>
                   </div>
                 </div>
               </div>
               <div className="flex space-x-5 py-5">
-                <div className="min-w-[250px] flex items-center justify-center text-lg rounded-xl ring-2 ring-emerald-200 px-5 py-3 hover:shadow-md cursor-pointer ">
+                <div
+                  onClick={addToCartHandler}
+                  className="min-w-[250px] flex items-center justify-center text-lg rounded-xl ring-2 ring-emerald-200 px-5 py-3 hover:shadow-md cursor-pointer "
+                >
                   Thêm vào giỏ
                 </div>
-                <div className="min-w-[250px] flex items-center justify-center text-lg rounded-xl px-5 py-3 hover:shadow-md cursor-pointer bg-emerald-500 text-white">
+                <div
+                  onClick={() => navigator("/checkout")}
+                  className="min-w-[250px] flex items-center justify-center text-lg rounded-xl px-5 py-3 hover:shadow-md cursor-pointer bg-emerald-500 text-white"
+                >
                   Mua ngay
                 </div>
               </div>

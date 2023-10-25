@@ -6,9 +6,11 @@ interface State {
     paymentMethod: string;
     cartItems: any[];
   };
+  search: string;
 }
 
 type Action =
+  | { type: "SEARCH"; payload: any }
   | { type: "CART_ADD_ITEM"; payload: any }
   | { type: "CART_REMOVE_ITEM"; payload: { _id: string } }
   | { type: "CART_CLEAR" }
@@ -27,30 +29,46 @@ const initialState: State = {
       ? JSON.parse(localStorage.getItem("cart_items")!)
       : [],
   },
+  search: "",
 };
 
 function reducer(state: State, action: Action): State {
   switch (action.type) {
+    case "SEARCH": {
+      const word = action.payload;
+      return { ...state, search: word };
+    }
     case "CART_ADD_ITEM": {
-      // add to cart
+      // Thêm vào giỏ hàng
       const newItem = action.payload;
-      const existItem = state.cart.cartItems.find(
-        (item) => item._id === newItem._id
-      );
-      const cartItems = existItem
-        ? state.cart.cartItems.map((item) =>
-            item._id === existItem._id ? newItem : item
-          )
-        : [...state.cart.cartItems, newItem];
-      localStorage.setItem("cart_items", JSON.stringify(cartItems));
-      return {
-        ...state,
-        cart: { ...state.cart, cartItems },
-      };
+      const cartItems = state.cart.cartItems;
+      const existingItem = cartItems.find((item) => item.id === newItem.id);
+
+      if (existingItem) {
+        // Cập nhật sản phẩm đã có trong giỏ hàng
+        const updatedItem = { ...existingItem, ...newItem };
+        const updatedCart = cartItems.map((item) =>
+          item.id === existingItem.id ? updatedItem : item
+        );
+        localStorage.setItem("cart_items", JSON.stringify(updatedCart));
+        return {
+          ...state,
+          cart: { ...state.cart, cartItems: updatedCart },
+        };
+      } else {
+        // Thêm sản phẩm mới vào giỏ hàng
+        const updatedCart = [...cartItems, newItem];
+        localStorage.setItem("cart_items", JSON.stringify(updatedCart));
+        return {
+          ...state,
+          cart: { ...state.cart, cartItems: updatedCart },
+        };
+      }
     }
     case "CART_REMOVE_ITEM": {
       const cartItems = state.cart.cartItems.filter(
-        (item) => item._id !== action.payload._id
+        // (item) => item._id !== action.payload._id
+        (item) => item._id !== action.payload
       );
       localStorage.setItem("cart_items", JSON.stringify(cartItems));
       return { ...state, cart: { ...state.cart, cartItems } };
