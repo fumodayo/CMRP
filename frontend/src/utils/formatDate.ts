@@ -1,9 +1,6 @@
-export function formatDate(inputDate = ""): string {
-  const date = new Date(inputDate);
-  const day = date.getUTCDate();
-  const month = date.getUTCMonth() + 1;
-  const year = date.getUTCFullYear();
+import dayjs from "dayjs";
 
-  const formattedDate = `${day}/${month}/${year}`;
+export function formatDate(inputDate = ""): string {
+  const formattedDate = dayjs(inputDate).format("DD/MM/YYYY");
   return formattedDate;
 }

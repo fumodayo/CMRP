@@ -1,41 +1,20 @@
-import jwt from "jsonwebtoken";
+export const sendToken = (res, user, statusCode, message) => {
+  const token = user.getJWTToken();
+  const options = {
+    httpOnly: true,
+    expires: new Date(
+      Date.now() + process.env.JWT_COOKIE_EXPIRE * 24 * 60 * 60 * 1000
+    ),
+  };
 
-export const generateToken = (user) => {
-  return jwt.sign(
-    {
-      _id: user._id,
-      name: user.name,
-      email: user.email,
-      role: user.role,
-    },
-    process.env.JWT_SECRET,
-    {
-      expiresIn: "30d",
-    }
-  );
-};
+  const userData = {
+    id: user._id,
+    email: user.email,
+    role: user.role,
+  };
 
-export const isAuth = (req, res, next) => {
-  const authorization = req.headers.authorization;
-  if (authorization) {
-    const token = authorization.slice(7, authorization.length); // Bearer XXXXXX
-    jwt.verify(token, process.env.JWT_SECRET, (err, decode) => {
-      if (err) {
-        res.status(401).send({ message: "Invalid Token" });
-      } else {
-        req.user = decode;
-        next();
-      }
-    });
-  } else {
-    res.status(401).send({ message: "No Token" });
-  }
-};
-
-export const isAdmin = (req, res, next) => {
-  if (req.user && req.user.role === "admin") {
-    next();
-  } else {
-    res.status(401).send({ message: "Invalid Admin Token" });
-  }
+  res
+    .status(statusCode)
+    .cookie("token", token, options)
+    .json({ success: true, message, data: userData });
 };

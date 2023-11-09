@@ -16,6 +16,7 @@ interface InputProps {
   errors: FieldErrors;
   errorMessage?: boolean;
   type?: string;
+  onChange?: (e: any) => void;
 }
 
 const Input: React.FC<InputProps> = ({
@@ -27,8 +28,10 @@ const Input: React.FC<InputProps> = ({
   errors,
   errorMessage,
   type = "text",
+  onChange,
 }) => {
   const [showPassword, setShowPassword] = useState(false);
+
   const togglePassword = () => {
     setShowPassword((showPassword) => !showPassword);
   };
@@ -44,6 +47,7 @@ const Input: React.FC<InputProps> = ({
           placeholder={placeholder + "..."}
           {...register(id, { required, ...rules })}
           type={id === "password" ? (showPassword ? "text" : "password") : type}
+          onChange={onChange}
           className={`
             w-full 
             block 

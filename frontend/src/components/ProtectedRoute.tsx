@@ -8,9 +8,7 @@ interface ProtectedRouteProps {
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
   const { state } = useContext(Store) ?? {};
-  console.log("state", state);
   const userInfo = state?.userInfo;
-  console.log("userInfo", userInfo);
 
   return userInfo && userInfo.role === "user" ? (
     children

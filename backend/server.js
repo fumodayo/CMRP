@@ -1,5 +1,13 @@
 import { app } from "./app.js";
+import { config } from "dotenv";
+import { connectDatabase } from "./config/database.js";
 
-app.listen(8080, () => {
-  console.log("listening on port 8080");
+config({
+  path: "./config/config.env",
+});
+
+connectDatabase();
+
+app.listen(process.env.PORT, () => {
+  console.log(`listening on port: ` + process.env.PORT);
 });

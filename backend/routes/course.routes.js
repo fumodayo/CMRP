@@ -1,6 +1,6 @@
 import express from "express";
 import expressAsyncHandler from "express-async-handler";
-import Course from "../models/courseModel.js";
+import Course from "../models/course.model.js";
 
 const courseRouter = express.Router();
 

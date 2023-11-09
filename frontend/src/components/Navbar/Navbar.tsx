@@ -33,9 +33,14 @@ const Navbar = () => {
         <ul className="flex items-center justify-between my-5 list-none">
           <li
             onClick={() => navigate("/")}
-            className="text-slate-700 text-4xl font-bold"
+            className="flex items-center text-slate-700 text-sm font-bold"
           >
-            Logo.
+            <img
+              className="relative h-[50px] w-[80px] rounded-xl object-cover mb-2"
+              src={"/images/logo.png"}
+              alt="avatar"
+            />
+            Course Marketplace <br /> Reviews Platform
           </li>
           <li>
             <div className="rounded-xl ring-1 ring-gray-200 px-3 py-1 hover:shadow-md cursor-pointer">
@@ -53,19 +58,30 @@ const Navbar = () => {
               />
             </div>
           </li>
+          <li className="flex justify-between items-center space-x-5">
+            <div className="flex space-x-10 items-center">
+              <div
+                onClick={() => navigate("/create-course")}
+                className="rounded-xl ring-1 ring-gray-200 px-3 py-1 hover:shadow-md cursor-pointer"
+              >
+                Mở khóa học mới
+              </div>
+              <AiOutlineShoppingCart
+                onClick={() => navigate("/cart")}
+                className="cursor-pointer"
+                size={22}
+              />
+            </div>
+          </li>
 
           {userInfo ? (
             <li className="flex justify-between items-center space-x-5">
-              <div className="relative">
-                <HiBell className="relative text-zinc-400" size={25} />
-                <div className="w-[6px] h-[6px] rounded-xl right-0 top-0 absolute bg-emerald-500" />
-              </div>
+              {/* USER PROFILE */}
               <MdLogout
                 onClick={signoutHandler}
                 className="text-zinc-400"
                 size={25}
               />
-              {/* USER PROFILE */}
               <img
                 className="relative w-[40px] h-[40px] rounded-2xl object-cover"
                 src={
@@ -76,16 +92,6 @@ const Navbar = () => {
             </li>
           ) : (
             <li className="flex space-x-10 items-center justify-between">
-              <div className="flex space-x-10 items-center">
-                <div className="rounded-xl ring-1 ring-gray-200 px-3 py-1 hover:shadow-md cursor-pointer">
-                  Mở khóa học mới
-                </div>
-                <AiOutlineShoppingCart
-                  onClick={() => navigate("/cart")}
-                  className="cursor-pointer"
-                  size={22}
-                />
-              </div>
               <div className="flex space-x-2">
                 <div
                   onClick={() => navigate("/signin")}

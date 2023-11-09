@@ -6,14 +6,13 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import SignIn from "./pages/SignIn";
 import AdminRoute from "./components/AdminRoute";
 import Admin from "./pages/admin/Admin";
-import InstructorRoute from "./components/InstructorRoute";
-import Instructor from "./pages/instructor/Instructor";
 import NotFound from "./pages/NotFound";
 import SignUp from "./pages/SignUp";
 import Cart from "./pages/Cart";
 import DetailCourse from "./pages/DetailCourse";
 import Profile from "./pages/user/Profile";
 import Checkout from "./pages/Checkout";
+import CreateCourse from "./pages/user/CreateCourse";
 
 function App() {
   return (
@@ -37,6 +36,22 @@ function App() {
               }
             />
             <Route
+              path="/create-course"
+              element={
+                <ProtectedRoute>
+                  <CreateCourse />
+                </ProtectedRoute>
+              }
+            />
+            {/* <Route
+              path="/instructor/create-course"
+              element={
+                <InstructorRoute>
+                  <CreateCourse />
+                </InstructorRoute>
+              }
+            /> */}
+            <Route
               path="/admin"
               element={
                 <AdminRoute>
@@ -44,14 +59,7 @@ function App() {
                 </AdminRoute>
               }
             />
-            <Route
-              path="/instructor"
-              element={
-                <InstructorRoute>
-                  <Instructor />
-                </InstructorRoute>
-              }
-            />
+
             <Route path="/*" element={<NotFound />} />
           </Routes>
         </main>

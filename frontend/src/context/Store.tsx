@@ -42,7 +42,7 @@ function reducer(state: State, action: Action): State {
       // Thêm vào giỏ hàng
       const newItem = action.payload;
       const cartItems = state.cart.cartItems;
-      const existingItem = cartItems.find((item) => item.id === newItem.id);
+      const existingItem = cartItems.find((item) => item._id === newItem._id);
 
       if (existingItem) {
         // Cập nhật sản phẩm đã có trong giỏ hàng

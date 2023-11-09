@@ -8,6 +8,7 @@ import { ClipLoader } from "react-spinners";
 import { HiArrowSmRight } from "react-icons/hi";
 import Input from "../components/inputs/Input";
 import axios from "axios";
+import { User } from "../types";
 
 const SignIn = () => {
   const navigate = useNavigate();
@@ -26,7 +27,7 @@ const SignIn = () => {
 
   const { state, dispatch: ctxDispatch } = useContext(Store) || {};
 
-  const onSubmit = async (user) => {
+  const onSubmit = async (user: User) => {
     setIsLoading(true);
     try {
       const { email, password } = user;
