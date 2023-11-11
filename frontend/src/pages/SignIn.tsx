@@ -32,20 +32,20 @@ const SignIn = () => {
     try {
       const { email, password } = user;
       const { data } = await axios.post(
-        "http://localhost:8080/api/user/signin",
+        "http://localhost:8080/api/auth/signin",
         {
           email,
           password,
         }
       );
-      ctxDispatch({ type: "USER_SIGNIN", payload: data });
-      localStorage.setItem("user_info", JSON.stringify(data));
+      ctxDispatch({ type: "USER_SIGNIN", payload: data.data });
+      localStorage.setItem("user_info", JSON.stringify(data.data));
       navigate(redirect || "/");
     } catch (error) {
       setErrorMessage(true);
       console.log(error);
     }
-    setErrorMessage(false);
+    setErrorMessage(true);
     setIsLoading(false);
   };
 

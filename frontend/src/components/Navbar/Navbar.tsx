@@ -5,6 +5,7 @@ import { MdLogout } from "react-icons/md";
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import { useContext, useState } from "react";
 import { Store } from "../../context/Store";
+import axios from "axios";
 
 const Navbar = () => {
   const { state, dispatch: ctxDispatch } = useContext(Store) || {};
@@ -21,7 +22,8 @@ const Navbar = () => {
 
   const navigate = useNavigate();
 
-  const signoutHandler = () => {
+  const signoutHandler = async () => {
+    await axios.get("http://localhost:8080/api/auth/logout");
     ctxDispatch({ type: "USER_SIGNOUT" });
     localStorage.removeItem("user_info");
     window.location.href = "/signin";

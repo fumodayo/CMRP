@@ -34,7 +34,7 @@ const SignUp = () => {
 
   const onSubmit = async (user: User) => {
     const { email, password, role } = user;
-    const { data } = await axios.post("http://localhost:8080/api/user/signup", {
+    const { data } = await axios.post("http://localhost:8080/api/auth/signup", {
       email,
       password,
       role,

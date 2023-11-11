@@ -11,6 +11,7 @@ authRouter.post(
   "/signin",
   expressAsyncHandler(async (req, res) => {
     const { email, password } = req.body;
+    console.log(email, password);
 
     const user = await UserModel.findOne({ email }).select("+password");
 
@@ -62,9 +63,15 @@ authRouter.get("/google/callback", (req, res, next) => {
   });
 });
 
-authRouter.get("/google/failure", (res) => res.send("Failed to login"));
+authRouter.get("/google/failure", (res) => {
+  res.send("Failed to login");
+  console.log("Failed to login");
+});
 
-authRouter.get("/protected", (res) => res.send("Profile has been"));
+authRouter.get("/protected", (res) => {
+  res.send("Profile has been");
+  console.log("Profile has been");
+});
 
 /** LOGOUT */
 authRouter.get(

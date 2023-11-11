@@ -67,7 +67,6 @@ function reducer(state: State, action: Action): State {
     }
     case "CART_REMOVE_ITEM": {
       const cartItems = state.cart.cartItems.filter(
-        // (item) => item._id !== action.payload._id
         (item) => item._id !== action.payload
       );
       localStorage.setItem("cart_items", JSON.stringify(cartItems));

@@ -9,7 +9,7 @@ import { useContext } from "react";
 import { CartItem } from "../types";
 
 export const CartItems: React.FC<CartItem> = ({
-  id,
+  _id,
   image,
   endDate,
   name,
@@ -27,7 +27,7 @@ export const CartItems: React.FC<CartItem> = ({
 
   return (
     <div
-      onClick={() => removeItemHandler(id)}
+      onClick={() => removeItemHandler(_id)}
       className="flex items-center space-x-10 cursor-pointer p-5 rounded-xl hover:bg-neutral-100"
     >
       <div className="w-[35px] border border-neutral-700" />

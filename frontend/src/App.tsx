@@ -43,14 +43,6 @@ function App() {
                 </ProtectedRoute>
               }
             />
-            {/* <Route
-              path="/instructor/create-course"
-              element={
-                <InstructorRoute>
-                  <CreateCourse />
-                </InstructorRoute>
-              }
-            /> */}
             <Route
               path="/admin"
               element={
