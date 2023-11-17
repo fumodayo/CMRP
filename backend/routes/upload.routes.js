@@ -8,7 +8,7 @@ const upload = multer();
 
 const uploadRoutes = express.Router();
 
-uploadRoutes.post("/", isAuth, upload.single("file"), async (req, res) => {
+uploadRoutes.post("/", upload.single("file"), async (req, res) => {
   try {
     cloudinary.config({
       cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -30,7 +30,6 @@ uploadRoutes.post("/", isAuth, upload.single("file"), async (req, res) => {
     };
 
     const result = await streamUpload(req);
-    console.log(result);
     return res.send(result);
   } catch (error) {
     return res.status(500).send("Có lỗi xảy ra trong quá trình tải lên");

@@ -8,7 +8,7 @@ export const sendToken = (res, user, statusCode, message) => {
   };
 
   const userData = {
-    id: user._id,
+    _id: user._id,
     email: user.email,
     role: user.role,
   };

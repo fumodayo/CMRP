@@ -6,7 +6,7 @@ const userSchema = new mongoose.Schema(
   {
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
-    role: { type: String, default: "user", required: true },
+    role: { type: Array, default: ["user"], required: true },
   },
   {
     timestamps: true,
@@ -22,7 +22,7 @@ userSchema.pre("save", async function (next) {
 });
 
 userSchema.methods.getJWTToken = function () {
-  return jwt.sign({ id: this.id, role: this.role }, process.env.JWT_SECRET, {
+  return jwt.sign({ _id: this._id, role: this.role }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_COOKIE_EXPIRE * 24 * 60 * 60 * 1000,
   });
 };

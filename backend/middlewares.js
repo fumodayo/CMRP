@@ -11,7 +11,7 @@ export const isAuth = async (req, res, next) => {
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    req.user = await UserModel.findById(decoded.id);
+    req.user = await UserModel.findById(decoded._id);
 
     next();
   } catch (error) {
@@ -43,8 +43,7 @@ export const isAdmin = async (req, res, next) => {
     const { token } = req.cookies;
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    const checked = decoded.role === "admin";
-
+    const checked = decoded.role.includes("admin");
     if (!checked) {
       return res
         .status(401)
