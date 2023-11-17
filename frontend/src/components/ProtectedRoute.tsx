@@ -10,7 +10,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
   const { state } = useContext(Store) ?? {};
   const userInfo = state?.userInfo;
 
-  return userInfo && userInfo.role === "user" ? (
+  return userInfo && userInfo.role.includes("user") ? (
     children
   ) : (
     <Navigate to="/signin" />

@@ -13,6 +13,9 @@ import DetailCourse from "./pages/DetailCourse";
 import Profile from "./pages/user/Profile";
 import Checkout from "./pages/Checkout";
 import CreateCourse from "./pages/user/CreateCourse";
+import Certificate from "./pages/user/Certificate";
+import Review from "./pages/Review";
+import Instructor from "./pages/instructor/Instructor";
 
 function App() {
   return (
@@ -27,6 +30,7 @@ function App() {
             <Route path="/signin" element={<SignIn />} />
             <Route path="/signup" element={<SignUp />} />
             <Route path="/course/:id" element={<DetailCourse />} />
+            <Route path="/review" element={<Review />} />
             <Route
               path="/profile"
               element={
@@ -40,6 +44,22 @@ function App() {
               element={
                 <ProtectedRoute>
                   <CreateCourse />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/certificate"
+              element={
+                <ProtectedRoute>
+                  <Certificate />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/instructor"
+              element={
+                <ProtectedRoute>
+                  <Instructor />
                 </ProtectedRoute>
               }
             />

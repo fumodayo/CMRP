@@ -2,8 +2,6 @@ import { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Store } from "../context/Store";
 import { useLocation, useNavigate } from "react-router-dom";
-import { FaGoogle } from "react-icons/fa";
-import LoginSocial from "../components/inputs/LoginSocial";
 import { ClipLoader } from "react-spinners";
 import { HiArrowSmRight } from "react-icons/hi";
 import Input from "../components/inputs/Input";
@@ -17,7 +15,7 @@ const SignIn = () => {
   const redirect = redirectUrl ? redirectUrl : "/";
 
   const [isLoading, setIsLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const {
     register,
@@ -29,8 +27,8 @@ const SignIn = () => {
 
   const onSubmit = async (user: User) => {
     setIsLoading(true);
+    const { email, password } = user;
     try {
-      const { email, password } = user;
       const { data } = await axios.post(
         "http://localhost:8080/api/auth/signin",
         {
@@ -41,31 +39,25 @@ const SignIn = () => {
       ctxDispatch({ type: "USER_SIGNIN", payload: data.data });
       localStorage.setItem("user_info", JSON.stringify(data.data));
       navigate(redirect || "/");
-    } catch (error) {
-      setErrorMessage(true);
-      console.log(error);
+    } catch (error: any) {
+      setErrorMessage(error.response.data.message);
     }
-    setErrorMessage(true);
     setIsLoading(false);
   };
 
-  const communities = [
-    {
-      icon: FaGoogle,
-      url: "google",
-      name: "google",
-      color: "hover:!bg-[#ea4335] hover:!ring-[#ea4335]",
-    },
-  ];
-
   return (
     <div className="w-full p-8 py-12 my-20 mx-auto sm:max-w-lg">
-      <h1
+      <div
         onClick={() => navigate("/")}
-        className="text-2xl font-semibold text-neutral-400 hover:underline cursor-pointer"
+        className="flex flex-start items-center text-slate-500 text-sm font-bold cursor-pointer"
       >
-        Logo
-      </h1>
+        <img
+          className="relative h-[60px] w-[60px] rounded-xl object-cover mb-5 mr-2"
+          src={"/images/logo.png"}
+          alt="avatar"
+        />
+        Course Marketplace <br /> Reviews Platform
+      </div>
       <h2 className="mb-2 text-3xl font-semibold text-neutral-900">
         Đăng nhập
       </h2>
@@ -117,24 +109,6 @@ const SignIn = () => {
               )}
             </button>
           </form>
-          <div className="flex items-center justify-between">
-            <span className="w-1/6 border-b lg:w-1/6"></span>
-            <div className="text-xs text-center text-neutral-500">
-              Hoặc đăng nhập bằng tài khoản google
-            </div>
-            <span className="w-1/6 border-b lg:w-1/6"></span>
-          </div>
-          <div className="flex items-center justify-between gap-2 sm:gap-7">
-            {communities.map((item, index) => (
-              <LoginSocial
-                key={index}
-                icon={item.icon}
-                url={item.url}
-                name={item.name}
-                color={item.color}
-              />
-            ))}
-          </div>
         </div>
       </div>
     </div>

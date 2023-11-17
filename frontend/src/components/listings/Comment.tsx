@@ -1,5 +1,5 @@
 import { Rating } from "@mui/material";
-import { formatDate } from "../../utils/formatDate";
+import { convertDateTime } from "../../utils/convertDateTime";
 
 interface CommentProps {
   user_name?: string;
@@ -7,6 +7,7 @@ interface CommentProps {
   rating: number;
   createdAt?: string;
   comment?: string;
+  hidden?: boolean;
 }
 
 const Comment: React.FC<CommentProps> = ({
@@ -15,11 +16,12 @@ const Comment: React.FC<CommentProps> = ({
   rating,
   createdAt,
   comment,
+  hidden,
 }) => {
   return (
-    <div className="space-y-5 ring-2 ring-emerald-200 p-5 shadow-xl rounded-xl">
-      <div className="flex">
-        <div className="relative mr-5">
+    <div className="space-y-3 py-3 border-b border-stone-300">
+      <div className="flex items-center">
+        <div className="relative mr-2">
           {avatar && (
             <img
               style={{ objectFit: "cover" }}
@@ -30,17 +32,19 @@ const Comment: React.FC<CommentProps> = ({
           )}
         </div>
         <div>
-          <h3 className="text-slate-700 font-semibold">{user_name}</h3>
+          <h3 className="text-slate-700 font-semibold">
+            {hidden ? "Đánh giá ẩn danh" : user_name}
+          </h3>
           <div className="flex items-center space-x-2 text-slate-400">
-            <span className="text-slate-700 font-medium">{rating}</span>
             <Rating
+              size="small"
               name="half-rating-read"
               defaultValue={rating}
               precision={0.1}
               readOnly
             />
             <span>|</span>
-            <span>{formatDate(createdAt)}</span>
+            <span>{convertDateTime(createdAt)}</span>
           </div>
         </div>
       </div>

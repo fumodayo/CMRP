@@ -24,7 +24,7 @@ const UploadSingleImage = ({ register, errors }) => {
       />
       {previewImage && (
         <img
-          className="relative my-5 p-3 min-w-full h-[350px] rounded-xl object-cover ring ring-emerald-400"
+          className="relative my-5 p-3 min-w-full h-[200px] rounded-xl object-cover ring ring-emerald-400"
           src={previewImage}
           alt="course"
         />

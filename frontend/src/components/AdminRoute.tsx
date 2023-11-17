@@ -10,7 +10,7 @@ const AdminRoute: React.FC<AdminRouteProps> = ({ children }) => {
   const { state } = useContext(Store) ?? {};
   const userInfo = state?.userInfo;
 
-  return userInfo && userInfo.role === "admin" ? (
+  return userInfo && userInfo.role.includes("admin") ? (
     children
   ) : (
     <Navigate to="/signin" />

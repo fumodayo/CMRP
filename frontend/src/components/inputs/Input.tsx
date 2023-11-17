@@ -14,7 +14,7 @@ interface InputProps {
   register: UseFormRegister<FieldValues>;
   rules?: RegisterOptions;
   errors: FieldErrors;
-  errorMessage?: boolean;
+  errorMessage?: string;
   type?: string;
   onChange?: (e: any) => void;
 }
@@ -67,8 +67,8 @@ const Input: React.FC<InputProps> = ({
             appearance-none
             ${errors[id] ? "ring-red-500" : "ring-neutral-300"}
             ${errors[id] ? "focus:ring-red-500" : "focus:ring-blue-600"}
-            ${errorMessage ? "ring-red-500" : "ring-neutral-300"}
             ${errorMessage ? "focus:ring-red-500" : "focus:ring-blue-600"}
+            ${errorMessage ? "ring-red-500" : "ring-neutral-300"}
         `}
         />
         {id === "password" && (
@@ -123,10 +123,8 @@ const Input: React.FC<InputProps> = ({
             Mật khẩu không được dài hơn 24 ký tự.
           </p>
         )}
-        {(id === "email" || id === "password") && errorMessage && !error && (
-          <p className="mt-1 text-sm text-red-400">
-            Tài khoản hoặc mật khẩu không đúng.
-          </p>
+        {errorMessage && !error && (
+          <p className="mt-1 text-sm text-red-400">{errorMessage}</p>
         )}
       </div>
     </div>

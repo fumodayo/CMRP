@@ -30,24 +30,19 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="sticky z-50 top-0 bg-white h-[80px] w-full border border-b-slate-100 shadow-sm cursor-pointer">
+    <nav className="sticky z-50 top-0 bg-white h-[90px] w-full border border-b-slate-100 shadow-sm cursor-pointer">
       <div className="mx-[90px] 2xl:mx-[280px] my-5">
         <ul className="flex items-center justify-between my-5 list-none">
           <li
             onClick={() => navigate("/")}
-            className="flex items-center text-slate-700 text-sm font-bold"
+            className="flex items-center justify-center text-slate-500 text-sm font-bold cursor-pointer"
           >
             <img
-              className="relative h-[50px] w-[80px] rounded-xl object-cover mb-2"
+              className="relative h-[50px] w-[50px] rounded-xl object-cover mb-5 mr-2"
               src={"/images/logo.png"}
               alt="avatar"
             />
             Course Marketplace <br /> Reviews Platform
-          </li>
-          <li>
-            <div className="rounded-xl ring-1 ring-gray-200 px-3 py-1 hover:shadow-md cursor-pointer">
-              Các lĩnh vực
-            </div>
           </li>
           <li>
             <div className="w-[520px] h-[40px] pl-6 pr-8 py-3 bg-neutral-100 rounded-2xl justify-start items-center gap-2 inline-flex">
@@ -58,6 +53,14 @@ const Navbar = () => {
                 placeholder="Tìm kiếm khóa học..."
                 onChange={handleSearchChange}
               />
+            </div>
+          </li>
+          <li>
+            <div
+              onClick={() => navigate("/instructor")}
+              className="rounded-xl ring-1 ring-gray-200 px-3 py-1 hover:shadow-md cursor-pointer"
+            >
+              Chế độ người dạy
             </div>
           </li>
           <li className="flex justify-between items-center space-x-5">
@@ -85,6 +88,7 @@ const Navbar = () => {
                 size={25}
               />
               <img
+                onClick={() => navigate("/profile")}
                 className="relative w-[40px] h-[40px] rounded-2xl object-cover"
                 src={
                   "https://cdn.lazi.vn/storage/uploads/users/avatar/273850_1571841685.jpg"

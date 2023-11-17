@@ -1,6 +1,7 @@
 import { useState, useEffect, useContext } from "react";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
-import { FaCheckCircle } from "react-icons/fa";
+import { AiFillStar } from "react-icons/ai";
+import { FaMapMarkerAlt } from "react-icons/fa";
 import { Tab } from "@headlessui/react";
 import { Rating } from "@mui/material";
 import YouTube from "react-youtube";
@@ -35,7 +36,6 @@ const DetailCourse = () => {
   const [isShowTitle, setShowTitle] = useState(true);
 
   const headerTabs = ["About", "Review"];
-  const totalLesion = ["20 chuyên đề", "68 bài giảng", "Hơn 800 bài tập"];
 
   const [courseData, setCourseData] = useState<Course>(courses[0]);
   useEffect(() => {
@@ -109,8 +109,6 @@ const DetailCourse = () => {
                   readOnly
                 />
                 <span>|</span>
-                <div>Review ({total_review})</div>
-                <span>|</span>
                 <div>{total_student} Học viên</div>
               </div>
               <div className="flex space-x-3 items-center">
@@ -122,6 +120,13 @@ const DetailCourse = () => {
                   />
                 </div>
                 <span className="text-zinc-400">{author}</span>
+                <span>|</span>
+                <span
+                  onClick={() => navigator("/review")}
+                  className="text-zinc-400 hover:underline cursor-pointer"
+                >
+                  Review ({total_review})
+                </span>
               </div>
               <Tab.Group>
                 <Tab.List className="flex w-full border-b-2 border-zinc-300">
@@ -170,18 +175,21 @@ const DetailCourse = () => {
                   <span className="text-emerald-400">đ</span>
                 </h2>
                 <div className="space-y-3">
-                  <h3 className="font-medium text-slate-700 text-lg">
-                    Khóa học bao gồm:
-                  </h3>
-                  {totalLesion.map((item) => (
-                    <div className="flex text-slate-700 text-sm items-center">
-                      <FaCheckCircle
-                        className="text-emerald-400 mr-2"
-                        size={20}
-                      />
-                      {item}
+                  <h3 className="font-medium text-zinc-500 text-lg flex space-x-3">
+                    <div className="flex items-center justify-center">
+                      <AiFillStar className="mr-1 text-emerald-400" />
+                      Offline
                     </div>
-                  ))}
+                    <span>|</span>
+                    <div>15 bài học</div>
+                    <span>|</span>
+                    <div className="flex items-center justify-center hover:underline cursor-pointer">
+                      <FaMapMarkerAlt className="mr-1 text-emerald-400" />
+                      <a href="https://www.google.com/maps/place/16.060604214041486,108.22159296753324">
+                        17 Nguyễn Văn Linh
+                      </a>
+                    </div>
+                  </h3>
                 </div>
                 <div className="flex space-x-3">
                   <h3 className="font-medium text-slate-700 text-lg">

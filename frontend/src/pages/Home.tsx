@@ -48,21 +48,6 @@ const Home = () => {
     },
   ];
 
-  const fields = [
-    {
-      name: "Phổ biến",
-      active: true,
-    },
-    {
-      name: "Mới",
-      active: false,
-    },
-    {
-      name: "Trending",
-      active: false,
-    },
-  ];
-
   const handlePageChange = (currentPage: number) => {
     setCurrentPage(currentPage);
   };
@@ -103,12 +88,6 @@ const Home = () => {
           </div>
         </section>
         <section className="py-5">
-          <div className="space-x-5 text-lg font-medium py-2 cursor-pointer">
-            {fields.map((item) => (
-              <CourseField name={item.name} active={item.active} />
-            ))}
-          </div>
-          <hr className="w-full border" />
           <div className="min-h-[500px] py-5 grid grid-cols-4 grid-flow-row gap-5">
             {coursesData.map((item) => (
               <CourseCard

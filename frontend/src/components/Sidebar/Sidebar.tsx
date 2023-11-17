@@ -1,10 +1,8 @@
+import { useNavigate } from "react-router-dom";
 import { IconType } from "react-icons";
 import { MdSpaceDashboard } from "react-icons/md";
-import { FaBookOpen } from "react-icons/fa";
-import { AiFillSchedule } from "react-icons/ai";
-import { BsFillPeopleFill } from "react-icons/bs";
-import { BiSolidUser } from "react-icons/bi";
-import { LuActivitySquare } from "react-icons/lu";
+import { GrSchedules } from "react-icons/gr";
+import { IoSettingsOutline } from "react-icons/io5";
 
 interface SidebarItemProps {
   name: string;
@@ -31,6 +29,8 @@ export const SidebarItem: React.FC<SidebarItemProps> = ({
 };
 
 const Sidebar = () => {
+  const navigate = useNavigate();
+
   const sidebarItems = [
     {
       name: "dashboard",
@@ -38,28 +38,13 @@ const Sidebar = () => {
       active: true,
     },
     {
-      name: "courses",
-      icon: FaBookOpen,
-      active: false,
-    },
-    {
       name: "schedule",
-      icon: AiFillSchedule,
+      icon: GrSchedules,
       active: false,
     },
     {
-      name: "instructors",
-      icon: BsFillPeopleFill,
-      active: false,
-    },
-    {
-      name: "profile",
-      icon: BiSolidUser,
-      active: false,
-    },
-    {
-      name: "activity",
-      icon: LuActivitySquare,
+      name: "setting",
+      icon: IoSettingsOutline,
       active: false,
     },
   ];
@@ -67,7 +52,17 @@ const Sidebar = () => {
   return (
     <nav className="fixed top-0 left-0 h-screen w-[250px] bg-white border border-r-slate-100 shadow-sm">
       <div className="flex items-center justify-center m-5">
-        <span className="text-slate-700 text-4xl font-bold">Logo.</span>
+        <div
+          onClick={() => navigate("/")}
+          className="flex flex-start items-center text-slate-500 text-sm font-bold cursor-pointer"
+        >
+          <img
+            className="relative h-[60px] w-[60px] rounded-xl object-cover mb-5 mr-2"
+            src={"/images/logo.png"}
+            alt="avatar"
+          />
+          Course Marketplace <br /> Reviews Platform
+        </div>
       </div>
       <ul className="flex flex-col py-2 items-center justify-center space-y-2">
         {sidebarItems.map((item) => (
