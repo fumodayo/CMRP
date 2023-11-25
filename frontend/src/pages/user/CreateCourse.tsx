@@ -23,13 +23,18 @@ const CreateCourse = () => {
   const [isShowInputAddress, setIsShowInputAddress] = useState(false);
 
   const [bookingData, setBookingData] = useState({
-    sessions: 0,
+    lesson: 0,
     schedule: [],
+    startDate: null,
+    endDate: null,
   });
 
-  const handleBooking = useCallback((sessions: number, schedule: any) => {
-    setBookingData({ sessions, schedule });
-  }, []);
+  const handleBooking = useCallback(
+    (lesson: number, schedule: any, startDate: any, endDate: any) => {
+      setBookingData({ lesson, schedule, startDate, endDate });
+    },
+    []
+  );
 
   const {
     control,
@@ -54,10 +59,35 @@ const CreateCourse = () => {
         }
       );
 
-      console.log(data.url);
-      navigator(`/certificate`);
+      const createCourse = {
+        author: userInfo.name,
+        name: course.name,
+        image: data.url,
+        category: course.category,
+        price: parseInt(course.price),
+        requirement: course.requirement,
+        short_description: course.short_description,
+        thumbnail: course.thumbnail,
+        total_student: parseInt(course.total_student),
+        type: course.type,
+        schedule: bookingData.schedule,
+        lesson: bookingData.lesson,
+        startDate: bookingData.startDate,
+        endDate: bookingData.endDate,
+      };
+
+      console.log(createCourse);
+
+      const res = await axios.post(
+        `http://localhost:8080/api/course`,
+        createCourse
+      );
+
+      console.log(res.data);
+
+      // navigator(`/certificate`);
     },
-    [bookingData]
+    [bookingData, userInfo.name]
   );
 
   const handleSelectChange = (selected: string) => {
@@ -105,7 +135,7 @@ const CreateCourse = () => {
               />
               <div>
                 <Controller
-                  name="location"
+                  name="type"
                   control={control}
                   render={({ field }) => (
                     <Select field={field} onSelectChange={handleSelectChange} />
@@ -122,7 +152,7 @@ const CreateCourse = () => {
                 )}
               </div>
               <Input
-                id="link"
+                id="thumbnail"
                 placeholder="Link youtube giới thiệu khóa học"
                 register={register}
                 errors={errors}
@@ -134,12 +164,28 @@ const CreateCourse = () => {
               <Controller
                 name="category"
                 control={control}
-                render={({ field }) => <MultiSelect field={field} />}
+                render={({ field }) => (
+                  <MultiSelect
+                    array={[
+                      {
+                        label: "Vẽ",
+                        value: "Vẽ",
+                      },
+                      { label: "Thiết kế", value: "Thiết kế" },
+                      {
+                        label: "Phát triển bản thân",
+                        value: "Phát triển bản thân",
+                      },
+                    ]}
+                    name="Thể loại"
+                    field={field}
+                  />
+                )}
               />
             </div>
 
             <div className="flex items-start justify-between space-x-10">
-              <div className="w-1/2">
+              <div className="w-1/3">
                 <h3>Tóm tắt</h3>
                 <Controller
                   name="short_description"
@@ -148,10 +194,19 @@ const CreateCourse = () => {
                   render={({ field }) => <RichTextEditor field={field} />}
                 />
               </div>
-              <div className="w-1/2">
+              <div className="w-1/3">
                 <h3>Nội dung</h3>
                 <Controller
                   name="description"
+                  control={control}
+                  defaultValue=""
+                  render={({ field }) => <RichTextEditor field={field} />}
+                />
+              </div>
+              <div className="w-1/3">
+                <h3>Yêu cầu</h3>
+                <Controller
+                  name="requirement"
                   control={control}
                   defaultValue=""
                   render={({ field }) => <RichTextEditor field={field} />}

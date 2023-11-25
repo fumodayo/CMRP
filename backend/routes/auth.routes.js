@@ -31,7 +31,13 @@ authRouter.post(
 authRouter.post(
   "/signup",
   expressAsyncHandler(async (req, res) => {
-    const { email, password, role } = req.body;
+    const { email, password, role, name } = req.body;
+
+    if (!email || !password) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Missing email or password" });
+    }
 
     let user = await UserModel.findOne({ email });
     if (user) {
@@ -40,11 +46,15 @@ authRouter.post(
         .json({ success: false, message: "Tài khoản đã tồn tại" });
     }
 
-    user = await UserModel.create({
+    // Kiểm tra xem `name` có tồn tại không trước khi sử dụng nó
+    const userData = {
       email,
       password,
       role,
-    });
+      name: name || "", // Sử dụng name nếu tồn tại, nếu không sẽ là chuỗi rỗng
+    };
+
+    user = await UserModel.create(userData);
 
     sendToken(res, user, 201, "User have been created");
   })

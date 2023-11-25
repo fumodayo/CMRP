@@ -34,7 +34,8 @@ const SignIn = () => {
         {
           email,
           password,
-        }
+        },
+        { withCredentials: true }
       );
       ctxDispatch({ type: "USER_SIGNIN", payload: data.data });
       localStorage.setItem("user_info", JSON.stringify(data.data));

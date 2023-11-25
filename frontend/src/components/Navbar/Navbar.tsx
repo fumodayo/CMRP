@@ -1,6 +1,5 @@
 import { useNavigate } from "react-router-dom";
 import { BiSearch } from "react-icons/bi";
-import { HiBell } from "react-icons/hi2";
 import { MdLogout } from "react-icons/md";
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import { useContext, useState } from "react";
@@ -88,13 +87,12 @@ const Navbar = () => {
                 size={25}
               />
               <img
-                onClick={() => navigate("/profile")}
+                // onClick={() => navigate("/profile")}
                 className="relative w-[40px] h-[40px] rounded-2xl object-cover"
-                src={
-                  "https://cdn.lazi.vn/storage/uploads/users/avatar/273850_1571841685.jpg"
-                }
-                alt="course"
+                src={userInfo.avatar}
+                alt="avatar"
               />
+              <h3>{userInfo.name}</h3>
             </li>
           ) : (
             <li className="flex space-x-10 items-center justify-between">

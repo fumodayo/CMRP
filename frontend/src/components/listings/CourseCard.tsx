@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { AiFillStar } from "react-icons/ai";
 import { formatPrice } from "../../utils/formatPrice";
 import { countdownDaysToEvent } from "../../utils/countdownDaysToEvent";
@@ -8,9 +8,9 @@ interface CourseCardProps {
   image?: string;
   endDate?: string;
   name?: string;
-  location?: string;
+  type?: string;
   author?: string;
-  rating?: number;
+  total_rating?: number;
   price?: number;
   total_student?: number;
 }
@@ -20,9 +20,9 @@ const CourseCard: React.FC<CourseCardProps> = ({
   image,
   endDate,
   name,
-  location,
+  type,
   author,
-  rating,
+  total_rating,
   price,
   total_student,
 }) => {
@@ -45,12 +45,12 @@ const CourseCard: React.FC<CourseCardProps> = ({
       <div className="pt-5 pb-3">
         <div className="flex justify-between items-end">
           <div className="text-slate-700 text-xl font-bold">{name}</div>
-          <div className="text-zinc-400 text-sm font-bold">{location}</div>
+          <div className="text-zinc-400 text-sm font-bold">{type}</div>
         </div>
         <div className="flex justify-between items-end pb-1">
           <div className="text-zinc-400 text-sm font-normal">{author}</div>
           <div className="flex items-center text-zinc-400 text-sm font-normal justify-center space-x-3">
-            {rating}
+            {total_rating}
             <AiFillStar className="text-yellow-400 mx-1" size={15} />|
             <span>{total_student} học viên</span>
           </div>

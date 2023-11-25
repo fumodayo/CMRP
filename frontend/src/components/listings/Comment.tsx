@@ -2,21 +2,21 @@ import { Rating } from "@mui/material";
 import { convertDateTime } from "../../utils/convertDateTime";
 
 interface CommentProps {
-  user_name?: string;
   avatar?: string;
-  rating: number;
+  name?: string;
+  rating?: number;
   createdAt?: string;
-  comment?: string;
-  hidden?: boolean;
+  content?: string;
+  isUnnamed?: boolean;
 }
 
 const Comment: React.FC<CommentProps> = ({
-  user_name,
   avatar,
+  name,
   rating,
   createdAt,
-  comment,
-  hidden,
+  content,
+  isUnnamed,
 }) => {
   return (
     <div className="space-y-3 py-3 border-b border-stone-300">
@@ -33,7 +33,7 @@ const Comment: React.FC<CommentProps> = ({
         </div>
         <div>
           <h3 className="text-slate-700 font-semibold">
-            {hidden ? "Đánh giá ẩn danh" : user_name}
+            {isUnnamed ? "Đánh giá ẩn danh" : name}
           </h3>
           <div className="flex items-center space-x-2 text-slate-400">
             <Rating
@@ -48,7 +48,7 @@ const Comment: React.FC<CommentProps> = ({
           </div>
         </div>
       </div>
-      <p className="text-slate-700 font-medium">{comment}</p>
+      <p className="text-slate-700 font-medium">{content}</p>
     </div>
   );
 };

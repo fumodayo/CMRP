@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from "react";
-import { Navigate, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { AiFillStar } from "react-icons/ai";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import { Tab } from "@headlessui/react";
@@ -17,7 +17,6 @@ import Reviews from "../components/listings/Reviews";
 import { countdownDaysToEvent } from "../utils/countdownDaysToEvent";
 import { formatPrice } from "../utils/formatPrice";
 import { Store } from "../context/Store";
-import { courses } from "../utils/data.sample";
 import { formatDate } from "../utils/formatDate";
 
 import { CartItem, Course } from "../types";
@@ -29,7 +28,6 @@ function classNames(...classes: any) {
 
 const DetailCourse = () => {
   const params = useParams();
-  console.log(params);
   const navigator = useNavigate();
 
   const { state, dispatch: ctxDispatch } = useContext(Store) || "{}";
@@ -37,7 +35,8 @@ const DetailCourse = () => {
 
   const headerTabs = ["About", "Review"];
 
-  const [courseData, setCourseData] = useState<Course>(courses[0]);
+  const [courseData, setCourseData] = useState<Course | null>(null);
+
   useEffect(() => {
     const { id } = params;
     const fetchData = async () => {
@@ -49,6 +48,34 @@ const DetailCourse = () => {
     fetchData();
   }, [params]);
 
+  if (!courseData) {
+    return null;
+  }
+
+  const {
+    _id,
+    name,
+    author,
+    author_image,
+    image,
+    thumbnail,
+    price,
+    createdAt,
+    startDate,
+    endDate,
+    type,
+    address,
+    short_description,
+    description,
+    requirement,
+    schedule,
+    total_rating,
+    total_review,
+    total_student,
+    total_lesson,
+    total_enroll,
+  } = courseData;
+
   const addToCartHandler = () => {
     const courseItem: CartItem = {
       _id: _id,
@@ -56,8 +83,8 @@ const DetailCourse = () => {
       endDate: endDate,
       name: name,
       author: author,
-      location: location,
-      rating: rating,
+      type: type,
+      rating: total_rating,
       total_student: total_student,
       price: price,
     };
@@ -67,27 +94,6 @@ const DetailCourse = () => {
     });
     navigator("/cart");
   };
-
-  console.log(courseData);
-
-  const {
-    _id,
-    name,
-    author,
-    image,
-    syllabus,
-    description,
-    price,
-    rating,
-    thumbnail,
-    author_image,
-    total_student,
-    total_review,
-    createdAt,
-    startDate,
-    endDate,
-    location,
-  } = courseData;
 
   return (
     <UserLayout>
@@ -99,17 +105,19 @@ const DetailCourse = () => {
               <h1 className="text-slate-700 text-4xl font-bold">
                 {name} - {author}
               </h1>
-              <p className="text-zinc-400">{syllabus}</p>
+              <p className="text-zinc-400">{short_description}</p>
               <div className="text-zinc-400 flex space-x-3 items-center">
-                <div className="text-slate-700 font-medium">{rating}</div>
+                <div className="text-slate-700 font-medium">{total_rating}</div>
                 <Rating
                   name="half-rating-read"
-                  defaultValue={rating}
+                  defaultValue={total_rating}
                   precision={0.1}
                   readOnly
                 />
                 <span>|</span>
-                <div>{total_student} Học viên</div>
+                <div>
+                  {total_enroll}/{total_student} Học viên
+                </div>
               </div>
               <div className="flex space-x-3 items-center">
                 <div className="relative w-[45px] h-[35px] ">
@@ -122,7 +130,7 @@ const DetailCourse = () => {
                 <span className="text-zinc-400">{author}</span>
                 <span>|</span>
                 <span
-                  onClick={() => navigator("/review")}
+                  onClick={() => navigator(`/review/${author}`)}
                   className="text-zinc-400 hover:underline cursor-pointer"
                 >
                   Review ({total_review})
@@ -147,7 +155,12 @@ const DetailCourse = () => {
                 </Tab.List>
                 <Tab.Panels>
                   <Tab.Panel>
-                    <Detail description={description} />
+                    {description && (
+                      <Detail
+                        description={description}
+                        requirement={requirement}
+                      />
+                    )}
                   </Tab.Panel>
                   <Tab.Panel>
                     <Reviews />
@@ -160,7 +173,7 @@ const DetailCourse = () => {
                 <div className="relative">
                   <YouTube
                     iframeClassName="relative rounded-2xl w-[500px] h-[300px]"
-                    videoId={thumbnail}
+                    videoId={thumbnail?.split("=").pop()}
                     onPlay={() => setShowTitle(false)}
                     onPause={() => setShowTitle(true)}
                   />
@@ -171,7 +184,7 @@ const DetailCourse = () => {
                   )}
                 </div>
                 <h2 className="text-3xl text-slate-700 font-bold">
-                  {formatPrice(price)}
+                  {price && formatPrice(price)}
                   <span className="text-emerald-400">đ</span>
                 </h2>
                 <div className="space-y-3">
@@ -181,14 +194,20 @@ const DetailCourse = () => {
                       Offline
                     </div>
                     <span>|</span>
-                    <div>15 bài học</div>
-                    <span>|</span>
-                    <div className="flex items-center justify-center hover:underline cursor-pointer">
-                      <FaMapMarkerAlt className="mr-1 text-emerald-400" />
-                      <a href="https://www.google.com/maps/place/16.060604214041486,108.22159296753324">
-                        17 Nguyễn Văn Linh
-                      </a>
-                    </div>
+                    <div>{total_lesson} bài học</div>
+                    {address && address.name && (
+                      <>
+                        <span>|</span>
+                        <div className="flex items-center justify-center hover:underline cursor-pointer">
+                          <FaMapMarkerAlt className="mr-1 text-emerald-400" />
+                          <a
+                            href={`https://www.google.com/maps/place/${address.lat},${address.lng}`}
+                          >
+                            {address.name}
+                          </a>
+                        </div>
+                      </>
+                    )}
                   </h3>
                 </div>
                 <div className="flex space-x-3">
@@ -227,7 +246,7 @@ const DetailCourse = () => {
             <h1 className="text-neutral-700 text-lg font-semibold">
               Các khóa học liên quan:
             </h1>
-            <SimilarCourses />
+            <SimilarCourses id={_id} />
           </div>
         </section>
       </Container>

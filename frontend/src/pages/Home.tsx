@@ -63,6 +63,7 @@ const Home = () => {
       );
       const { courses, page, pages } = data;
       setCourseData(courses);
+      console.log(courses);
       setPageSize(pages);
       setCurrentPage(page);
     };
@@ -95,9 +96,9 @@ const Home = () => {
                 image={item.image}
                 endDate={item.endDate}
                 name={item.name}
-                location={item.location}
+                type={item.type}
                 author={item.author}
-                rating={item.rating}
+                total_rating={item.total_rating}
                 price={item.price}
                 total_student={item.total_student}
               />

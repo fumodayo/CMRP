@@ -7,61 +7,60 @@ type Schedule = {
   end: string;
 };
 
-const generateClassTimeFromTimeObject = (
-  classTime: dayjs.Dayjs,
-  classDurationMinutes: number
-) => {
-  const startTime = classTime;
-  const endTime = classTime.add(classDurationMinutes, "minute");
-
-  return { startTime: startTime, endTime: endTime };
-};
-
 export const generateSchedule = (
-  endDate: dayjs.Dayjs,
-  classTime: dayjs.Dayjs,
-  classDurationMinutes: number,
-  selectedDays: number[]
+  startDate?: dayjs.Dayjs,
+  endDate?: dayjs.Dayjs,
+  classDurationMinutes?: number,
+  selectedDays?: { day: number; time: string }[]
 ) => {
-  const end = endDate;
-
-  const { startTime } = generateClassTimeFromTimeObject(
-    classTime,
-    classDurationMinutes
-  );
-
   const schedule: Schedule[] = [];
-  let currentSessionDate = startTime;
+  const selectedDaysOfWeek = selectedDays?.map((item) => item.day) || [];
 
-  while (currentSessionDate.isBefore(end) || currentSessionDate.isSame(end)) {
-    const classStartTime = currentSessionDate;
-    const classEndTime = classStartTime.add(classDurationMinutes, "minute");
+  let currentDate = startDate?.startOf("day");
 
-    if (classEndTime.isBefore(end) || classEndTime.isSame(end)) {
-      // Only add the session if it ends before or on the end date and on selected days
-      if (selectedDays.includes(classStartTime.day())) {
-        schedule.push({
-          id: String(Math.floor(Math.random() * 100000)),
-          title: "Class A",
-          start: classStartTime.toISOString(),
-          end: classEndTime.toISOString(),
-        });
+  if (!currentDate || !endDate || !classDurationMinutes || !selectedDays) {
+    return { sessions: 0, schedule: [] };
+  }
+
+  // Iterate from start date to end date
+  while (
+    currentDate.isSame(endDate, "day") ||
+    currentDate.isBefore(endDate, "day")
+  ) {
+    const dayOfWeek = currentDate.day();
+
+    if (
+      dayOfWeek !== undefined &&
+      selectedDaysOfWeek.includes(dayOfWeek === 0 ? 6 : dayOfWeek - 1)
+    ) {
+      const selectedDay = selectedDays.find(
+        (day) => day.day === (dayOfWeek === 0 ? 6 : dayOfWeek - 1)
+      );
+
+      if (selectedDay && selectedDay.time) {
+        const timeParts = selectedDay.time.split("T")[1].split(":");
+        const hours = parseInt(timeParts[0]);
+        const minutes = parseInt(timeParts[1]);
+
+        const classStartTime = currentDate
+          .set("hour", hours)
+          .set("minute", minutes);
+        const classEndTime = classStartTime.add(classDurationMinutes, "minute");
+
+        if (classEndTime.isBefore(currentDate.endOf("day"))) {
+          schedule.push({
+            id: String(Math.floor(Math.random() * 100000)),
+            title: "Class A",
+            start: classStartTime.toISOString(),
+            end: classEndTime.toISOString(),
+          });
+        }
       }
     }
 
-    // Move to the next session based on the selected days
-    let daysToAdd = 1; // Default: daily
-    if (
-      selectedDays.includes(1) ||
-      selectedDays.includes(3) ||
-      selectedDays.includes(5)
-    ) {
-      // If Monday, Wednesday, or Friday is selected
-      daysToAdd = 2;
-    }
-
-    currentSessionDate = currentSessionDate.add(daysToAdd, "day");
+    // Move to the next day
+    currentDate = currentDate.add(1, "day");
   }
 
-  return { sessions: schedule.length, schedule };
+  return { lesson: schedule.length, schedule };
 };

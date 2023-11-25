@@ -8,8 +8,6 @@ const adminRouter = express.Router();
 /** GET USERS */
 adminRouter.get(
   "/user",
-  isAuth,
-  isAdmin,
   expressAsyncHandler(async (req, res) => {
     const users = await UserModel.find({});
     if (users) {

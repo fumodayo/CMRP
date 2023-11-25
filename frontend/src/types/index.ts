@@ -1,52 +1,88 @@
 export type Course = {
-  _id: string;
-  name: string;
-  author: string;
-  rating: number;
-  image: string;
-  thumbnail: string;
-  author_image: string;
-  status: string;
-  price: number;
-  startDate: string;
-  endDate: string;
-  category: string;
-  location: string;
-  address: [];
-  description: string;
-  requirement: string;
-  syllabus: string;
-  total_student: number;
-  createdAt: string;
-  total_review: number;
+  _id?: string;
+  name?: string;
+  author?: string;
+  author_image?: string;
+  image?: string;
+  thumbnail?: string; // Link youtube
+  price?: number;
+  createdAt?: string; // Thời gian tạo khóa học (Thời gian được phép đăng ký)
+  startDate?: string;
+  endDate?: string;
+  category?: string[];
+  /**
+   * Online
+   * Offline / Hybrid (Phải có address)
+   */
+  type?: string;
+  address?: {
+    name?: string;
+    lat?: number;
+    lng?: number;
+  };
+  short_description?: string;
+  description?: string;
+  requirement?: string;
+  schedule?: [];
+  total_rating?: number; // Tổng rating
+  total_review?: number; // Tổng của reviewIds
+  total_student?: number; // Tổng của học viên theo yêu cầu
+  total_lesson?: number; // Tổng của schedule
+  total_enroll?: number; // Tổng của số lượng học viên đăng ký hiện tại
+  /* 
+    AWAITING (Đang chờ thanh toán tiền)
+    REJECTED (Bị từ chối)
+    PENDING (Đang chờ được duyệt)
+    OPEN (Duyệt xong và bắt đầu cho học viên đăng ký) 
+    IN_PROGRESS 
+    COMPLETED (Được phép review)
+  */
+  status?: string;
+  student_Ids?: string[];
+  reviews_Ids?: string[];
 };
 
 export type Review = {
-  id: string;
-  user_name: string;
-  avatar: string;
-  course_id: string;
-  createdAt: string;
-  comment: string;
-  rating: number;
+  _id?: string;
+  isUnnamed?: boolean;
+  author?: string;
+  avatar?: string;
+  course_id?: string;
+  createdAt?: string;
+  content?: string;
+  rating?: number;
+  user?: any;
 };
 
 export type CartItem = {
   _id?: string;
-  image: string;
-  endDate: string;
-  name: string;
-  author: string;
-  location: string;
-  rating: number;
-  total_student: number;
-  price: number;
+  image?: string;
+  endDate?: string;
+  name?: string;
+  author?: string;
+  type?: string;
+  rating?: number;
+  total_student?: number;
+  price?: number;
+  /* 
+    PENDING (Chưa thanh toán)
+    COMPLETE (Đã thanh toán)
+  */
+  status?: string;
 };
 
 export type User = {
-  id: string;
-  user_name: string;
-  email: string;
-  password: string;
-  role: string;
+  _id?: string;
+  name?: string;
+  avatar?: string;
+  email?: string;
+  password?: string;
+  role?: string[];
+  description?: string;
+  isCertificate?: boolean;
+  category?: [];
+  total_course?: number;
+  total_review?: number;
+  course_Ids?: string[];
+  review_Ids?: string[];
 };

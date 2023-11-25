@@ -4,9 +4,19 @@ import jwt from "jsonwebtoken";
 
 const userSchema = new mongoose.Schema(
   {
+    // _id: { type: String },
+    avatar: { type: String },
     email: { type: String, required: true, unique: true },
+    name: { type: String, require: true },
     password: { type: String, required: true },
     role: { type: Array, default: ["user"], required: true },
+    description: { type: String },
+    isCertificate: { type: Boolean, default: false },
+    category: { type: Array, default: [] },
+    total_course: { type: Number, default: 0 },
+    total_review: { type: Number, default: 0 },
+    course_Ids: { type: Array, default: [] },
+    review_Ids: { type: Array, default: [] },
   },
   {
     timestamps: true,

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Theme, useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import OutlinedInput from "@mui/material/OutlinedInput";
@@ -19,8 +19,6 @@ const MenuProps = {
   },
 };
 
-const names = ["Vẽ", "Thiết kế", "Phát triển bản thân"];
-
 function getStyles(name: string, personName: readonly string[], theme: Theme) {
   return {
     fontWeight:
@@ -30,7 +28,21 @@ function getStyles(name: string, personName: readonly string[], theme: Theme) {
   };
 }
 
-const MultiSelect = ({ field }) => {
+interface MultiSelectProps {
+  field?: any;
+  array: { label: string; value: string | number }[];
+  name: string;
+  onMultiSelectChange?: (value) => void;
+  reset?: boolean;
+}
+
+const MultiSelect: React.FC<MultiSelectProps> = ({
+  field,
+  array,
+  name,
+  onMultiSelectChange,
+  reset,
+}) => {
   const theme = useTheme();
   const [personName, setPersonName] = useState<string[]>([]);
 
@@ -42,13 +54,26 @@ const MultiSelect = ({ field }) => {
       // On autofill we get a stringified value.
       typeof value === "string" ? value.split(",") : value
     );
-    field.onChange(value);
+
+    if (onMultiSelectChange) {
+      onMultiSelectChange(value);
+    }
+
+    if (field) {
+      field.onChange(value);
+    }
   };
+
+  useEffect(() => {
+    if (reset) {
+      setPersonName([]);
+    }
+  }, [reset]);
 
   return (
     <div>
       <FormControl sx={{ width: "100%", minWidth: 300 }}>
-        <InputLabel id="demo-multiple-chip-label">Thể loại</InputLabel>
+        <InputLabel id="demo-multiple-chip-label">{name}</InputLabel>
         <Select
           labelId="demo-multiple-chip-label"
           id="demo-multiple-chip"
@@ -56,22 +81,29 @@ const MultiSelect = ({ field }) => {
           value={personName}
           onChange={handleChange}
           input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
-          renderValue={(selected) => (
-            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-              {selected.map((value) => (
-                <Chip key={value} label={value} />
-              ))}
-            </Box>
-          )}
+          renderValue={(selected: (string | number)[]) => {
+            const selectedLabels = array
+              .sort((a, b) => a.value - b.value)
+              .filter((item) => selected.includes(item.value))
+              .map((item) => item.label);
+
+            return (
+              <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                {selectedLabels.map((label) => (
+                  <Chip key={label} label={label} />
+                ))}
+              </Box>
+            );
+          }}
           MenuProps={MenuProps}
         >
-          {names.map((name) => (
+          {array.map((item) => (
             <MenuItem
-              key={name}
-              value={name}
-              style={getStyles(name, personName, theme)}
+              key={item.value}
+              value={item.value}
+              style={getStyles(item.label, personName, theme)}
             >
-              {name}
+              {item.label}
             </MenuItem>
           ))}
         </Select>

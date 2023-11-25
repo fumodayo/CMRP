@@ -20,7 +20,6 @@ const UploadSingleImage = ({ register, errors }) => {
         register={register}
         errors={errors}
         onChange={handleImageChange}
-        required
       />
       {previewImage && (
         <img
