@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const reviewSchema = new mongoose.Schema({
+const certificateSchema = new mongoose.Schema({
   _id: { type: String, required: true },
   isUnnamed: { type: Boolean, default: false },
   user_id: { type: String, required: true },
@@ -10,5 +10,5 @@ const reviewSchema = new mongoose.Schema({
   createdAt: { type: String, require: true },
 });
 
-const ReviewModel = mongoose.model("Review", reviewSchema);
-export default ReviewModel;
+const CertificateModal = mongoose.model("Certificate", certificateSchema);
+export default CertificateModal;

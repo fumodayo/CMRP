@@ -1,6 +1,8 @@
 import express from "express";
 import expressAsyncHandler from "express-async-handler";
-import Course from "../models/course.model.js";
+import CourseModel from "../models/course.model.js";
+import { UserModel } from "../models/user.model.js";
+import { v4 as uuidv4 } from "uuid";
 
 const courseRouter = express.Router();
 
@@ -26,13 +28,28 @@ courseRouter.get(
     const nameSearchRegex = new RegExp(searchQuery, "i");
     filter.name = nameSearchRegex;
 
-    const courses = await Course.find(filter)
+    const courses = await CourseModel.find(filter)
       .skip(pageSize * (page - 1))
       .limit(pageSize);
 
-    const countingPage = await Course.countDocuments(filter);
+    const countingPage = await CourseModel.countDocuments(filter);
+
+    const coursesWithUserInfo = await Promise.all(
+      courses.map(async (course) => {
+        const instructor = await UserModel.findById(course.user_id);
+        if (instructor) {
+          return {
+            ...course.toObject(),
+            author: instructor.name,
+          };
+        }
+
+        return { ...course.toObject(), avatar: null, name: null };
+      })
+    );
+
     res.send({
-      courses,
+      courses: coursesWithUserInfo,
       countingPage,
       page,
       pages: Math.ceil(countingPage / pageSize),
@@ -43,21 +60,21 @@ courseRouter.get(
 courseRouter.get(
   "/:id",
   expressAsyncHandler(async (req, res) => {
-    const course = await Course.findById(req.params.id);
-    if (course) {
-      res.send(course);
-    } else {
-      res.status(404).send({ message: "Course not found" });
-    }
-  })
-);
+    const course = await CourseModel.findById(req.params.id);
+    const instructor = await UserModel.findById(course.user_id);
 
-courseRouter.get(
-  "/instructor/:author",
-  expressAsyncHandler(async (req, res) => {
-    const course = await Course.find({ author: req.params.author });
+    if (!instructor) {
+      return res.status(404).send({ message: "Instructor not found" });
+    }
+
+    const coursesWithUserInfo = {
+      ...course.toObject(),
+      author: instructor.name,
+      author_image: instructor.avatar,
+    };
+
     if (course) {
-      res.send(course);
+      res.send(coursesWithUserInfo);
     } else {
       res.status(404).send({ message: "Course not found" });
     }
@@ -86,7 +103,8 @@ courseRouter.post(
     } = req.body;
 
     try {
-      const newCourse = await Course.create({
+      const newCourse = await CourseModel.create({
+        _id: uuidv4(),
         author,
         name,
         image,
@@ -116,16 +134,15 @@ courseRouter.post(
   expressAsyncHandler(async (req, res) => {
     const { _id } = req.body;
 
-    const course = await Course.findById(_id);
-    if (!course) {
-      return res.status(404).send({ message: "Course not found" });
+    let query = {
+      status: { $in: ["OPEN", "IN_PROGRESS", "COMPLETED"] },
+    };
+
+    if (_id) {
+      query._id = { $nin: _id };
     }
 
-    const similarCourses = await Course.find({
-      _id: { $ne: _id },
-      category: { $in: course.category },
-      status: { $in: ["OPEN", "IN_PROGRESS", "COMPLETED"] },
-    }).limit(4);
+    const similarCourses = await CourseModel.find(query).limit(4);
 
     res.send(similarCourses);
   })

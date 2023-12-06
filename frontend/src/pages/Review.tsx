@@ -16,10 +16,10 @@ const Review = () => {
   const [reviewsData, setReviewsData] = useState(null);
 
   useEffect(() => {
-    const { author } = params;
+    const { id } = params;
     const fetchData = async () => {
       const { data } = await axios.get(
-        `http://localhost:8080/api/review/author/${author}`
+        `http://localhost:8080/api/review/author/${id}`
       );
       setReviewsData(data);
     };
@@ -35,22 +35,24 @@ const Review = () => {
 
   const rangeStars = [
     {
-      name: "",
-    },
-    {
       name: "5 Sao",
+      value: 5,
     },
     {
       name: "4 Sao",
+      value: 4,
     },
     {
       name: "3 Sao",
+      value: 3,
     },
     {
       name: "2 Sao",
+      value: 2,
     },
     {
       name: "1 Sao",
+      value: 1,
     },
   ];
 
@@ -72,15 +74,13 @@ const Review = () => {
           <div className="flex items-center space-x-3">
             <p>Các lĩnh vực đào tạo</p>
             <div className="flex space-x-2">
-              {category &&
-                category.map((item) => (
-                  <Chip
-                    square
-                    key={item}
-                    name={item}
-                    onCurrentType={handleTypeChange}
-                  />
-                ))}
+              {category && (
+                <Chip
+                  types={category}
+                  currentType={""}
+                  onCurrentType={handleTypeChange}
+                />
+              )}
             </div>
           </div>
           <div className="flex bg-zinc-200 px-7 py-5 space-x-5">
@@ -97,14 +97,7 @@ const Review = () => {
               />
             </div>
             <div className="flex space-x-2 py-5">
-              {rangeStars.map((item) => (
-                <Chip
-                  square
-                  key={item.name}
-                  name={item.name}
-                  onCurrentType={handleTypeChange}
-                />
-              ))}
+              <Chip types={rangeStars} currentType={""} onCurrentType={handleTypeChange} />
             </div>
           </div>
           {courses &&

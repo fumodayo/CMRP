@@ -4,7 +4,7 @@ import CourseCard from "../components/listings/CourseCard";
 import Pagination from "../components/Pagination";
 import Container from "../components/Container";
 import { useEffect, useState, useContext } from "react";
-import { Course } from "../types";
+import { Category, Course } from "../types";
 import axios from "axios";
 import { Store } from "../context/Store";
 
@@ -27,32 +27,27 @@ export const CourseField: React.FC<CourseField> = ({ name, active }) => {
 
 const Home = () => {
   const [coursesData, setCourseData] = useState<Course[]>([]);
+  const [categoriesData, setCategoryData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(1);
   const [currentType, setCurrentType] = useState("");
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const { search } = state;
 
-  const type = [
-    {
-      name: "",
-    },
-    {
-      name: "vẽ",
-    },
-    {
-      name: "Thiết kế",
-    },
-    {
-      name: "Phát triển bản thân",
-    },
-  ];
+  useEffect(() => {
+    const fetchData = async () => {
+      const { data } = await axios.get(`http://localhost:8080/api/category`);
+      setCategoryData(data);
+    };
+    fetchData();
+  }, []);
 
   const handlePageChange = (currentPage: number) => {
     setCurrentPage(currentPage);
   };
 
   const handleTypeChange = (item: string) => {
+    console.log(item);
     setCurrentType(item);
   };
 
@@ -63,7 +58,6 @@ const Home = () => {
       );
       const { courses, page, pages } = data;
       setCourseData(courses);
-      console.log(courses);
       setPageSize(pages);
       setCurrentPage(page);
     };
@@ -78,14 +72,13 @@ const Home = () => {
             Các lĩnh vực đang hot
           </h1>
           <div className="flex space-x-2">
-            {type.map((item) => (
+            {categoriesData && (
               <Chip
-                key={item.name}
-                name={item.name}
+                types={categoriesData}
                 currentType={currentType}
                 onCurrentType={handleTypeChange}
               />
-            ))}
+            )}
           </div>
         </section>
         <section className="py-5">

@@ -30,7 +30,7 @@ function getStyles(name: string, personName: readonly string[], theme: Theme) {
 
 interface MultiSelectProps {
   field?: any;
-  array: { label: string; value: string | number }[];
+  array: { name: string; value: string | number }[];
   name: string;
   onMultiSelectChange?: (value) => void;
   reset?: boolean;
@@ -85,7 +85,7 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
             const selectedLabels = array
               .sort((a, b) => a.value - b.value)
               .filter((item) => selected.includes(item.value))
-              .map((item) => item.label);
+              .map((item) => item.name);
 
             return (
               <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
@@ -101,9 +101,9 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
             <MenuItem
               key={item.value}
               value={item.value}
-              style={getStyles(item.label, personName, theme)}
+              style={getStyles(item.name, personName, theme)}
             >
-              {item.label}
+              {item.name.toUpperCase()}
             </MenuItem>
           ))}
         </Select>

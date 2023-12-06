@@ -1,7 +1,7 @@
 import express from "express";
 import ReviewModel from "../models/review.model.js";
 import { UserModel } from "../models/user.model.js";
-import Course from "../models/course.model.js";
+import CourseModel from "../models/course.model.js";
 import expressAsyncHandler from "express-async-handler";
 
 const reviewRouter = express.Router();
@@ -31,7 +31,7 @@ reviewRouter.get(
         {
           $lookup: {
             from: "users",
-            localField: "author",
+            localField: "user_id",
             foreignField: "_id",
             as: "user",
           },
@@ -39,13 +39,14 @@ reviewRouter.get(
         { $unwind: "$user" },
         {
           $project: {
-            avatar: "$user.avatar",
-            name: "$user.name",
+            _id: 1,
             isUnnamed: 1,
             course_id: 1,
             createdAt: 1,
             content: 1,
             rating: 1,
+            avatar: "$user.avatar",
+            name: "$user.name",
           },
         },
       ]);
@@ -63,12 +64,12 @@ reviewRouter.get(
 
 /** GET REVIEWS AUTHOR */
 reviewRouter.get(
-  "/author/:author",
+  "/author/:id",
   expressAsyncHandler(async (req, res) => {
     try {
-      const authorName = req.params.author;
+      const authorId = req.params.id;
 
-      const author = await UserModel.findOne({ name: authorName });
+      const author = await UserModel.findById(authorId);
       if (!author) {
         return res.status(404).send({ message: "Author not found" });
       }
@@ -79,7 +80,7 @@ reviewRouter.get(
         category: author.category, // Giả sử category là một trường của tác giả
       };
 
-      const courses = await Course.find({ author: authorName });
+      const courses = await CourseModel.find({ user_id: authorId });
 
       const reviewsWithUsers = [];
 
@@ -90,10 +91,13 @@ reviewRouter.get(
         for (const reviewId of course.reviews_Ids) {
           const review = await ReviewModel.findOne({ _id: reviewId });
           if (review) {
-            const user = await UserModel.findOne({ _id: review.author });
+            const user = await UserModel.findOne({ _id: review.user_id });
             if (user) {
-              review.user = { avatar: user.avatar, username: user.username };
-              reviews.push(review);
+              reviews.push({
+                ...review.toObject(),
+                avatar: user.avatar,
+                author: user.name,
+              });
             }
           }
         }

@@ -35,3 +35,4 @@ build
 .env.production.local
 
 backend/config/config.env
+rating-comment/.env

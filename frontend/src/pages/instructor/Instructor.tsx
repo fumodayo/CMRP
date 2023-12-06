@@ -65,10 +65,10 @@ const Instructor = () => {
   const [courseData, setCourseData] = useState([]);
 
   useEffect(() => {
-    const { name } = userInfo;
     const fetchData = async () => {
       const { data } = await axios.get(
-        `http://localhost:8080/api/course/instructor/${name}`
+        `http://localhost:8080/api/instructor/courses`,
+        { withCredentials: true }
       );
       setCourseData(data);
     };
@@ -78,6 +78,11 @@ const Instructor = () => {
   return (
     <InstructorLayout>
       <Container>
+        <div>
+          <h2>Doanh thu tháng này</h2>
+          <h2>Số tiền có thể rút</h2>
+        </div>
+        <h1>Khóa học</h1>
         <Table columns={columns} dataSource={courseData} />
       </Container>
     </InstructorLayout>

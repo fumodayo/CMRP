@@ -1,8 +1,21 @@
+export type Category = {
+  _id?: string;
+  name?: string;
+  value?: string;
+};
+
+export type Schedule = {
+  id?: string;
+  title?: string;
+  start?: string;
+  end?: string;
+};
+
 export type Course = {
   _id?: string;
   name?: string;
+  user_id?: string;
   author?: string;
-  author_image?: string;
   image?: string;
   thumbnail?: string; // Link youtube
   price?: number;
@@ -23,7 +36,7 @@ export type Course = {
   short_description?: string;
   description?: string;
   requirement?: string;
-  schedule?: [];
+  schedule?: Schedule[];
   total_rating?: number; // Tổng rating
   total_review?: number; // Tổng của reviewIds
   total_student?: number; // Tổng của học viên theo yêu cầu
@@ -45,13 +58,13 @@ export type Course = {
 export type Review = {
   _id?: string;
   isUnnamed?: boolean;
-  author?: string;
+  user_id?: string;
   avatar?: string;
+  name?: string;
   course_id?: string;
   createdAt?: string;
   content?: string;
   rating?: number;
-  user?: any;
 };
 
 export type CartItem = {
@@ -66,7 +79,7 @@ export type CartItem = {
   price?: number;
   /* 
     PENDING (Chưa thanh toán)
-    COMPLETE (Đã thanh toán)
+    COMPLETED (Đã thanh toán)
   */
   status?: string;
 };
@@ -78,11 +91,32 @@ export type User = {
   email?: string;
   password?: string;
   role?: string[];
-  description?: string;
+  bio?: string;
   isCertificate?: boolean;
-  category?: [];
+  category?: string[];
+  total_course_created?: number;
+  total_review_created?: number;
   total_course?: number;
   total_review?: number;
   course_Ids?: string[];
   review_Ids?: string[];
+  course_created_Ids?: string[];
+  review_created_Ids?: string[];
+  real_name?: string;
+  cccd_number?: number;
+  dateOfBirth?: string;
+  createdAt?: string;
+};
+
+export type Certificate = {
+  _id?: string;
+  user_id?: string;
+  category?: string[];
+  images?: string[];
+  /*
+    PENDING
+    COMPLETED
+    REJECTED
+  */
+  status?: string;
 };

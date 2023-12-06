@@ -1,14 +1,30 @@
 import { useNavigate } from "react-router-dom";
 import { BiSearch } from "react-icons/bi";
 import { MdLogout } from "react-icons/md";
-import { AiOutlineShoppingCart } from "react-icons/ai";
 import { useContext, useState } from "react";
 import { Store } from "../../context/Store";
 import axios from "axios";
+import { extractUsername } from "../../utils/extractUsername";
+import Badge, { BadgeProps } from "@mui/material/Badge";
+import { styled } from "@mui/material/styles";
+import IconButton from "@mui/material/IconButton";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+
+const StyledBadge = styled(Badge)<BadgeProps>(({ theme }) => ({
+  "& .MuiBadge-badge": {
+    right: -3,
+    top: 13,
+    border: `2px solid ${theme.palette.background.paper}`,
+    padding: "0 4px",
+  },
+}));
 
 const Navbar = () => {
   const { state, dispatch: ctxDispatch } = useContext(Store) || {};
-  const { cart, userInfo } = state;
+  const {
+    cart: { cartItems },
+    userInfo,
+  } = state;
   const [search, setSearch] = useState("");
 
   const handleSearchChange = (e: any) => {
@@ -22,10 +38,11 @@ const Navbar = () => {
   const navigate = useNavigate();
 
   const signoutHandler = async () => {
-    await axios.get("http://localhost:8080/api/auth/logout");
+    await axios.get("http://localhost:8080/api/auth/logout", {
+      withCredentials: true,
+    });
     ctxDispatch({ type: "USER_SIGNOUT" });
     localStorage.removeItem("user_info");
-    window.location.href = "/signin";
   };
 
   return (
@@ -70,11 +87,14 @@ const Navbar = () => {
               >
                 Mở khóa học mới
               </div>
-              <AiOutlineShoppingCart
-                onClick={() => navigate("/cart")}
-                className="cursor-pointer"
-                size={22}
-              />
+              <IconButton aria-label="cart">
+                <StyledBadge badgeContent={cartItems.length} color="secondary">
+                  <ShoppingCartIcon
+                    onClick={() => navigate("/cart")}
+                    className="cursor-pointer"
+                  />
+                </StyledBadge>
+              </IconButton>
             </div>
           </li>
 
@@ -89,10 +109,13 @@ const Navbar = () => {
               <img
                 // onClick={() => navigate("/profile")}
                 className="relative w-[40px] h-[40px] rounded-2xl object-cover"
-                src={userInfo.avatar}
+                src={
+                  userInfo.avatar ||
+                  "https://cdn-icons-png.flaticon.com/512/3177/3177440.png"
+                }
                 alt="avatar"
               />
-              <h3>{userInfo.name}</h3>
+              <h3>{extractUsername(userInfo.name)}</h3>
             </li>
           ) : (
             <li className="flex space-x-10 items-center justify-between">

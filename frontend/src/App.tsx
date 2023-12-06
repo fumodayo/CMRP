@@ -16,67 +16,77 @@ import CreateCourse from "./pages/user/CreateCourse";
 import Certificate from "./pages/user/Certificate";
 import Review from "./pages/Review";
 import Instructor from "./pages/instructor/Instructor";
+import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 
 function App() {
-  return (
-    <BrowserRouter>
-      <div className="app">
-        <ToastContainer limit={1} className="mt-5" />
-        <main className="main">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/cart" element={<Cart />} />
-            <Route path="/checkout" element={<Checkout />} />
-            <Route path="/signin" element={<SignIn />} />
-            <Route path="/signup" element={<SignUp />} />
-            <Route path="/course/:id" element={<DetailCourse />} />
-            <Route path="/review/:author" element={<Review />} />
-            <Route
-              path="/profile"
-              element={
-                <ProtectedRoute>
-                  <Profile />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/create-course"
-              element={
-                <ProtectedRoute>
-                  <CreateCourse />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/certificate"
-              element={
-                <ProtectedRoute>
-                  <Certificate />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/instructor"
-              element={
-                <ProtectedRoute>
-                  <Instructor />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/admin"
-              element={
-                <AdminRoute>
-                  <Admin />
-                </AdminRoute>
-              }
-            />
+  const initialOptions = {
+    clientId:
+      "AR1UGb6qHlyFIl7cVxHU2lQ-JacoTFFyHy7pFDQrMuaWhoIzsiJ-zdImCz6IvxvakP_sNJWqZF0ynfBu",
+    currency: "USD",
+    intent: "capture",
+  };
 
-            <Route path="/*" element={<NotFound />} />
-          </Routes>
-        </main>
-      </div>
-    </BrowserRouter>
+  return (
+    <PayPalScriptProvider options={initialOptions}>
+      <BrowserRouter>
+        <div className="app">
+          <ToastContainer limit={1} className="mt-5" />
+          <main className="main">
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/cart" element={<Cart />} />
+              <Route path="/checkout" element={<Checkout />} />
+              <Route path="/signin" element={<SignIn />} />
+              <Route path="/signup" element={<SignUp />} />
+              <Route path="/course/:id" element={<DetailCourse />} />
+              <Route path="/review/:id" element={<Review />} />
+              <Route
+                path="/profile"
+                element={
+                  <ProtectedRoute>
+                    <Profile />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/create-course"
+                element={
+                  <ProtectedRoute>
+                    <CreateCourse />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/certificate"
+                element={
+                  <ProtectedRoute>
+                    <Certificate />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/instructor"
+                element={
+                  <ProtectedRoute>
+                    <Instructor />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/admin"
+                element={
+                  <ProtectedRoute>
+                    <Admin />
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route path="/*" element={<NotFound />} />
+            </Routes>
+          </main>
+        </div>
+      </BrowserRouter>
+    </PayPalScriptProvider>
   );
 }
 

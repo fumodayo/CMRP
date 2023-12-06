@@ -2,26 +2,29 @@ import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
-const userSchema = new mongoose.Schema(
-  {
-    // _id: { type: String },
-    avatar: { type: String },
-    email: { type: String, required: true, unique: true },
-    name: { type: String, require: true },
-    password: { type: String, required: true },
-    role: { type: Array, default: ["user"], required: true },
-    description: { type: String },
-    isCertificate: { type: Boolean, default: false },
-    category: { type: Array, default: [] },
-    total_course: { type: Number, default: 0 },
-    total_review: { type: Number, default: 0 },
-    course_Ids: { type: Array, default: [] },
-    review_Ids: { type: Array, default: [] },
-  },
-  {
-    timestamps: true,
-  }
-);
+const userSchema = new mongoose.Schema({
+  _id: { type: String },
+  avatar: { type: String },
+  name: { type: String, require: true },
+  email: { type: String, required: true, unique: true },
+  password: { type: String, required: true },
+  role: { type: Array, default: ["user"], required: true },
+  bio: { type: String },
+  isCertificate: { type: Boolean, default: false },
+  category: { type: Array, default: [] },
+  course_Ids: { type: Array, default: [] },
+  total_course: { type: Number, default: 0 },
+  review_Ids: { type: Array, default: [] },
+  total_review: { type: Number, default: 0 },
+  total_course_created: { type: Number, default: 0 },
+  course_created_Ids: { type: Array, default: [] },
+  total_review_created: { type: Number, default: 0 },
+  review_created_Ids: { type: Array, default: [] },
+  real_name: { type: String },
+  cccd_number: { type: String },
+  dateOfBirth: { type: String },
+  createdAt: { type: String },
+});
 
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();

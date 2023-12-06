@@ -50,7 +50,7 @@ const CreateCourse = () => {
       formData.append("file", course.image[0]);
 
       const { data } = await axios.post(
-        `http://localhost:8080/api/upload`,
+        `http://localhost:8080/api/upload/single`,
         formData,
         {
           headers: {
@@ -168,12 +168,12 @@ const CreateCourse = () => {
                   <MultiSelect
                     array={[
                       {
-                        label: "Vẽ",
+                        name: "Vẽ",
                         value: "Vẽ",
                       },
-                      { label: "Thiết kế", value: "Thiết kế" },
+                      { name: "Thiết kế", value: "Thiết kế" },
                       {
-                        label: "Phát triển bản thân",
+                        name: "Phát triển bản thân",
                         value: "Phát triển bản thân",
                       },
                     ]}

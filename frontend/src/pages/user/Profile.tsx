@@ -5,6 +5,8 @@ import UserLayout from "../../layouts/UserLayout";
 import { useEffect, useState } from "react";
 import { Tab } from "@headlessui/react";
 import History from "../../components/listings/History";
+import Helper from "../../components/listings/Helper";
+import ReviewHistory from "../../components/listings/ReviewHistory";
 
 function classNames(...classes: any) {
   return classes.filter(Boolean).join(" ");
@@ -85,7 +87,11 @@ export const CourseItem: React.FC<CourseItemProps> = ({
 };
 
 const Profile = () => {
-  const headerTabs = ["Lịch sử thanh toán", "Yêu cầu trợ giúp"];
+  const headerTabs = [
+    "Lịch sử thanh toán",
+    "Yêu cầu trợ giúp",
+    "Review của tôi",
+  ];
 
   return (
     <UserLayout>
@@ -99,7 +105,7 @@ const Profile = () => {
                   Học viên
                 </div>
                 <img
-                  className="relative h-[100px] w-[100px] rounded-xl object-cover mb-2" 
+                  className="relative h-[100px] w-[100px] rounded-xl object-cover mb-2"
                   src={"/images/avatar.png"}
                   alt="avatar"
                 />
@@ -109,8 +115,12 @@ const Profile = () => {
                 </p>
               </div>
               <div className="flex flex-col">
-                <p className="text-lg font-semibold text-neutral-700">Giới thiệu</p>
-                <div className="min-h-[200px] bg-neutral-50 p-5 text-neutral-400">Thú vị vui tính</div>
+                <p className="text-lg font-semibold text-neutral-700">
+                  Giới thiệu
+                </p>
+                <div className="min-h-[200px] bg-neutral-50 p-5 text-neutral-400">
+                  Thú vị vui tính
+                </div>
               </div>
             </div>
           </div>
@@ -147,11 +157,16 @@ const Profile = () => {
                     </Tab>
                   ))}
                 </Tab.List>
-                <Tab.Panels>
+                <Tab.Panels style={{ paddingTop: "20px" }}>
                   <Tab.Panel>
                     <History />
                   </Tab.Panel>
-                  <Tab.Panel>Status</Tab.Panel>
+                  <Tab.Panel>
+                    <Helper />
+                  </Tab.Panel>
+                  <Tab.Panel>
+                    <ReviewHistory />
+                  </Tab.Panel>
                 </Tab.Panels>
               </Tab.Group>
             </div>

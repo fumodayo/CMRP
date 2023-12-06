@@ -69,6 +69,7 @@ const DetailCourse = () => {
     description,
     requirement,
     schedule,
+    user_id,
     total_rating,
     total_review,
     total_student,
@@ -92,7 +93,6 @@ const DetailCourse = () => {
       type: "CART_ADD_ITEM",
       payload: { ...courseItem },
     });
-    navigator("/cart");
   };
 
   return (
@@ -130,7 +130,7 @@ const DetailCourse = () => {
                 <span className="text-zinc-400">{author}</span>
                 <span>|</span>
                 <span
-                  onClick={() => navigator(`/review/${author}`)}
+                  onClick={() => navigator(`/review/${user_id}`)}
                   className="text-zinc-400 hover:underline cursor-pointer"
                 >
                   Review ({total_review})

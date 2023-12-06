@@ -2,6 +2,7 @@ import express from "express";
 import expressAsyncHandler from "express-async-handler";
 import { UserModel } from "../models/user.model.js";
 import { sendToken } from "../utils.js";
+import { v4 as uuidv4 } from "uuid";
 
 const authRouter = express.Router();
 
@@ -46,12 +47,12 @@ authRouter.post(
         .json({ success: false, message: "Tài khoản đã tồn tại" });
     }
 
-    // Kiểm tra xem `name` có tồn tại không trước khi sử dụng nó
     const userData = {
+      _id: uuidv4(),
       email,
       password,
       role,
-      name: name || "", // Sử dụng name nếu tồn tại, nếu không sẽ là chuỗi rỗng
+      name: email,
     };
 
     user = await UserModel.create(userData);

@@ -7,6 +7,9 @@ import SimilarCourses from "../components/listings/SimilarCourses";
 import { Store } from "../context/Store";
 import { useContext } from "react";
 import { CartItem } from "../types";
+import { useNavigate } from "react-router-dom";
+import BackButton from "../components/buttons/BackButton";
+import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 
 export const CartItems: React.FC<CartItem> = ({
   _id,
@@ -14,7 +17,7 @@ export const CartItems: React.FC<CartItem> = ({
   endDate,
   name,
   author,
-  location,
+  type,
   rating,
   total_student,
   price,
@@ -26,44 +29,50 @@ export const CartItems: React.FC<CartItem> = ({
   };
 
   return (
-    <div
-      onClick={() => removeItemHandler(_id)}
-      className="flex items-center space-x-10 cursor-pointer p-5 rounded-xl hover:bg-neutral-100"
-    >
-      <div className="w-[35px] border border-neutral-700" />
-      <div className="flex space-x-5 justify-center items-center">
-        <div className="relative w-full h-[160px]">
+    <div className="flex items-center space-x-10 cursor-pointer p-5 rounded-xl hover:bg-gray-100 transition-colors duration-300">
+      <div className="hover:bg-red-200 p-1 rounded-2xl">
+        <HighlightOffIcon
+          color="error"
+          onClick={() => removeItemHandler(_id)}
+        />
+      </div>
+      <div className="flex items-center space-x-5">
+        <div className="relative w-72 h-42">
           {image && (
             <img
-              className="relative h-[160px] rounded-xl object-cover"
+              className="h-full w-full rounded-md object-cover"
               src={image}
               alt="course"
             />
           )}
-          <div className="absolute bottom-0 rounded-bl-xl bg-red-500 px-3 py-1 text-sm text-white">
+          <div className="absolute bottom-0 rounded-b-md bg-red-500 px-3 py-1 text-sm text-white">
             {countdownDaysToEvent(endDate)}
           </div>
         </div>
-        <div className="min-w-[350px] space-y-1">
-          <h2 className="text-2xl font-semibold text-neutral-900">{name}</h2>
-          <div className="text-zinc-400 text-sm font-normal">{author}</div>
-          <div className="text-zinc-400 text-sm font-semibold">{location}</div>
-          <div className="flex items-center text-zinc-400 text-sm font-normal space-x-3">
+        <div className="flex flex-col min-w-[350px]">
+          <h2 className="text-lg font-semibold text-gray-900">{name}</h2>
+          <div className="text-gray-500 text-sm">{author}</div>
+          <div className="text-gray-500 text-sm font-semibold">
+            {type?.toUpperCase()}
+          </div>
+          <div className="flex items-center text-gray-500 text-sm space-x-1">
             {rating}
-            <AiFillStar className="text-yellow-400 mx-1" size={15} />|
+            <AiFillStar className="text-yellow-400" size={15} />
+            <span className="mx-1">|</span>
             <span>{total_student}</span>
           </div>
         </div>
       </div>
-      <div className="text-slate-700 text-xl font-bold">
+      <div className="text-gray-700 text-lg font-bold">
         {price && formatPrice(price)}
-        <span className="text-emerald-500">đ</span>
+        <span className="text-green-500">đ</span>
       </div>
     </div>
   );
 };
 
 const Cart = () => {
+  const navigator = useNavigate();
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const {
     cart: { cartItems },
@@ -76,7 +85,8 @@ const Cart = () => {
   return (
     <UserLayout>
       <Container>
-        <div className="flex flex-col justify-between">
+        <BackButton />
+        <section className="flex flex-col justify-between mx-6 py-5">
           <h1 className="mb-5 text-3xl font-semibold text-neutral-900">
             Giỏ hàng ({cartItems.length})
           </h1>
@@ -89,7 +99,7 @@ const Cart = () => {
                   endDate={item.endDate}
                   name={item.name}
                   author={item.author}
-                  location={item.location}
+                  type={item.type}
                   rating={item.rating}
                   total_student={item.total_student}
                   price={item.price}
@@ -106,7 +116,10 @@ const Cart = () => {
                   <span className="text-emerald-500">đ</span>
                 </div>
               </div>
-              <div className="min-w-[300px] bg-neutral-700 text-white text-xl flex items-center justify-center px-5 py-3 cursor-pointer hover:bg-neutral-900">
+              <div
+                onClick={() => navigator("/checkout")}
+                className="min-w-[300px] bg-neutral-700 text-white text-xl flex items-center justify-center px-5 py-3 cursor-pointer hover:bg-neutral-900"
+              >
                 Thanh toán
               </div>
             </div>
@@ -117,7 +130,7 @@ const Cart = () => {
             </h1>
             <SimilarCourses />
           </div>
-        </div>
+        </section>
       </Container>
     </UserLayout>
   );

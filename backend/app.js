@@ -7,6 +7,8 @@ import authRouter from "./routes/auth.routes.js";
 import adminRouter from "./routes/admin.routes.js";
 import uploadRoutes from "./routes/upload.routes.js";
 import reviewRouter from "./routes/review.routes.js";
+import categoryRoutes from "./routes/category.routes.js";
+import instructorRouter from "./routes/instructor.routes.js";
 
 export const app = express();
 
@@ -23,6 +25,8 @@ app.use(
 
 app.use("/api/auth", authRouter);
 app.use("/api/course", courseRouter);
+app.use("/api/category", categoryRoutes);
+app.use("/api/instructor", instructorRouter);
 app.use("/api/review", reviewRouter);
 app.use("/api/admin", adminRouter);
 app.use("/api/upload", uploadRoutes);
