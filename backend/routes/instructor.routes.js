@@ -13,7 +13,6 @@ instructorRouter.get(
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const { _id } = decoded;
     const course = await CourseModel.find({ user_id: _id });
-    console.log(course);
     if (course) {
       res.send(course);
     } else {

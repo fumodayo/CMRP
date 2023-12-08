@@ -16,6 +16,7 @@ export type Course = {
   name?: string;
   user_id?: string;
   author?: string;
+  isCertificate?: boolean;
   image?: string;
   thumbnail?: string; // Link youtube
   price?: number;
@@ -108,7 +109,7 @@ export type User = {
   createdAt?: string;
 };
 
-export type Certificate = {
+export type CertificateTypes = {
   _id?: string;
   user_id?: string;
   category?: string[];

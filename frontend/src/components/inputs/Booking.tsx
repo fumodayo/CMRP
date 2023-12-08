@@ -1,9 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
-import interactionPlugin from "@fullcalendar/interaction";
-import { EventClickArg } from "@fullcalendar/core";
+import interactionPlugin, {
+  EventResizeDoneArg,
+} from "@fullcalendar/interaction";
+import { DateSelectArg, EventClickArg, EventDropArg } from "@fullcalendar/core";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import dayjs, { Dayjs } from "dayjs";
 import { viVN } from "@mui/x-date-pickers/locales";
@@ -16,6 +18,8 @@ import {
 import { DateRange } from "@mui/x-date-pickers-pro";
 import MultiSelect from "./MultiSelect";
 import { nanoid } from "nanoid";
+import Modal from "../Modal";
+import moment from "moment";
 
 type Schedule = {
   id: string;
@@ -24,8 +28,32 @@ type Schedule = {
   end: string;
 };
 
+interface ScheduleState {
+  clickInfo?: EventClickArg;
+  selectInfo?: DateSelectArg;
+  checkInfo?: EventDropArg | EventResizeDoneArg;
+  status?: string;
+}
+
 const Booking = ({ onChangeBooking }) => {
   const today = dayjs();
+  const [state, setState] = useState<ScheduleState>({});
+  const calendarRef = useRef(null);
+
+  const [modal, setModal] = useState(false);
+  const [childrenSetup, setChildrenSetup] = useState<JSX.Element>();
+  const [addNewTime, setAddNewTime] = useState("");
+  const [addNewEvent, setAddNewEvent] = useState("");
+
+  const handleCloseModal = () => {
+    handleClose();
+    setModal(false);
+  };
+
+  const handleClose = () => {
+    setState({});
+    setModal(false);
+  };
 
   // Schedule lấy từ database
   const [events, setEvents] = useState<Schedule[]>([]);
@@ -60,46 +88,34 @@ const Booking = ({ onChangeBooking }) => {
     setMultiDays(updatedSchedule);
   };
 
-  // Handle trong lịch
   const handleEventClick = (clickInfo: EventClickArg) => {
-    const clickedEvent = clickInfo.event;
-    const eventId = clickedEvent.id;
-
-    // Kiểm tra xem sự kiện được click có trong danh sách events không
-    const eventIndex = events.findIndex((event) => event.id === eventId);
-
-    // Nếu sự kiện được click có trong danh sách events, xóa nó
-    if (eventIndex !== -1) {
-      const updatedEvents = [...events];
-      updatedEvents.splice(eventIndex, 1);
-      setEvents(updatedEvents);
-    }
+    setState({ clickInfo, status: "UPDATE" });
+    setModal(true);
   };
 
-  const handleEmptySlotClick = (arg: any) => {
-    console.log(arg);
-    const clickedDate = arg.dateStr;
-
-    // Kiểm tra xem clickedDate đã có trong danh sách events chưa
-    const isDateOccupied = events.some((event) =>
-      dayjs(event.start).isSame(clickedDate, "day")
+  const handleEmptySlotClick = (clickInfo: any) => {
+    console.log("chua co event", clickInfo);
+    setAddNewEvent(clickInfo.startStr);
+    setModal(true);
+    const newChildren = (
+      <div>
+        <h2>Giờ bắt đầu buổi học</h2>
+        <LocalizationProvider
+          dateAdapter={AdapterDayjs}
+          dateLibInstance={dayjs}
+          adapterLocale={"vi"}
+          localeText={
+            viVN.components.MuiLocalizationProvider.defaultProps.localeText
+          }
+        >
+          <MobileTimePicker
+            ampm={false}
+            onChange={(time) => setAddNewTime(time)}
+          />
+        </LocalizationProvider>
+      </div>
     );
-
-    // Nếu clickedDate chưa có sự kiện, thêm sự kiện mới
-    if (!isDateOccupied) {
-      const newEvent = {
-        id: nanoid(),
-        title: "Sự kiện mới",
-        start: clickedDate,
-        end: clickedDate, // hoặc cập nhật end date nếu cần
-      };
-
-      const updatedEvents = [...events, newEvent];
-      setEvents(updatedEvents);
-    }
-
-    // Các hành động khác (nếu cần)
-    // ...
+    setChildrenSetup(newChildren);
   };
 
   const [isResetMultiSelect, setResetMultiSelect] = useState(false);
@@ -128,6 +144,72 @@ const Booking = ({ onChangeBooking }) => {
     setResetMultiSelect(false);
   }, [selectedRangeTime, onChangeBooking, multiDays]);
 
+  const handleSubmit = () => {
+    const startDateTime = moment(addNewTime["$d"]);
+    const newStart = startDateTime
+      .set({
+        year: parseInt(addNewEvent.substring(0, 4)),
+        month: parseInt(addNewEvent.substring(5, 7)) - 1, // Giảm đi 1 vì tháng bắt đầu từ 0
+        date: parseInt(addNewEvent.substring(8, 10)),
+      })
+      .toISOString();
+
+    const endDateTime = new Date(addNewTime["$d"]);
+    const newEnd = new Date(endDateTime.getTime() + 90 * 60000).toISOString();
+
+    const newEvent: Schedule = {
+      id: nanoid(),
+      title: "Test",
+      start: newStart,
+      end: newEnd,
+    };
+    setEvents((oldEvents) => [...oldEvents, newEvent]);
+    handleClose();
+  };
+
+  const handleDelete = () => {
+    if (state.clickInfo) {
+      const updatedEvents = events.filter(
+        (item) => item.id !== state?.clickInfo?.event.id
+      );
+      setEvents(updatedEvents);
+      handleClose();
+    }
+  };
+
+  const handleEdit = () => {
+    const startDateTime = moment(addNewTime["$d"]);
+    const newStart = startDateTime
+      .set({
+        year: parseInt(addNewEvent.substring(0, 4)),
+        month: parseInt(addNewEvent.substring(5, 7)) - 1, // Giảm đi 1 vì tháng bắt đầu từ 0
+        date: parseInt(addNewEvent.substring(8, 10)),
+      })
+      .toISOString();
+
+    const endDateTime = new Date(addNewTime["$d"]);
+    const newEnd = new Date(endDateTime.getTime() + 90 * 60000).toISOString();
+
+    if (state.clickInfo) {
+      const updatedEvents = events.map((item) => {
+        if (item.id === state?.clickInfo?.event.id) {
+          return {
+            ...item,
+            title: "Updated Title",
+            start: newStart,
+            end: newEnd,
+          };
+        }
+        return item;
+      });
+
+      setEvents(updatedEvents);
+      handleClose();
+    }
+  };
+
+  console.log(events);
+
   return (
     <div>
       <LocalizationProvider
@@ -150,13 +232,13 @@ const Booking = ({ onChangeBooking }) => {
           />
           <MultiSelect
             array={[
-              { label: "Thứ 2", value: 0 },
-              { label: "Thứ 3", value: 1 },
-              { label: "Thứ 4", value: 2 },
-              { label: "Thứ 5", value: 3 },
-              { label: "Thứ 6", value: 4 },
-              { label: "Thứ 7", value: 5 },
-              { label: "Chủ nhật", value: 6 },
+              { name: "Thứ 2", value: 0 },
+              { name: "Thứ 3", value: 1 },
+              { name: "Thứ 4", value: 2 },
+              { name: "Thứ 5", value: 3 },
+              { name: "Thứ 6", value: 4 },
+              { name: "Thứ 7", value: 5 },
+              { name: "Chủ nhật", value: 6 },
             ]}
             name="Chọn ngày theo lịch trình của bạn"
             onMultiSelectChange={handleMultiDaysChange}
@@ -187,6 +269,7 @@ const Booking = ({ onChangeBooking }) => {
         </button>
       </LocalizationProvider>
       <FullCalendar
+        ref={calendarRef}
         validRange={{
           start: today.toISOString(), // Ngày hôm nay
           end: today.add(1, "year").toISOString(), // Ngày kết thúc trong 1 năm từ ngày hôm nay
@@ -208,6 +291,20 @@ const Booking = ({ onChangeBooking }) => {
         locale={"vi"}
         eventClick={handleEventClick}
       />
+      <Modal
+        title={
+          state.status === "UPDATE" ? "Chỉnh sửa buổi học" : "Thêm buổi học mới"
+        }
+        isOpen={modal}
+        toggle={handleCloseModal}
+        onCancel={handleCloseModal}
+        onSubmit={state.clickInfo ? handleEdit : handleSubmit}
+        submitText={state.clickInfo ? "Thay đổi" : "Lưu"}
+        onDelete={state.clickInfo && handleDelete}
+        deleteText={"Xóa"}
+      >
+        {childrenSetup}
+      </Modal>
     </div>
   );
 };

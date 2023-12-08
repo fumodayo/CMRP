@@ -37,25 +37,8 @@ const columns: ColumnsType<DataType> = [
   },
 ];
 
-const ReviewHistory = () => {
-  const items = [
-    {
-      _id: "0222",
-      createdAt: "09-10-2023",
-      name: "Khóa học Code",
-      rating: 5,
-      content: "Hay",
-    },
-    {
-      _id: "0222",
-      createdAt: "09-10-2023",
-      name: "Khóa học Code",
-      rating: 5,
-      content: "Hay",
-    },
-  ];
-
-  return <Table columns={columns} dataSource={items} />;
+const ReviewHistory = ({ reviews }) => {
+  return <Table columns={columns} dataSource={reviews} />;
 };
 
 export default ReviewHistory;

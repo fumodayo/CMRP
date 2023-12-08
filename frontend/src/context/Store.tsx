@@ -44,17 +44,14 @@ function reducer(state: State, action: Action): State {
       const cartItems = state.cart.cartItems;
       const existingItem = cartItems.find((item) => item._id === newItem._id);
 
-      if (existingItem) {
-        // Cập nhật sản phẩm đã có trong giỏ hàng
-        const updatedItem = { ...existingItem, ...newItem };
-        const updatedCart = cartItems.map((item) =>
-          item.id === existingItem.id ? updatedItem : item
-        );
-        localStorage.setItem("cart_items", JSON.stringify(updatedCart));
-        return {
-          ...state,
-          cart: { ...state.cart, cartItems: updatedCart },
-        };
+      // Kiểm tra userInfo có mảng course_Ids
+      const userInfo = state.userInfo || {};
+      const { course_Ids } = userInfo;
+
+      if (existingItem || (course_Ids && course_Ids.includes(newItem._id))) {
+        // Nếu sản phẩm đã tồn tại trong giỏ hàng hoặc trong mảng course_Ids của userInfo
+        // Không thực hiện thêm vào giỏ hàng
+        return { ...state };
       } else {
         // Thêm sản phẩm mới vào giỏ hàng
         const updatedCart = [...cartItems, newItem];

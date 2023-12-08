@@ -1,4 +1,4 @@
-import { useCallback, useContext, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { ClipLoader } from "react-spinners";
 import { HiArrowSmRight } from "react-icons/hi";
 import { Controller, useForm } from "react-hook-form";
@@ -13,6 +13,9 @@ import { useNavigate } from "react-router-dom";
 import UploadSingleImage from "../../components/inputs/UploadSingleImage";
 import { Store } from "../../context/Store";
 import axios from "axios";
+import { DateTime } from "luxon";
+import Category from "../../components/listings/Category";
+import toast from "react-hot-toast";
 
 const CreateCourse = () => {
   const navigator = useNavigate();
@@ -49,20 +52,20 @@ const CreateCourse = () => {
       const formData = new FormData();
       formData.append("file", course.image[0]);
 
-      const { data } = await axios.post(
-        `http://localhost:8080/api/upload/single`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      // const { data } = await axios.post(
+      //   `http://localhost:8080/api/upload/single`,
+      //   formData,
+      //   {
+      //     headers: {
+      //       "Content-Type": "multipart/form-data",
+      //     },
+      //   }
+      // );
 
       const createCourse = {
         author: userInfo.name,
         name: course.name,
-        image: data.url,
+        // image: data.url,
         category: course.category,
         price: parseInt(course.price),
         requirement: course.requirement,
@@ -75,15 +78,15 @@ const CreateCourse = () => {
         startDate: bookingData.startDate,
         endDate: bookingData.endDate,
       };
-
+      toast.success("Thành công");
       console.log(createCourse);
 
-      const res = await axios.post(
-        `http://localhost:8080/api/course`,
-        createCourse
-      );
+      // const res = await axios.post(
+      //   `http://localhost:8080/api/course`,
+      //   createCourse
+      // );
 
-      console.log(res.data);
+      // console.log(res.data);
 
       // navigator(`/certificate`);
     },
@@ -93,6 +96,110 @@ const CreateCourse = () => {
   const handleSelectChange = (selected: string) => {
     setIsShowInputAddress(selected === "offline" || selected === "hybrid");
   };
+
+  useEffect(() => {
+    interface Event {
+      id: string;
+      title: string;
+      start: string;
+      end: string;
+    }
+
+    function convertEventsToString(events: Event[]): string {
+      const daysMap: { [key: number]: string } = {
+        0: "Chủ Nhật",
+        1: "Thứ 2",
+        2: "Thứ 3",
+        3: "Thứ 4",
+        4: "Thứ 5",
+        5: "Thứ 6",
+        6: "Thứ 7",
+      };
+
+      const filteredEvents = events.filter((event) => {
+        const eventDate = DateTime.fromISO(event.start).setZone(
+          "Asia/Ho_Chi_Minh"
+        );
+        return eventDate.weekday === 1 || eventDate.weekday === 3; // Monday or Wednesday
+      });
+
+      const timeStrings = filteredEvents.map((event) => {
+        const eventDate = DateTime.fromISO(event.start).setZone(
+          "Asia/Ho_Chi_Minh"
+        );
+        const day = daysMap[eventDate.weekday];
+        const startTime = eventDate.toFormat("HH:mm");
+        const endTime = DateTime.fromISO(event.end)
+          .setZone("Asia/Ho_Chi_Minh")
+          .toFormat("HH:mm");
+        const weekNumber = eventDate.weekNumber;
+        return `Tuần thứ ${weekNumber} ${day} từ ${startTime} đến ${endTime}`;
+      });
+
+      return timeStrings.join(", ");
+    }
+
+    const events: Event[] = [
+      {
+        id: "31082",
+        title: "Class A",
+        start: "2023-08-02T00:00:00.000Z",
+        end: "2023-08-02T01:30:00.000Z",
+      },
+      {
+        id: "90154",
+        title: "Class A",
+        start: "2023-08-07T00:00:00.000Z",
+        end: "2023-08-07T01:30:00.000Z",
+      },
+      {
+        id: "76424",
+        title: "Class A",
+        start: "2023-08-09T00:00:00.000Z",
+        end: "2023-08-09T01:30:00.000Z",
+      },
+      {
+        id: "98535",
+        title: "Class A",
+        start: "2023-08-14T00:00:00.000Z",
+        end: "2023-08-14T01:30:00.000Z",
+      },
+      {
+        id: "22176",
+        title: "Class A",
+        start: "2023-08-16T00:00:00.000Z",
+        end: "2023-08-16T01:30:00.000Z",
+      },
+      {
+        id: "22422",
+        title: "Class A",
+        start: "2023-08-21T00:00:00.000Z",
+        end: "2023-08-21T01:30:00.000Z",
+      },
+      {
+        id: "68145",
+        title: "Class A",
+        start: "2023-08-23T00:00:00.000Z",
+        end: "2023-08-23T01:30:00.000Z",
+      },
+      {
+        id: "20796",
+        title: "Class A",
+        start: "2023-08-28T00:00:00.000Z",
+        end: "2023-08-28T01:30:00.000Z",
+      },
+      {
+        id: "28559",
+        title: "Class A",
+        start: "2023-08-30T00:00:00.000Z",
+        end: "2023-08-30T01:30:00.000Z",
+      },
+    ];
+
+    // Chuyển đổi và in kết quả
+    const result = convertEventsToString(events);
+    console.log(result);
+  }, []);
 
   return (
     <UserLayout>
@@ -164,23 +271,7 @@ const CreateCourse = () => {
               <Controller
                 name="category"
                 control={control}
-                render={({ field }) => (
-                  <MultiSelect
-                    array={[
-                      {
-                        name: "Vẽ",
-                        value: "Vẽ",
-                      },
-                      { name: "Thiết kế", value: "Thiết kế" },
-                      {
-                        name: "Phát triển bản thân",
-                        value: "Phát triển bản thân",
-                      },
-                    ]}
-                    name="Thể loại"
-                    field={field}
-                  />
-                )}
+                render={({ field }) => <Category field={field} />}
               />
             </div>
 

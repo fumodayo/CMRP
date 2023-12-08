@@ -103,7 +103,7 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
               value={item.value}
               style={getStyles(item.name, personName, theme)}
             >
-              {item.name.toUpperCase()}
+              {item.name}
             </MenuItem>
           ))}
         </Select>

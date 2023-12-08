@@ -64,10 +64,14 @@ reviewRouter.get(
 
 /** GET REVIEWS AUTHOR */
 reviewRouter.get(
-  "/author/:id",
+  "/author/:id/:type/:rating",
   expressAsyncHandler(async (req, res) => {
     try {
+      console.log(req.params);
       const authorId = req.params.id;
+      const typeFilter = req.params.type !== "all" ? req.params.type : null; // Lọc theo type
+      const ratingFilter =
+        req.params.rating !== "all" ? parseInt(req.params.rating) : null; // Lọc theo rating
 
       const author = await UserModel.findById(authorId);
       if (!author) {
@@ -80,7 +84,24 @@ reviewRouter.get(
         category: author.category, // Giả sử category là một trường của tác giả
       };
 
-      const courses = await CourseModel.find({ user_id: authorId });
+      let courses = [];
+      if (typeFilter !== null && ratingFilter !== null) {
+        courses = await CourseModel.find({
+          user_id: authorId,
+          category: typeFilter,
+        });
+      } else if (typeFilter !== null) {
+        courses = await CourseModel.find({
+          user_id: authorId,
+          category: typeFilter,
+        });
+      } else if (ratingFilter !== null) {
+        courses = await CourseModel.find({
+          user_id: authorId,
+        });
+      } else {
+        courses = await CourseModel.find({ user_id: authorId });
+      }
 
       const reviewsWithUsers = [];
 
@@ -89,7 +110,15 @@ reviewRouter.get(
         const courseInfo = { ...course.toObject() }; // Copy thông tin course
 
         for (const reviewId of course.reviews_Ids) {
-          const review = await ReviewModel.findOne({ _id: reviewId });
+          let review = null;
+          if (ratingFilter !== null) {
+            review = await ReviewModel.findOne({
+              _id: reviewId,
+              rating: ratingFilter,
+            }); // Lọc theo rating
+          } else {
+            review = await ReviewModel.findById(reviewId);
+          }
           if (review) {
             const user = await UserModel.findOne({ _id: review.user_id });
             if (user) {
@@ -108,7 +137,10 @@ reviewRouter.get(
         }
       }
 
-      return res.status(200).send({ ...authorInfo, courses: reviewsWithUsers });
+      return res.status(200).send({
+        ...authorInfo,
+        courses: reviewsWithUsers,
+      });
     } catch (err) {
       return res
         .status(500)

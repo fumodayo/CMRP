@@ -99,23 +99,26 @@ const Navbar = () => {
           </li>
 
           {userInfo ? (
-            <li className="flex justify-between items-center space-x-5">
+            <li className="flex justify-between items-center space-x-2">
               {/* USER PROFILE */}
+              <div className="flex items-center" onClick={() => navigate("/profile")}>
+                <img
+                  className="relative w-[40px] h-[40px] rounded-xl object-cover mr-1"
+                  src={
+                    userInfo.avatar ||
+                    "https://cdn-icons-png.flaticon.com/512/3177/3177440.png"
+                  }
+                  alt="avatar"
+                />
+                <h3 className="font-medium">
+                  {extractUsername(userInfo.name)}
+                </h3>
+              </div>
               <MdLogout
                 onClick={signoutHandler}
-                className="text-zinc-400"
+                className="text-red-500"
                 size={25}
               />
-              <img
-                // onClick={() => navigate("/profile")}
-                className="relative w-[40px] h-[40px] rounded-2xl object-cover"
-                src={
-                  userInfo.avatar ||
-                  "https://cdn-icons-png.flaticon.com/512/3177/3177440.png"
-                }
-                alt="avatar"
-              />
-              <h3>{extractUsername(userInfo.name)}</h3>
             </li>
           ) : (
             <li className="flex space-x-10 items-center justify-between">

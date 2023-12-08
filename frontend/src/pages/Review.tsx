@@ -3,7 +3,6 @@ import UserLayout from "../layouts/UserLayout";
 import BackButton from "../components/buttons/BackButton";
 import Chip from "../components/listings/Chip";
 import { AiFillStar } from "react-icons/ai";
-import { convertDateTime } from "../utils/convertDateTime";
 import Container from "../components/Container";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -14,17 +13,21 @@ const Review = () => {
   const params = useParams();
 
   const [reviewsData, setReviewsData] = useState(null);
+  const [type, setType] = useState("");
+  const [rating, setRating] = useState("");
 
   useEffect(() => {
     const { id } = params;
+    const typeParam = type || "all";
+    const ratingParam = rating || "all";
     const fetchData = async () => {
       const { data } = await axios.get(
-        `http://localhost:8080/api/review/author/${id}`
+        `http://localhost:8080/api/review/author/${id}/${typeParam}/${ratingParam}`
       );
       setReviewsData(data);
     };
     fetchData();
-  }, [params]);
+  }, [params, rating, type]);
 
   if (!reviewsData) {
     return null;
@@ -57,7 +60,11 @@ const Review = () => {
   ];
 
   const handleTypeChange = (item: string) => {
-    console.log(item);
+    setType(item);
+  };
+
+  const handleRatingChange = (item: string) => {
+    setRating(item);
   };
 
   return (
@@ -67,7 +74,7 @@ const Review = () => {
         <section className="space-y-5">
           <div className="flex justify-between">
             <h1>
-              Đánh giá <span>{name}</span>
+              Đánh giá của <span className="font-medium">{name}</span>
             </h1>
             {/* <p>Tạo khóa học đầu tiên từ {convertDateTime(author.firstTime)}</p> */}
           </div>
@@ -77,7 +84,7 @@ const Review = () => {
               {category && (
                 <Chip
                   types={category}
-                  currentType={""}
+                  currentType={type}
                   onCurrentType={handleTypeChange}
                 />
               )}
@@ -97,7 +104,11 @@ const Review = () => {
               />
             </div>
             <div className="flex space-x-2 py-5">
-              <Chip types={rangeStars} currentType={""} onCurrentType={handleTypeChange} />
+              <Chip
+                types={rangeStars}
+                currentType={rating}
+                onCurrentType={handleRatingChange}
+              />
             </div>
           </div>
           {courses &&

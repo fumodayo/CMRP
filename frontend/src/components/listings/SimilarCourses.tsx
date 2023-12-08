@@ -39,7 +39,6 @@ const SimilarCourses: React.FC<SimilarCourseProps> = ({ id }) => {
       {coursesData &&
         coursesData.map((item) => (
           <CourseCard
-            key={item._id}
             id={item._id}
             image={item.image}
             endDate={item.endDate}
@@ -49,6 +48,7 @@ const SimilarCourses: React.FC<SimilarCourseProps> = ({ id }) => {
             total_rating={item.total_rating}
             price={item.price}
             total_student={item.total_student}
+            isCertificate={item.isCertificate}
           />
         ))}
     </div>

@@ -9,6 +9,7 @@ import uploadRoutes from "./routes/upload.routes.js";
 import reviewRouter from "./routes/review.routes.js";
 import categoryRoutes from "./routes/category.routes.js";
 import instructorRouter from "./routes/instructor.routes.js";
+import userRouter from "./routes/user.routes.js";
 
 export const app = express();
 
@@ -29,4 +30,5 @@ app.use("/api/category", categoryRoutes);
 app.use("/api/instructor", instructorRouter);
 app.use("/api/review", reviewRouter);
 app.use("/api/admin", adminRouter);
+app.use("/api/user", userRouter);
 app.use("/api/upload", uploadRoutes);

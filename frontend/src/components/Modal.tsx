@@ -6,7 +6,20 @@ import {
   DialogTitle,
 } from "@mui/material";
 
-const Modal = ({
+interface ModalProps {
+  title?: string;
+  isOpen: boolean;
+  toggle?: () => void;
+  onCancel?: () => void;
+  cancelText?: string;
+  onSubmit?: () => void;
+  submitText?: string;
+  onDelete?: () => void;
+  deleteText?: string;
+  children?: React.ReactNode;
+}
+
+const Modal: React.FC<ModalProps> = ({
   title = "Title",
   isOpen,
   toggle,

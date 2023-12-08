@@ -21,13 +21,13 @@ const ColorlibConnector = styled(StepConnector)(({ theme }) => ({
   [`&.${stepConnectorClasses.active}`]: {
     [`& .${stepConnectorClasses.line}`]: {
       backgroundImage:
-        "linear-gradient( 95deg,rgb(242,113,33) 0%,rgb(233,64,87) 50%,rgb(138,35,135) 100%)",
+        "linear-gradient( 95deg,rgb(6, 183, 56) 0%, rgb(8, 126, 18) 50%, rgb(35, 138, 61) 100%)",
     },
   },
   [`&.${stepConnectorClasses.completed}`]: {
     [`& .${stepConnectorClasses.line}`]: {
       backgroundImage:
-        "linear-gradient( 95deg,rgb(242,113,33) 0%,rgb(233,64,87) 50%,rgb(138,35,135) 100%)",
+        "linear-gradient( 95deg,rgb(6, 183, 56) 0%, rgb(8, 126, 18) 50%, rgb(35, 138, 61) 100%)",
     },
   },
   [`& .${stepConnectorClasses.line}`]: {
@@ -54,12 +54,12 @@ const ColorlibStepIconRoot = styled("div")<{
   alignItems: "center",
   ...(ownerState.active && {
     backgroundImage:
-      "linear-gradient( 136deg, rgb(242,113,33) 0%, rgb(233,64,87) 50%, rgb(138,35,135) 100%)",
+      "linear-gradient( 136deg, rgb(6, 183, 56) 0%, rgb(8, 126, 18) 50%, rgb(35, 138, 61) 100%)",
     boxShadow: "0 4px 10px 0 rgba(0,0,0,.25)",
   }),
   ...(ownerState.completed && {
     backgroundImage:
-      "linear-gradient( 136deg, rgb(242,113,33) 0%, rgb(233,64,87) 50%, rgb(138,35,135) 100%)",
+      "linear-gradient( 136deg, rgb(6, 183, 56) 0%, rgb(8, 126, 18) 50%, rgb(35, 138, 61) 100%)",
   }),
 }));
 
@@ -91,10 +91,39 @@ const Certificate = () => {
     real_name: "",
     dateOfBirth: "",
   });
+
   const [authentic, setAuthentic] = useState({
     category: [],
     images: [],
   });
+
+  const [allCertificateData, setAllCertificateData] = useState<any[]>([]);
+
+  // Thêm danh sách các chứng chỉ đã tạo
+  const [certificateSteps, setCertificateSteps] = useState<JSX.Element[]>([]);
+
+  // Thêm hàm để tạo mới bước chứng chỉ
+  const addCertificateStep = () => {
+    const newCertificateStep = (
+      <CertificateStep
+        key={certificateSteps.length}
+        onAuthentic={setAuthentic}
+      />
+    );
+    setCertificateSteps([...certificateSteps, newCertificateStep]);
+  };
+
+  useEffect(() => {
+    if (authentic.images.length > 0) {
+      setAllCertificateData((prevData) => [...prevData, authentic]);
+    }
+  }, [authentic]);
+
+  // Thêm hàm để xóa bước chứng chỉ đã tạo
+  const removeCertificateStep = (index: number) => {
+    const updatedSteps = certificateSteps.filter((_, i) => i !== index);
+    setCertificateSteps(updatedSteps);
+  };
 
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
@@ -118,7 +147,7 @@ const Certificate = () => {
       //     },
       //   }
       // );
-      console.log(authentic);
+      console.log(allCertificateData);
     }
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
@@ -154,7 +183,18 @@ const Certificate = () => {
           {activeStep === 0 ? (
             <CCCDStep onCCCDData={setCccdData} />
           ) : (
-            <CertificateStep onAuthentic={setAuthentic} />
+            <div>
+              <CertificateStep onAuthentic={setAuthentic} />
+              {certificateSteps.map((step, index) => (
+                <div key={index}>
+                  {step}
+                  <Button onClick={() => removeCertificateStep(index)}>
+                    Xóa
+                  </Button>
+                </div>
+              ))}
+              <Button onClick={addCertificateStep}>Thêm chứng chỉ</Button>
+            </div>
           )}
         </div>
         <div className="flex justify-between">

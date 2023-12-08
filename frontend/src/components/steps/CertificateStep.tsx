@@ -39,14 +39,10 @@ const CertificateStep = ({ onAuthentic }) => {
     <div className="py-10">
       <h1>Lựa chọn thể loại của bạn</h1>
       <Category onChange={setCategories} />
-      <Dropzone
-        className="p-16 mt-10 border border-neutral-200"
-        handleFileChange={handleFileChange}
-      />
       {/* Hiển thị hình ảnh đã chọn */}
       <div className="mt-4">
         <h2 className="text-lg font-semibold">Hình ảnh đã chọn:</h2>
-        <ul className="list-none mt-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-10">
+        <ul className="bg-gray-100 px-3 py-2 list-none mt-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-10">
           {selectedFiles.map((file) => (
             <li key={file.name} className="relative h-32 rounded-md shadow-lg">
               <img
@@ -61,16 +57,20 @@ const CertificateStep = ({ onAuthentic }) => {
               />
               <button
                 type="button"
-                className="w-7 h-7 absolute -top-3 -right-3"
+                className="w-7 h-7 absolute -top-0 -right-3"
                 onClick={() => removeFile(file.name)}
               >
                 <IoIosCloseCircle className="w-7 h-7 fill-secondary-500 hover:fill-secondary-400 transition-colors" />
               </button>
-              <p className="mt-2 text-neutral-500 text-[12px] font-medium">
+              <p className="mt-1 truncate text-neutral-500 text-[12px] font-medium">
                 {file.name}
               </p>
             </li>
           ))}
+          <Dropzone
+            className="p-4 mt-2 rounded-xl border-2 border-dashed border-neutral-400"
+            handleFileChange={handleFileChange}
+          />
         </ul>
       </div>
     </div>

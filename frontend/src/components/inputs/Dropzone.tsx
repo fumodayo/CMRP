@@ -26,9 +26,9 @@ const Dropzone = ({ className, handleFileChange }) => {
         <div className="flex flex-col items-center justify-center gap-4">
           <BsFileEarmarkArrowUp className="w-5 h-5 fill-current" />
           {isDragActive ? (
-            <p>Kéo và thả tập tin vào đây...</p>
+            <p className="text-sm">Kéo và thả tập tin vào đây...</p>
           ) : (
-            <p>Kéo và thả tập tin vào đây hoặc nhấn để chọn tập tin</p>
+            <p className="text-sm">Kéo và thả tập tin vào đây hoặc nhấn để chọn tập tin</p>
           )}
         </div>
       </div>

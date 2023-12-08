@@ -174,56 +174,78 @@ const CCCDStep = ({ onCCCDData }) => {
   }, [result]);
 
   return (
-    <div>
-      <input type="file" accept="image/*" onChange={handleImageChange} />
-      <Button onClick={onImageCropConfirm}>Xác nhận cắt ảnh</Button>
+    <div className="p-4 bg-gray-100">
+      <input
+        type="file"
+        accept="image/*"
+        onChange={handleImageChange}
+        className="mb-4"
+      />
+      <Button onClick={onImageCropConfirm} className="mb-4">
+        Xác nhận cắt ảnh
+      </Button>
       {!!imgSrc && (
-        <ReactCrop
-          crop={crop}
-          onChange={(_, percentCrop) => setCrop(percentCrop)}
-          onComplete={(c) => setCompletedCrop(c)}
-          minHeight={200}
-        >
-          <img ref={imgRef} alt="Crop me" src={imgSrc} onLoad={onImageLoad} />
-        </ReactCrop>
-      )}
-      {!!completedCrop && (
-        <>
-          <div>
-            <canvas
-              ref={previewCanvasRef}
-              style={{
-                border: "1px solid black",
-                objectFit: "contain",
-                width: completedCrop.width,
-                height: completedCrop.height,
-              }}
+        <div className="relative">
+          <ReactCrop
+            crop={crop}
+            onChange={(_, percentCrop) => setCrop(percentCrop)}
+            onComplete={(c) => setCompletedCrop(c)}
+            minHeight={200}
+            className="mb-4"
+          >
+            <img
+              ref={imgRef}
+              alt="Crop me"
+              src={imgSrc}
+              onLoad={onImageLoad}
+              className="w-full h-auto"
             />
-          </div>
-        </>
+          </ReactCrop>
+          {!!completedCrop && (
+            <div className="absolute top-0 left-0">
+              <canvas
+                ref={previewCanvasRef}
+                className="border border-black bg-white"
+                style={{
+                  width: completedCrop.width,
+                  height: completedCrop.height,
+                }}
+              />
+            </div>
+          )}
+        </div>
       )}
-      <div>
-        <label>Số CCCD</label>
-        <Input
-          type="text"
-          placeholder="CCCD"
-          value={cccd}
-          onChange={(e) => setCccd(e.target.value)}
-        />
-        <label>Tên người dùng</label>
-        <Input
-          type="text"
-          placeholder="Tên người dùng"
-          value={fullName}
-          onChange={(e) => setFullName(e.target.value)}
-        />
-        <label>Ngày/tháng/năm sinh</label>
-        <Input
-          type="text"
-          placeholder="Ngày/tháng/năm sinh"
-          value={dob}
-          onChange={(e) => setDob(e.target.value)}
-        />
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div>
+          <label className="block mb-1">Số CCCD</label>
+          <Input
+            type="text"
+            placeholder="CCCD"
+            value={cccd}
+            onChange={(e) => setCccd(e.target.value)}
+            className="w-full"
+          />
+        </div>
+        <div>
+          <label className="block mb-1">Tên người dùng</label>
+          <Input
+            type="text"
+            placeholder="Tên người dùng"
+            value={fullName}
+            onChange={(e) => setFullName(e.target.value)}
+            className="w-full"
+          />
+        </div>
+        <div>
+          <label className="block mb-1">Ngày/tháng/năm sinh</label>
+          <Input
+            type="text"
+            placeholder="Ngày/tháng/năm sinh"
+            value={dob}
+            onChange={(e) => setDob(e.target.value)}
+            className="w-full"
+          />
+        </div>
       </div>
     </div>
   );

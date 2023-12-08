@@ -2,7 +2,12 @@ import { useEffect, useState } from "react";
 import MultiSelect from "../inputs/MultiSelect";
 import axios from "axios";
 
-const Category = ({ onChange }) => {
+interface CategoryProps {
+  field?: any;
+  onChange?: () => void;
+}
+
+const Category: React.FC<CategoryProps> = ({ field, onChange }) => {
   const [categoriesData, setCategoryData] = useState([]);
 
   useEffect(() => {
@@ -15,6 +20,7 @@ const Category = ({ onChange }) => {
 
   return (
     <MultiSelect
+      field={field}
       array={categoriesData}
       name="Thể loại"
       onMultiSelectChange={onChange}

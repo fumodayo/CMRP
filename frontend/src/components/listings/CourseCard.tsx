@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { AiFillStar } from "react-icons/ai";
 import { formatPrice } from "../../utils/formatPrice";
 import { countdownDaysToEvent } from "../../utils/countdownDaysToEvent";
+import VerifiedUserIcon from "@mui/icons-material/VerifiedUser";
 
 interface CourseCardProps {
   id?: string;
@@ -13,6 +14,7 @@ interface CourseCardProps {
   total_rating?: number;
   price?: number;
   total_student?: number;
+  isCertificate?: boolean;
 }
 
 const CourseCard: React.FC<CourseCardProps> = ({
@@ -25,6 +27,7 @@ const CourseCard: React.FC<CourseCardProps> = ({
   total_rating,
   price,
   total_student,
+  isCertificate,
 }) => {
   const navigator = useNavigate();
 
@@ -48,7 +51,12 @@ const CourseCard: React.FC<CourseCardProps> = ({
           <div className="text-zinc-400 text-sm font-bold">{type}</div>
         </div>
         <div className="flex justify-between items-end pb-1">
-          <div className="text-zinc-400 text-sm font-normal">{author}</div>
+          <div className="text-zinc-400 text-sm font-normal">
+            {author}
+            {isCertificate && (
+              <VerifiedUserIcon fontSize="small" className="ml-1 text-emerald-500" />
+            )}
+          </div>
           <div className="flex items-center text-zinc-400 text-sm font-normal justify-center space-x-3">
             {total_rating}
             <AiFillStar className="text-yellow-400 mx-1" size={15} />|

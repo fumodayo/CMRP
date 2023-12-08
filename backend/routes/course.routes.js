@@ -41,6 +41,7 @@ courseRouter.get(
           return {
             ...course.toObject(),
             author: instructor.name,
+            isCertificate: instructor.isCertificate,
           };
         }
 
@@ -144,7 +145,22 @@ courseRouter.post(
 
     const similarCourses = await CourseModel.find(query).limit(4);
 
-    res.send(similarCourses);
+    const coursesWithUserInfo = await Promise.all(
+      similarCourses.map(async (course) => {
+        const instructor = await UserModel.findById(course.user_id);
+        if (instructor) {
+          return {
+            ...course.toObject(),
+            author: instructor.name,
+            isCertificate: instructor.isCertificate,
+          };
+        }
+
+        return { ...course.toObject(), avatar: null, name: null };
+      })
+    );
+
+    res.send(coursesWithUserInfo);
   })
 );
 

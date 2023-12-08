@@ -94,6 +94,7 @@ const Home = () => {
                 total_rating={item.total_rating}
                 price={item.price}
                 total_student={item.total_student}
+                isCertificate={item.isCertificate}
               />
             ))}
           </div>

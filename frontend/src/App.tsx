@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
+import toast, { Toaster } from "react-hot-toast";
 import "react-toastify/dist/ReactToastify.css";
 import Home from "./pages/Home";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -30,7 +30,7 @@ function App() {
     <PayPalScriptProvider options={initialOptions}>
       <BrowserRouter>
         <div className="app">
-          <ToastContainer limit={1} className="mt-5" />
+          <Toaster />
           <main className="main">
             <Routes>
               <Route path="/" element={<Home />} />
