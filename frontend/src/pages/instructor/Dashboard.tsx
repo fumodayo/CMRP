@@ -59,7 +59,7 @@ const columns: ColumnsType<DataType> = [
   },
 ];
 
-const Instructor = () => {
+const Dashboard = () => {
   const { state, dispatch: ctxDispatch } = useContext(Store) || {};
   const { cart, userInfo } = state;
   const [courseData, setCourseData] = useState([]);
@@ -89,4 +89,4 @@ const Instructor = () => {
   );
 };
 
-export default Instructor;
+export default Dashboard;

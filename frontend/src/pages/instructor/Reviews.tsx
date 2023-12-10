@@ -1,23 +1,24 @@
 import { Rating } from "@mui/material";
-import UserLayout from "../layouts/UserLayout";
-import BackButton from "../components/buttons/BackButton";
-import Chip from "../components/listings/Chip";
+import UserLayout from "../../layouts/UserLayout";
+import BackButton from "../../components/buttons/BackButton";
+import Chip from "../../components/listings/Chip";
 import { AiFillStar } from "react-icons/ai";
-import Container from "../components/Container";
-import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import Container from "../../components/Container";
+import { useEffect, useState, useContext } from "react";
 import axios from "axios";
-import Comment from "../components/listings/Comment";
+import Comment from "../../components/listings/Comment";
+import { Store } from "../../context/Store";
+import InstructorLayout from "../../layouts/InstructorLayout";
 
-const Review = () => {
-  const params = useParams();
-
+const Reviews = () => {
   const [reviewsData, setReviewsData] = useState(null);
   const [type, setType] = useState("");
   const [rating, setRating] = useState("");
+  const { state } = useContext(Store);
+  const { userInfo } = state;
 
   useEffect(() => {
-    const { id } = params;
+    const id = userInfo._id;
     const typeParam = type || "all";
     const ratingParam = rating || "all";
     const fetchData = async () => {
@@ -27,7 +28,7 @@ const Review = () => {
       setReviewsData(data);
     };
     fetchData();
-  }, [params, rating, type]);
+  }, [rating, type, userInfo]);
 
   if (!reviewsData) {
     return null;
@@ -67,9 +68,8 @@ const Review = () => {
   };
 
   return (
-    <UserLayout>
+    <InstructorLayout>
       <Container>
-        <BackButton />
         <section className="space-y-5">
           <div className="flex justify-between">
             <h1>
@@ -157,8 +157,8 @@ const Review = () => {
             ))}
         </section>
       </Container>
-    </UserLayout>
+    </InstructorLayout>
   );
 };
 
-export default Review;
+export default Reviews;

@@ -20,13 +20,18 @@ const Reviews = () => {
   const [comment, setComment] = useState("");
   const [point, setPoint] = useState([]);
   const [rating, setRating] = useState(0);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
-      const { data } = await axios.get(
-        `http://localhost:8080/api/review/${id}`
-      );
-      setReviews(data);
+      try {
+        const { data } = await axios.get(
+          `http://localhost:8080/api/review/${id}`
+        );
+        setReviews(data);
+      } catch (error: any) {
+        setError(error.response.data.message);
+      }
     };
     fetchData();
   }, [id]);
@@ -57,7 +62,6 @@ const Reviews = () => {
       .catch(function (error) {
         console.error(error);
       });
-    
 
     console.log("comment", comment);
     console.log("rating", convertToRating(point));
@@ -65,6 +69,7 @@ const Reviews = () => {
 
   return (
     <div className="space-y-5 p-3 max-h-[500px] overflow-auto">
+      {error && <h1 className="font-medium text-zinc-400">{error}</h1>}
       {isRating && (
         <div className="flex">
           {avatar && (

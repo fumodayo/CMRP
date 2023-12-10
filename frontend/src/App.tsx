@@ -1,11 +1,11 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import toast, { Toaster } from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
 import "react-toastify/dist/ReactToastify.css";
 import Home from "./pages/Home";
 import ProtectedRoute from "./components/ProtectedRoute";
 import SignIn from "./pages/SignIn";
 import AdminRoute from "./components/AdminRoute";
-import Admin from "./pages/admin/Admin";
+import AdminDashboard from "./pages/admin/Dashboard";
 import NotFound from "./pages/NotFound";
 import SignUp from "./pages/SignUp";
 import Cart from "./pages/Cart";
@@ -15,8 +15,13 @@ import Checkout from "./pages/Checkout";
 import CreateCourse from "./pages/user/CreateCourse";
 import Certificate from "./pages/user/Certificate";
 import Review from "./pages/Review";
-import Instructor from "./pages/instructor/Instructor";
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
+import Dashboard from "./pages/instructor/Dashboard";
+import Reviews from "./pages/instructor/Reviews";
+import Schedule from "./pages/instructor/Schedule";
+import Settings from "./pages/instructor/Settings";
+import AdminCertificate from "./pages/admin/Certificate";
+import Support from "./pages/admin/Support";
 
 function App() {
   const initialOptions = {
@@ -68,7 +73,31 @@ function App() {
                 path="/instructor"
                 element={
                   <ProtectedRoute>
-                    <Instructor />
+                    <Dashboard />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/instructor/reviews"
+                element={
+                  <ProtectedRoute>
+                    <Reviews />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/instructor/schedule"
+                element={
+                  <ProtectedRoute>
+                    <Schedule />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/instructor/settings"
+                element={
+                  <ProtectedRoute>
+                    <Settings />
                   </ProtectedRoute>
                 }
               />
@@ -76,11 +105,26 @@ function App() {
                 path="/admin"
                 element={
                   <ProtectedRoute>
-                    <Admin />
+                    <AdminDashboard />
                   </ProtectedRoute>
                 }
               />
-
+              <Route
+                path="/admin/certificate"
+                element={
+                  <ProtectedRoute>
+                    <AdminCertificate />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/admin/support"
+                element={
+                  <ProtectedRoute>
+                    <Support />
+                  </ProtectedRoute>
+                }
+              />
               <Route path="/*" element={<NotFound />} />
             </Routes>
           </main>

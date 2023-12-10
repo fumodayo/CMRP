@@ -142,9 +142,6 @@ const Profile = () => {
             <div className="w-1/3">
               <div className="py-5 px-3 max-w-[300px] min-h-[500px] space-y-5 border border-neutral-300 rounded-xl shadow-md">
                 <div className="flex flex-col items-center justify-center">
-                  <div className="text-xl font-semibold text-neutral-700">
-                    Học viên
-                  </div>
                   <img
                     className="relative h-[100px] w-[100px] rounded-xl object-cover mb-2"
                     src={user.avatar}
@@ -152,9 +149,6 @@ const Profile = () => {
                   />
                   <p className="text-lg font-medium text-neutral-700">
                     {user.name}
-                  </p>
-                  <p className="text-sm font-medium text-neutral-500">
-                    Id: {user._id}
                   </p>
                 </div>
                 <div className="flex flex-col">

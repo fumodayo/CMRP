@@ -1,23 +1,23 @@
 import UserLayout from "../layouts/UserLayout";
 import Container from "../components/Container";
 import { PayPalButtons } from "@paypal/react-paypal-js";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { Store } from "../context/Store";
 import { formatPrice } from "../utils/formatPrice";
 import BackButton from "../components/buttons/BackButton";
 import { Divider } from "@mui/material";
+import toast from "react-hot-toast";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Checkout = () => {
-  const course = {
-    description: "test description",
-    price: "5000",
-  };
-
+  const navigator = useNavigate();
   const [paidFor, setPaidFor] = useState(false);
   const [error, setError] = useState("");
 
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const {
+    userInfo,
     cart: { cartItems },
   } = state;
 
@@ -25,16 +25,16 @@ const Checkout = () => {
     return accumulator + currentValue.price;
   }, 0);
 
-  const handleApprove = (orderId) => {
-    setPaidFor(true);
-  };
-
-  if (paidFor) {
-    alert("Thanh toan thanh cong");
-  }
+  useEffect(() => {
+    if (paidFor) {
+      const body = { cartItems, user_id: userInfo._id };
+      axios.post(`http://localhost:8080/api/cart`, body);
+      ctxDispatch({ type: "CART_CLEAR" });
+    }
+  }, [paidFor, cartItems, userInfo]);
 
   if (error) {
-    alert(error);
+    toast.error(error);
   }
 
   return (
@@ -75,6 +75,10 @@ const Checkout = () => {
                 shape: "pill",
               }}
               onClick={(data, actions) => {
+                if (!userInfo) {
+                  navigator("/signin");
+                  return actions.reject();
+                }
                 const hasAlreadyBoughtCourse = false;
 
                 if (hasAlreadyBoughtCourse) {
@@ -86,22 +90,38 @@ const Checkout = () => {
                 }
               }}
               createOrder={(data, actions) => {
+                const items = cartItems.map((item) => ({
+                  name: item.name,
+                  unit_amount: {
+                    currency_code: "USD", // Đổi sang đơn vị tiền tệ mong muốn
+                    value: (item.price / 23000).toFixed(2), // Đổi giá về đơn vị tiền tệ mong muốn
+                  },
+                  quantity: "1", // Số lượng sản phẩm (1 sản phẩm mỗi item)
+                }));
+
                 return actions.order.create({
                   purchase_units: [
                     {
-                      description: course.description,
+                      description: "Purchase from your website",
                       amount: {
-                        value: course.price,
+                        currency_code: "USD", // Đổi sang đơn vị tiền tệ mong muốn
+                        value: (total / 23000).toFixed(2), // Đổi tổng giá về đơn vị tiền tệ mong muốn
+                        breakdown: {
+                          item_total: {
+                            currency_code: "USD", // Đổi sang đơn vị tiền tệ mong muốn
+                            value: (total / 23000).toFixed(2), // Đổi tổng giá về đơn vị tiền tệ mong muốn
+                          },
+                        },
                       },
+                      items,
                     },
                   ],
                 });
               }}
               onApprove={async (data, actions) => {
-                const order = await actions.order.capture();
-                console.log("order", order);
-
-                handleApprove(data.orderID);
+                // const order = await actions.order.capture();
+                setPaidFor(true);
+                toast.success("Thanh toán thành công");
               }}
               onCancel={() => {}}
               onError={(err: any) => {

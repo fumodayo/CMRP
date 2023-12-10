@@ -25,7 +25,8 @@ const SignIn = () => {
 
   const { state, dispatch: ctxDispatch } = useContext(Store) || {};
 
-  const onSubmit = async (user: User) => {
+  const onSubmit = async (user: User, e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     setIsLoading(true);
     const { email, password } = user;
     try {

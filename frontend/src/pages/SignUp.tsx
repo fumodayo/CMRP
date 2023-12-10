@@ -29,7 +29,8 @@ const SignUp = () => {
   const redirectUrl = new URLSearchParams(search).get("redirect");
   const redirect = redirectUrl ? redirectUrl : "/";
 
-  const onSubmit = async (user: User) => {
+  const onSubmit = async (user: User, e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     setIsLoading(true);
     const { email, password } = user;
     try {

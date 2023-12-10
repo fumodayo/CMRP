@@ -21,6 +21,8 @@ import { formatDate } from "../utils/formatDate";
 
 import { CartItem, Course } from "../types";
 import axios from "axios";
+import Schedule from "../components/listings/Schedule";
+import toast from "react-hot-toast";
 
 function classNames(...classes: any) {
   return classes.filter(Boolean).join(" ");
@@ -31,9 +33,14 @@ const DetailCourse = () => {
   const navigator = useNavigate();
 
   const { state, dispatch: ctxDispatch } = useContext(Store) || "{}";
+  const {
+    cart: { cartItems },
+    userInfo,
+  } = state;
+
   const [isShowTitle, setShowTitle] = useState(true);
 
-  const headerTabs = ["About", "Review"];
+  const headerTabs = ["Nội dung", "Đánh giá", "Lịch học"];
 
   const [courseData, setCourseData] = useState<Course | null>(null);
 
@@ -47,6 +54,28 @@ const DetailCourse = () => {
     };
     fetchData();
   }, [params]);
+
+  const [status, setStatus] = useState("");
+
+  useEffect(() => {
+    const { id } = params;
+
+    if (id) {
+      const checkIfCourseInCart = (id: string, course_Ids: any) => {
+        return course_Ids.includes(id);
+      };
+
+      const checkIfCourseInCourseOfUser = (id: string, courses: any) => {
+        return courses.some((course) => course.id === id);
+      };
+
+      if (checkIfCourseInCart(id, userInfo.course_Ids)) {
+        setStatus("IN_COURSE");
+      } else if (checkIfCourseInCourseOfUser(id, cartItems)) {
+        setStatus("IN_CART");
+      }
+    }
+  }, [cartItems, userInfo]);
 
   if (!courseData) {
     return null;
@@ -93,6 +122,7 @@ const DetailCourse = () => {
       type: "CART_ADD_ITEM",
       payload: { ...courseItem },
     });
+    toast.success("Đã thêm vào giỏ hàng");
   };
 
   return (
@@ -165,6 +195,66 @@ const DetailCourse = () => {
                   <Tab.Panel>
                     <Reviews />
                   </Tab.Panel>
+                  <Tab.Panel>
+                    <Schedule
+                      schedule={[
+                        {
+                          id: "31082",
+                          title: "Class A",
+                          start: "2023-08-02T00:00:00.000Z",
+                          end: "2023-08-02T01:30:00.000Z",
+                        },
+                        {
+                          id: "90154",
+                          title: "Class A",
+                          start: "2023-08-07T00:00:00.000Z",
+                          end: "2023-08-07T01:30:00.000Z",
+                        },
+                        {
+                          id: "76424",
+                          title: "Class A",
+                          start: "2023-08-09T00:00:00.000Z",
+                          end: "2023-08-09T01:30:00.000Z",
+                        },
+                        {
+                          id: "98535",
+                          title: "Class A",
+                          start: "2023-08-14T00:00:00.000Z",
+                          end: "2023-08-14T01:30:00.000Z",
+                        },
+                        {
+                          id: "22176",
+                          title: "Class A",
+                          start: "2023-08-16T00:00:00.000Z",
+                          end: "2023-08-16T01:30:00.000Z",
+                        },
+                        {
+                          id: "22422",
+                          title: "Class A",
+                          start: "2023-08-21T00:00:00.000Z",
+                          end: "2023-08-21T01:30:00.000Z",
+                        },
+                        {
+                          id: "68145",
+                          title: "Class A",
+                          start: "2023-08-23T00:00:00.000Z",
+                          end: "2023-08-23T01:30:00.000Z",
+                        },
+                        {
+                          id: "20796",
+                          title: "Class A Created",
+                          start: "2023-08-28T01:30:00.000Z",
+                          end: "2023-08-28T03:00:00.000Z",
+                        },
+                        {
+                          id: "28559",
+                          title: "Class A Updated",
+                          start: "2023-08-30T05:00:00.000Z",
+                          end: "2023-08-30T06:30:00.000Z",
+                        },
+                      ]}
+                    />
+                  </Tab.Panel>
                 </Tab.Panels>
               </Tab.Group>
             </div>
@@ -226,20 +316,31 @@ const DetailCourse = () => {
                   </div>
                 </div>
               </div>
-              <div className="flex space-x-5 py-5">
-                <div
-                  onClick={addToCartHandler}
-                  className="min-w-[250px] flex items-center justify-center text-lg rounded-xl ring-2 ring-emerald-200 px-5 py-3 hover:shadow-md cursor-pointer "
-                >
-                  Thêm vào giỏ
+              {status === "IN_COURSE" ? (
+                <h1 className="font-medium text-emerald-400 text-lg">
+                  Bạn đang học khóa học này
+                </h1>
+              ) : (
+                <div className="flex space-x-5 py-5">
+                  {status !== "IN_CART" && (
+                    <div
+                      onClick={addToCartHandler}
+                      className="min-w-[250px] flex items-center justify-center text-lg rounded-xl ring-2 ring-emerald-200 px-5 py-3 hover:shadow-md cursor-pointer "
+                    >
+                      Thêm vào giỏ
+                    </div>
+                  )}
+                  <div
+                    onClick={() => {
+                      addToCartHandler();
+                      navigator("/checkout");
+                    }}
+                    className="min-w-[250px] flex items-center justify-center text-lg rounded-xl px-5 py-3 hover:shadow-md cursor-pointer bg-emerald-500 text-white"
+                  >
+                    Mua ngay
+                  </div>
                 </div>
-                <div
-                  onClick={() => navigator("/checkout")}
-                  className="min-w-[250px] flex items-center justify-center text-lg rounded-xl px-5 py-3 hover:shadow-md cursor-pointer bg-emerald-500 text-white"
-                >
-                  Mua ngay
-                </div>
-              </div>
+              )}
             </div>
           </div>
           <div>

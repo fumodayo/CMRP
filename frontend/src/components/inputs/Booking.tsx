@@ -89,8 +89,12 @@ const Booking = ({ onChangeBooking }) => {
   };
 
   const handleEventClick = (clickInfo: EventClickArg) => {
-    setState({ clickInfo, status: "UPDATE" });
-    setModal(true);
+    if (clickInfo) {
+      setState({ clickInfo, status: "UPDATE" });
+      setModal(true);
+      const date = clickInfo.event.start.toISOString();
+      setAddNewEvent(date);
+    }
   };
 
   const handleEmptySlotClick = (clickInfo: any) => {

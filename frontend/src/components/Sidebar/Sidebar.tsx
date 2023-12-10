@@ -1,53 +1,37 @@
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { IconType } from "react-icons";
-import { MdSpaceDashboard } from "react-icons/md";
-import { GrSchedules } from "react-icons/gr";
-import { IoSettingsOutline } from "react-icons/io5";
 
 interface SidebarItemProps {
   name: string;
   icon: IconType;
   active?: boolean;
+  link: string;
 }
 
 export const SidebarItem: React.FC<SidebarItemProps> = ({
   name,
   icon: Icon,
   active,
+  link,
 }) => {
   return (
-    <li
-      className={`hover:shadow hover:ring-1 hover:ring-gray-200 min-w-[220px] text-base px-10 py-3 rounded-2xl justify-start items-center space-x-4 inline-flex cursor-pointer capitalize    
+    <Link
+      to={link}
+      className={`hover:shadow hover:ring-1 hover:ring-gray-200 min-w-[220px] text-base px-5 py-3 rounded-xl justify-start items-center space-x-4 inline-flex cursor-pointer capitalize    
         ${active ? "bg-emerald-500" : "bg-white"}
         ${active ? "text-white" : "text-zinc-400 "}
       `}
     >
       <Icon size={25} />
       <span className="font-medium">{name}</span>
-    </li>
+    </Link>
   );
 };
 
-const Sidebar = () => {
+const Sidebar = ({ sidebarItems }) => {
   const navigate = useNavigate();
-
-  const sidebarItems = [
-    {
-      name: "dashboard",
-      icon: MdSpaceDashboard,
-      active: true,
-    },
-    {
-      name: "schedule",
-      icon: GrSchedules,
-      active: false,
-    },
-    {
-      name: "setting",
-      icon: IoSettingsOutline,
-      active: false,
-    },
-  ];
+  const location = useLocation();
+  const currentPath = location.pathname;
 
   return (
     <nav className="fixed top-0 left-0 h-screen w-[250px] bg-white border border-r-slate-100 shadow-sm">
@@ -64,13 +48,14 @@ const Sidebar = () => {
           Course Marketplace <br /> Reviews Platform
         </div>
       </div>
-      <ul className="flex flex-col py-2 items-center justify-center space-y-2">
+      <ul className="flex flex-col py-2 items-left justify-center p-5 space-y-2">
         {sidebarItems.map((item) => (
           <SidebarItem
             key={item.name}
             name={item.name}
             icon={item.icon}
-            active={item.active}
+            active={item.link === currentPath}
+            link={item.link}
           />
         ))}
       </ul>

@@ -52,9 +52,11 @@ reviewRouter.get(
       ]);
 
       if (reviewsWithUserInfo.length > 0) {
-        res.send(reviewsWithUserInfo);
+        return res.send(reviewsWithUserInfo);
       } else {
-        res.status(404).send({ message: "No reviews found for this course" });
+        return res
+          .status(404)
+          .send({ message: "Chưa có đánh giá vì khóa học chưa dạy" });
       }
     } catch (err) {
       res.status(500).send({ message: "Error fetching reviews", error: err });
