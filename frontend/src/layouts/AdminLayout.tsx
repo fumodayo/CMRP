@@ -3,6 +3,7 @@ import Sidebar from "../components/Sidebar/Sidebar";
 import { MdSpaceDashboard } from "react-icons/md";
 import { PiCertificateDuotone } from "react-icons/pi";
 import { BiSupport } from "react-icons/bi";
+import { ImBooks } from "react-icons/im";
 
 interface AdminLayoutProps {
   children: React.ReactNode;
@@ -19,6 +20,11 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
       name: "Giấy chứng nhận",
       icon: PiCertificateDuotone,
       link: "/admin/certificate",
+    },
+    {
+      name: "Khóa học",
+      icon: ImBooks,
+      link: "/admin/course",
     },
     {
       name: "CSKH",

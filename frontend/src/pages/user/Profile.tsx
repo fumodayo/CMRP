@@ -9,8 +9,10 @@ import Helper from "../../components/listings/Helper";
 import ReviewHistory from "../../components/listings/ReviewHistory";
 import axios from "axios";
 import { User } from "../../types";
-import { Input } from "antd";
+import { Input, Modal, Select } from "antd";
 import { Link } from "react-router-dom";
+import toast from "react-hot-toast";
+import { TextareaAutosize } from "@mui/material";
 
 function classNames(...classes: any) {
   return classes.filter(Boolean).join(" ");
@@ -37,6 +39,18 @@ export const CourseItem: React.FC<CourseItemProps> = ({
 }) => {
   const [status, setStatus] = useState(false);
   const [daysCountdown, setDaysCountdown] = useState(0);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [comment, setComment] = useState("");
+
+  const handleConfirm = () => {
+    toast.success("Gửi thành công");
+    setIsModalOpen(false);
+  };
+
+  const handleCancel = () => {
+    toast.error("Gửi thất bại");
+    setIsModalOpen(false);
+  };
 
   useEffect(() => {
     if (time) {
@@ -54,15 +68,6 @@ export const CourseItem: React.FC<CourseItemProps> = ({
       }
     }
   }, [time]);
-
-  const recipient = "recipient@example.com";
-  const subject = "Subject of the email";
-  const body = "Content of the email";
-
-  // Tạo đường dẫn mailto với thông tin recipient, subject và body
-  const mailtoLink = `mailto:${recipient}?subject=${encodeURIComponent(
-    subject
-  )}&body=${encodeURIComponent(body)}`;
 
   return (
     <div className="flex items-center cursor-pointer">
@@ -93,18 +98,47 @@ export const CourseItem: React.FC<CourseItemProps> = ({
         </span>
         <span className="flex items-center justify-start text-red-500 font-medium hover:underline">
           {status ? (
-            <Link
-              to="#"
-              onClick={(e) => {
-                window.location.href = mailtoLink;
-                e.preventDefault();
-              }}
-            >
-              Yêu cầu trợ giúp
-            </Link>
+            <p onClick={() => setIsModalOpen(true)}>Yêu cầu trợ giúp</p>
           ) : (
             "Hủy"
           )}
+          <Modal
+            title="Gửi yêu cầu trợ giúp"
+            okText="Gửi"
+            cancelText="Hủy"
+            open={isModalOpen}
+            onOk={handleConfirm}
+            onCancel={handleCancel}
+            okType="danger"
+            style={{ height: 50 }}
+          >
+            <div className="flex flex-col space-y-3">
+              <h1 className="font-medium">
+                Chọn các vấn đề thường gặp
+              </h1>
+              <Select
+                defaultValue="Nội dung không giống như quảng cáo"
+                onChange={(value) => setComment(value)}
+                options={[
+                  { value: "Nội dung không giống như quảng cáo" },
+                  { value: "Không hay" },
+                  { value: "Nhàm chán" },
+                  { value: "Không phù hợp" },
+                ]}
+              />
+              <h1 className="font-medium">
+                Hãy ghi vẫn đề cụ thể của bạn ở đây:
+              </h1>
+              <TextareaAutosize
+                className="w-80 h-52 text-sm font-sans font-normal leading-5 px-3 py-2 rounded-lg shadow-md shadow-slate-100 dark:shadow-slate-900 focus:shadow-outline-purple dark:focus:shadow-outline-purple focus:shadow-lg border border-solid border-slate-300 hover:border-purple-500 dark:hover:border-purple-500 focus:border-purple-500 dark:focus:border-purple-500 dark:border-slate-600 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-300 focus-visible:outline-0"
+                placeholder="Nội dung không giống như quảng cáo..."
+                minRows={2}
+                maxRows={3}
+                value={comment}
+                onChange={(e) => setComment(e.target.value)}
+              />
+            </div>
+          </Modal>
         </span>
       </div>
     </div>

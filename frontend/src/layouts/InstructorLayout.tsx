@@ -1,7 +1,7 @@
 import Footer from "../components/Footer";
 import Sidebar from "../components/Sidebar/Sidebar";
 import { MdSpaceDashboard } from "react-icons/md";
-import { GrSchedules } from "react-icons/gr";
+import { AiOutlineSchedule } from "react-icons/ai";
 import { IoSettingsOutline } from "react-icons/io5";
 import { MdOutlineReviews } from "react-icons/md";
 
@@ -18,7 +18,7 @@ const InstructorLayout: React.FC<InstructorLayoutProps> = ({ children }) => {
     },
     {
       name: "Lịch trình",
-      icon: GrSchedules,
+      icon: AiOutlineSchedule,
       link: "/instructor/schedule",
     },
     {

@@ -8,6 +8,7 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Comment from "../components/listings/Comment";
+import Chart from "../components/listings/Chart";
 
 const Review = () => {
   const params = useParams();
@@ -75,6 +76,10 @@ const Review = () => {
             <h1>
               Đánh giá của <span className="font-medium">{name}</span>
             </h1>
+            <div className="w-full">
+              <Chart />
+            </div>
+
             {/* <p>Tạo khóa học đầu tiên từ {convertDateTime(author.firstTime)}</p> */}
           </div>
           <div className="flex items-center space-x-3">

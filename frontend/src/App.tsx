@@ -22,6 +22,7 @@ import Schedule from "./pages/instructor/Schedule";
 import Settings from "./pages/instructor/Settings";
 import AdminCertificate from "./pages/admin/Certificate";
 import Support from "./pages/admin/Support";
+import Courses from "./pages/admin/Courses";
 
 function App() {
   const initialOptions = {
@@ -114,6 +115,14 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <AdminCertificate />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/admin/course"
+                element={
+                  <ProtectedRoute>
+                    <Courses />
                   </ProtectedRoute>
                 }
               />
