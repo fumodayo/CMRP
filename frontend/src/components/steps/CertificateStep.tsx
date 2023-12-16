@@ -3,7 +3,7 @@ import { IoIosCloseCircle } from "react-icons/io";
 import Dropzone from "../../components/inputs/Dropzone";
 import Category from "../listings/Category";
 
-const CertificateStep = ({ onAuthentic }) => {
+const CertificateStep = ({ id, onAuthentic }) => {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [categories, setCategories] = useState([]);
 
@@ -30,10 +30,15 @@ const CertificateStep = ({ onAuthentic }) => {
 
   useEffect(() => {
     onAuthentic({
+      id: id,
       category: categories,
-      images: selectedFiles,
+      // images: selectedFiles,
+      images: [
+        "https://sununi.edu.vn/wp-content/uploads/2023/05/Ha-Phuong-723x1024.png",
+        "https://quangcaosieutoc.com//upload/chung-chi-google-min.jpg",
+      ],
     });
-  }, [categories, selectedFiles]);
+  }, [categories, selectedFiles, id]);
 
   return (
     <div className="py-10">

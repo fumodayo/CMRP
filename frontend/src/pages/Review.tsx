@@ -4,14 +4,15 @@ import BackButton from "../components/buttons/BackButton";
 import Chip from "../components/listings/Chip";
 import { AiFillStar } from "react-icons/ai";
 import Container from "../components/Container";
-import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { useEffect, useMemo, useState } from "react";
 import axios from "axios";
 import Comment from "../components/listings/Comment";
 import Chart from "../components/listings/Chart";
 
 const Review = () => {
   const params = useParams();
+  const navigate = useNavigate();
 
   const [reviewsData, setReviewsData] = useState(null);
   const [type, setType] = useState("");
@@ -29,6 +30,51 @@ const Review = () => {
     };
     fetchData();
   }, [params, rating, type]);
+
+  const averageRating = useMemo(() => {
+    let totalRating = 0;
+    let totalReviews = 0;
+    if (reviewsData && reviewsData.courses) {
+      reviewsData?.courses.forEach((course) => {
+        if (course.reviews && course.reviews.length > 0) {
+          course.reviews.forEach((review) => {
+            totalRating += review.rating;
+            totalReviews++;
+          });
+        }
+      });
+    }
+
+    return totalReviews > 0 ? totalRating / totalReviews : 0;
+  }, [reviewsData]);
+
+  const sentimentRating = useMemo(() => {
+    const sentimentValues = {
+      "Tiêu cực": 0,
+      "Tích cực": 0,
+      "Trung lập": 0,
+    };
+
+    reviewsData?.courses.forEach((course) => {
+      course.reviews.forEach((review) => {
+        const [negative, positive, neutral] = review.sentiment;
+        if (negative > positive && negative > neutral) {
+          sentimentValues["Tiêu cực"]++;
+        } else if (positive > negative && positive > neutral) {
+          sentimentValues["Tích cực"]++;
+        } else {
+          sentimentValues["Trung lập"]++;
+        }
+      });
+    });
+
+    return Object.entries(sentimentValues).map(([name, value]) => ({
+      name,
+      value,
+    }));
+  }, [reviewsData]);
+
+  console.log(sentimentRating);
 
   if (!reviewsData) {
     return null;
@@ -76,11 +122,9 @@ const Review = () => {
             <h1>
               Đánh giá của <span className="font-medium">{name}</span>
             </h1>
-            <div className="w-full">
-              <Chart />
+            <div className="w-[800px]">
+              <Chart sentimentRating={sentimentRating} />
             </div>
-
-            {/* <p>Tạo khóa học đầu tiên từ {convertDateTime(author.firstTime)}</p> */}
           </div>
           <div className="flex items-center space-x-3">
             <p>Các lĩnh vực đào tạo</p>
@@ -97,12 +141,13 @@ const Review = () => {
           <div className="flex bg-zinc-200 px-7 py-5 space-x-5">
             <div className="flex flex-col items-center">
               <p className="text-xl font-medium">
-                <span className="text-4xl">4.9</span> trên 5
+                <span className="text-4xl">{averageRating}</span> trên 5
               </p>
               <Rating
                 name="half-rating-read"
                 size="large"
-                defaultValue={4.9}
+                defaultValue={0}
+                value={averageRating}
                 precision={0.1}
                 readOnly
               />
@@ -118,7 +163,14 @@ const Review = () => {
           {courses &&
             courses.map((course: any) => (
               <div key={course._id}>
-                <div className="flex space-x-5 items-center">
+                <div
+                  className="flex space-x-5 items-center hover:bg-zinc-200 px-5 py-3 rounded-xl cursor-pointer"
+                  onClick={() =>
+                    navigate(`/course/${course._id}`, {
+                      state: "WATCH ONLY",
+                    })
+                  }
+                >
                   <div className="relative h-[140px]">
                     <img
                       className="relative h-[140px] rounded-xl object-cover"

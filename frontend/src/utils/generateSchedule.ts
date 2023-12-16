@@ -8,6 +8,7 @@ type Schedule = {
 };
 
 export const generateSchedule = (
+  name: string,
   startDate?: dayjs.Dayjs,
   endDate?: dayjs.Dayjs,
   classDurationMinutes?: number,
@@ -19,7 +20,7 @@ export const generateSchedule = (
   let currentDate = startDate?.startOf("day");
 
   if (!currentDate || !endDate || !classDurationMinutes || !selectedDays) {
-    return { sessions: 0, schedule: [] };
+    return { schedule: [] };
   }
 
   // Iterate from start date to end date
@@ -50,7 +51,7 @@ export const generateSchedule = (
         if (classEndTime.isBefore(currentDate.endOf("day"))) {
           schedule.push({
             id: String(Math.floor(Math.random() * 100000)),
-            title: "Class A",
+            title: name,
             start: classStartTime.toISOString(),
             end: classEndTime.toISOString(),
           });
@@ -62,5 +63,5 @@ export const generateSchedule = (
     currentDate = currentDate.add(1, "day");
   }
 
-  return { lesson: schedule.length, schedule };
+  return { schedule };
 };

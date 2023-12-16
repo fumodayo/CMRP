@@ -52,7 +52,38 @@ const Schedule = () => {
   };
 
   // Schedule lấy từ database
-  const [events, setEvents] = useState<Schedule[]>([]);
+  const [events, setEvents] = useState<Schedule[]>([
+    {
+      id: "31082",
+      title: "Bí Mật Đàm Phán",
+      start: "2023-12-11T01:30:00.000Z",
+      end: "2023-08-02T01:30:00.000Z",
+    },
+    {
+      id: "31082",
+      title: "Bí Mật Đàm Phán",
+      start: "2023-12-18T01:30:00.000Z",
+      end: "2023-08-02T01:30:00.000Z",
+    },
+    {
+      id: "31082",
+      title: "Bí Mật Đàm Phán",
+      start: "2023-12-25T01:30:00.000Z",
+      end: "2023-08-02T01:30:00.000Z",
+    },
+    {
+      id: "31082",
+      title: "Đánh Thức Năng Lực Giao Tiếp Trong Bạn",
+      start: "2023-12-23T01:30:00.000Z",
+      end: "2023-08-02T01:30:00.000Z",
+    },
+    {
+      id: "31082",
+      title: "Tự do tài chính cho người dưới 30 tuổi",
+      start: "2023-12-28T01:30:00.000Z",
+      end: "2023-08-02T01:30:00.000Z",
+    },
+  ]);
 
   const handleEventClick = (clickInfo: EventClickArg) => {
     if (clickInfo) {

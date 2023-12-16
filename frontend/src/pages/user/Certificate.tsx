@@ -93,6 +93,7 @@ const Certificate = () => {
   });
 
   const [authentic, setAuthentic] = useState({
+    id: 0,
     category: [],
     images: [],
   });
@@ -101,42 +102,89 @@ const Certificate = () => {
 
   // Thêm danh sách các chứng chỉ đã tạo
   const [certificateSteps, setCertificateSteps] = useState<JSX.Element[]>([]);
+  const [key, setKey] = useState(1);
 
   // Thêm hàm để tạo mới bước chứng chỉ
   const addCertificateStep = () => {
+    setKey((prevKey) => prevKey + 1);
     const newCertificateStep = (
-      <CertificateStep
-        key={certificateSteps.length}
-        onAuthentic={setAuthentic}
-      />
+      <CertificateStep id={key} onAuthentic={setAuthentic} />
     );
     setCertificateSteps([...certificateSteps, newCertificateStep]);
   };
 
   useEffect(() => {
-    if (authentic.images.length > 0) {
-      setAllCertificateData((prevData) => [...prevData, authentic]);
+    if (authentic.images.length > 0 && authentic.category.length > 0) {
+      // Kiểm tra xem authentic có ID mới không trùng với các phần tử trong allCertificateData
+      const isNewAuthentic = !allCertificateData.some(
+        (item) => item.id === authentic.id
+      );
+
+      if (isNewAuthentic) {
+        setAllCertificateData((prevData) => [...prevData, authentic]);
+      }
     }
-  }, [authentic]);
+  }, [authentic, allCertificateData]);
 
   // Thêm hàm để xóa bước chứng chỉ đã tạo
   const removeCertificateStep = (index: number) => {
     const updatedSteps = certificateSteps.filter((_, i) => i !== index);
     setCertificateSteps(updatedSteps);
+
+    // Update allCertificateData after removing the step
+    setAllCertificateData((prevData) => {
+      const updatedData = prevData.filter((_, i) => i !== index);
+      return updatedData;
+    });
   };
 
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
+  // // Function to upload an image to Cloudinary
+  // const uploadToCloudinary = async (imageUrl) => {
+  //   try {
+  //     const formData = new FormData();
+  //     formData.append("file", imageUrl); // 'file' là tên của field chứa hình ảnh cần tải lên
+  //     formData.append("api_key", "457796921621652");
+  //     formData.append("upload_preset", "YOUR_UPLOAD_PRESET");
+  //     const response = await axios.post(
+  //       `https://api.cloudinary.com/v1_1/du93troxt/image/upload`, // Replace with your Cloudinary upload URL
+  //       formData
+  //     );
+  //     console.log(response);
+  //     return response.data.secure_url; // Return the secure URL of the uploaded image
+  //   } catch (error) {
+  //     console.error("Error uploading image to Cloudinary:", error);
+  //     return null;
+  //   }
+  // };
+
+  // // Function to handle image uploading for allCertificateData
+  // const uploadImagesToCloudinary = async (certificateData) => {
+  //   const updatedCertificateData = await Promise.all(
+  //     certificateData.map(async (cert) => {
+  //       const images = cert.images.map(async (image) => {
+  //         const uploadedUrl = await uploadToCloudinary(image.preview); // Upload each image to Cloudinary
+  //         return { ...image, preview: uploadedUrl }; // Replace the preview URL with Cloudinary's URL
+  //       });
+  //       const updatedImages = await Promise.all(images);
+  //       return { ...cert, images: updatedImages }; // Update the images array with Cloudinary URLs
+  //     })
+  //   );
+  //   return updatedCertificateData;
+  // };
+
   const handleNext = async () => {
     if (activeStep === 0) {
       console.log("cccd", cccdData);
     } else {
-      // const { images, category } = authentic;
+      // const updatedData = await uploadImagesToCloudinary(allCertificateData);
+      console.log(allCertificateData);
       // const formData = new FormData();
       // images.forEach((image) => formData.append("file", image));
-      // formData.append("upload_preset", "friendsbook");
+      // formData.append("upload_preset", "mwdchmys");
 
       // const { data } = await axios.post(
       //   `http://localhost:8080/api/upload/multi`,
@@ -147,16 +195,16 @@ const Certificate = () => {
       //     },
       //   }
       // );
-      console.log(allCertificateData);
+      // console.log(data);
     }
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
 
-  useEffect(() => {
-    if (activeStep === steps.length) {
-      navigator("/");
-    }
-  }, [activeStep, navigator]);
+  // useEffect(() => {
+  //   if (activeStep === steps.length) {
+  //     navigator("/");
+  //   }
+  // }, [activeStep, navigator]);
 
   return (
     <UserLayout>
@@ -184,7 +232,7 @@ const Certificate = () => {
             <CCCDStep onCCCDData={setCccdData} />
           ) : (
             <div>
-              <CertificateStep onAuthentic={setAuthentic} />
+              <CertificateStep id={0} onAuthentic={setAuthentic} />
               {certificateSteps.map((step, index) => (
                 <div key={index}>
                   {step}

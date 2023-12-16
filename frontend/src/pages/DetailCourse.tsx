@@ -1,5 +1,7 @@
+import axios from "axios";
+import toast from "react-hot-toast";
 import { useState, useEffect, useContext } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { AiFillStar } from "react-icons/ai";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import { Tab } from "@headlessui/react";
@@ -13,16 +15,14 @@ import Detail from "../components/listings/Detail";
 import BackButton from "../components/buttons/BackButton";
 import SimilarCourses from "../components/listings/SimilarCourses";
 import Reviews from "../components/listings/Reviews";
+import Schedule from "../components/listings/Schedule";
 
+import { Store } from "../context/Store";
 import { countdownDaysToEvent } from "../utils/countdownDaysToEvent";
 import { formatPrice } from "../utils/formatPrice";
-import { Store } from "../context/Store";
 import { formatDate } from "../utils/formatDate";
 
 import { CartItem, Course } from "../types";
-import axios from "axios";
-import Schedule from "../components/listings/Schedule";
-import toast from "react-hot-toast";
 
 function classNames(...classes: any) {
   return classes.filter(Boolean).join(" ");
@@ -30,6 +30,7 @@ function classNames(...classes: any) {
 
 const DetailCourse = () => {
   const params = useParams();
+  const location = useLocation();
   const navigator = useNavigate();
 
   const { state, dispatch: ctxDispatch } = useContext(Store) || "{}";
@@ -58,24 +59,29 @@ const DetailCourse = () => {
   const [status, setStatus] = useState("");
 
   useEffect(() => {
+    const { _id } = userInfo;
     const { id } = params;
 
-    if (id) {
-      const checkIfCourseInCart = (id: string, course_Ids: any) => {
+    if (_id && courseData) {
+      const checkIfUserInCourse = (id: string, course_Ids: any) => {
         return course_Ids.includes(id);
       };
 
-      const checkIfCourseInCourseOfUser = (id: string, courses: any) => {
-        return courses.some((course) => course.id === id);
+      if (checkIfUserInCourse(_id, courseData.student_Ids)) {
+        setStatus("IN_COURSE");
+      }
+    }
+
+    if (id && cartItems) {
+      const checkIfCourseInCart = (id: string, cartItems: any) => {
+        return cartItems.some((item) => item._id === id);
       };
 
-      if (checkIfCourseInCart(id, userInfo.course_Ids)) {
-        setStatus("IN_COURSE");
-      } else if (checkIfCourseInCourseOfUser(id, cartItems)) {
+      if (checkIfCourseInCart(id, cartItems)) {
         setStatus("IN_CART");
       }
     }
-  }, [cartItems, userInfo]);
+  }, [userInfo, params, courseData, cartItems]);
 
   if (!courseData) {
     return null;
@@ -118,11 +124,17 @@ const DetailCourse = () => {
       total_student: total_student,
       price: price,
     };
+
     ctxDispatch({
       type: "CART_ADD_ITEM",
       payload: { ...courseItem },
     });
-    toast.success("Đã thêm vào giỏ hàng");
+
+    if (status === "IN_CART") {
+      toast.error("Đã có trong giỏ hàng rồi");
+    } else {
+      toast.success("Đã thêm vào giỏ hàng");
+    }
   };
 
   return (
@@ -196,64 +208,7 @@ const DetailCourse = () => {
                     <Reviews />
                   </Tab.Panel>
                   <Tab.Panel>
-                    <Schedule
-                      schedule={[
-                        {
-                          id: "31082",
-                          title: "Class A",
-                          start: "2023-08-02T00:00:00.000Z",
-                          end: "2023-08-02T01:30:00.000Z",
-                        },
-                        {
-                          id: "90154",
-                          title: "Class A",
-                          start: "2023-08-07T00:00:00.000Z",
-                          end: "2023-08-07T01:30:00.000Z",
-                        },
-                        {
-                          id: "76424",
-                          title: "Class A",
-                          start: "2023-08-09T00:00:00.000Z",
-                          end: "2023-08-09T01:30:00.000Z",
-                        },
-                        {
-                          id: "98535",
-                          title: "Class A",
-                          start: "2023-08-14T00:00:00.000Z",
-                          end: "2023-08-14T01:30:00.000Z",
-                        },
-                        {
-                          id: "22176",
-                          title: "Class A",
-                          start: "2023-08-16T00:00:00.000Z",
-                          end: "2023-08-16T01:30:00.000Z",
-                        },
-                        {
-                          id: "22422",
-                          title: "Class A",
-                          start: "2023-08-21T00:00:00.000Z",
-                          end: "2023-08-21T01:30:00.000Z",
-                        },
-                        {
-                          id: "68145",
-                          title: "Class A",
-                          start: "2023-08-23T00:00:00.000Z",
-                          end: "2023-08-23T01:30:00.000Z",
-                        },
-                        {
-                          id: "20796",
-                          title: "Class A Created",
-                          start: "2023-08-28T01:30:00.000Z",
-                          end: "2023-08-28T03:00:00.000Z",
-                        },
-                        {
-                          id: "28559",
-                          title: "Class A Updated",
-                          start: "2023-08-30T05:00:00.000Z",
-                          end: "2023-08-30T06:30:00.000Z",
-                        },
-                      ]}
-                    />
+                    <Schedule schedule={schedule} />
                   </Tab.Panel>
                 </Tab.Panels>
               </Tab.Group>
@@ -316,30 +271,32 @@ const DetailCourse = () => {
                   </div>
                 </div>
               </div>
-              {status === "IN_COURSE" ? (
-                <h1 className="font-medium text-emerald-400 text-lg">
-                  Bạn đang học khóa học này
-                </h1>
-              ) : (
-                <div className="flex space-x-5 py-5">
-                  {status !== "IN_CART" && (
-                    <div
-                      onClick={addToCartHandler}
-                      className="min-w-[250px] flex items-center justify-center text-lg rounded-xl ring-2 ring-emerald-200 px-5 py-3 hover:shadow-md cursor-pointer "
-                    >
-                      Thêm vào giỏ
+              {location.state !== "WATCH ONLY" && (
+                <>
+                  {status === "IN_COURSE" ? (
+                    <h1 className="font-medium text-emerald-400 text-lg">
+                      Bạn đang học khóa học này
+                    </h1>
+                  ) : (
+                    <div className="flex space-x-5 py-5">
+                      <div
+                        onClick={addToCartHandler}
+                        className="min-w-[250px] flex items-center justify-center text-lg rounded-xl ring-2 ring-emerald-200 px-5 py-3 hover:shadow-md cursor-pointer "
+                      >
+                        Thêm vào giỏ
+                      </div>
+                      <div
+                        onClick={() => {
+                          addToCartHandler();
+                          navigator("/checkout");
+                        }}
+                        className="min-w-[250px] flex items-center justify-center text-lg rounded-xl px-5 py-3 hover:shadow-md cursor-pointer bg-emerald-500 text-white"
+                      >
+                        Mua ngay
+                      </div>
                     </div>
                   )}
-                  <div
-                    onClick={() => {
-                      addToCartHandler();
-                      navigator("/checkout");
-                    }}
-                    className="min-w-[250px] flex items-center justify-center text-lg rounded-xl px-5 py-3 hover:shadow-md cursor-pointer bg-emerald-500 text-white"
-                  >
-                    Mua ngay
-                  </div>
-                </div>
+                </>
               )}
             </div>
           </div>

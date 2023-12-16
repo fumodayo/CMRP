@@ -8,7 +8,7 @@ const userSchema = new mongoose.Schema({
   name: { type: String, require: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  role: { type: Array, default: ["user"], required: true },
+  role: { type: Array, default: ["user"] },
   bio: { type: String },
   isCertificate: { type: Boolean, default: false },
   category: { type: Array, default: [] },
@@ -16,14 +16,10 @@ const userSchema = new mongoose.Schema({
   total_course: { type: Number, default: 0 },
   review_Ids: { type: Array, default: [] },
   total_review: { type: Number, default: 0 },
-  total_course_created: { type: Number, default: 0 },
-  course_created_Ids: { type: Array, default: [] },
-  total_review_created: { type: Number, default: 0 },
-  review_created_Ids: { type: Array, default: [] },
   real_name: { type: String },
   cccd_number: { type: String },
   dateOfBirth: { type: String },
-  createdAt: { type: String },
+  createdAt: { type: String, default: new Date().toISOString() },
 });
 
 userSchema.pre("save", async function (next) {

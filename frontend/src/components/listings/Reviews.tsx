@@ -7,6 +7,7 @@ import { Store } from "../../context/Store";
 import { TextareaAutosize } from "@mui/base/TextareaAutosize";
 import { convertToRating } from "../../utils/convertToRating";
 import { Button } from "antd";
+import { Rating } from "@mui/material";
 
 const Reviews = () => {
   const params = useParams();
@@ -80,15 +81,21 @@ const Reviews = () => {
               alt="avatar"
             />
           )}
-          <form className="flex" onSubmit={handleSubmit}>
+          <form className="flex flex-col space-y-1" onSubmit={handleSubmit}>
+            <Rating />
+
             <TextareaAutosize
               className="w-80 text-sm font-sans font-normal leading-5 px-3 py-2 rounded-lg shadow-md shadow-slate-100 dark:shadow-slate-900 focus:shadow-outline-purple dark:focus:shadow-outline-purple focus:shadow-lg border border-solid border-slate-300 hover:border-purple-500 dark:hover:border-purple-500 focus:border-purple-500 dark:focus:border-purple-500 dark:border-slate-600 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-300 focus-visible:outline-0"
               placeholder="Hãy viết bình luận của bạn..."
+              minRows={2}
               maxRows={3}
               value={comment}
               onChange={(e) => setComment(e.target.value)}
             />
-            <Button htmlType="submit">Đăng</Button>
+
+            <Button className="w-20" htmlType="submit">
+              Đăng
+            </Button>
           </form>
         </div>
       )}

@@ -198,7 +198,7 @@ const CCCDStep = ({ onCCCDData }) => {
               alt="Crop me"
               src={imgSrc}
               onLoad={onImageLoad}
-              className="w-full h-auto"
+              className="w-full h-[500px]"
             />
           </ReactCrop>
           {!!completedCrop && (

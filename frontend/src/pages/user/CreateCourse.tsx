@@ -5,15 +5,12 @@ import { Controller, useForm } from "react-hook-form";
 import Container from "../../components/Container";
 import Input from "../../components/inputs/Input";
 import RichTextEditor from "../../components/inputs/RichTextEditor";
-import MultiSelect from "../../components/inputs/MultiSelect";
 import Select from "../../components/inputs/Select";
 import UserLayout from "../../layouts/UserLayout";
 import Booking from "../../components/inputs/Booking";
 import { useNavigate } from "react-router-dom";
 import UploadSingleImage from "../../components/inputs/UploadSingleImage";
 import { Store } from "../../context/Store";
-import axios from "axios";
-import { DateTime } from "luxon";
 import Category from "../../components/listings/Category";
 import toast from "react-hot-toast";
 
@@ -24,6 +21,7 @@ const CreateCourse = () => {
 
   const [isLoading, setIsLoading] = useState(false);
   const [isShowInputAddress, setIsShowInputAddress] = useState(false);
+  const [nameCourse, setNameCourse] = useState("");
 
   const [bookingData, setBookingData] = useState({
     lesson: 0,
@@ -102,15 +100,9 @@ const CreateCourse = () => {
       <Container>
         <section className="space-y-5">
           <h1 className="text-slate-700 text-2xl font-bold">Tạo khóa học</h1>
-          <div className="space-y-5">
-            <h2 className="text-slate-500 text-xl font-bold">
-              Bước 1: Tạo lịch học
-            </h2>
-            <Booking onChangeBooking={handleBooking} />
-          </div>
           <form className="space-y-5" onSubmit={handleSubmit(onSubmit)}>
             <h2 className="text-slate-500 text-xl font-bold">
-              Bước 2: Tạo thông tin chung
+              Bước 1: Tạo thông tin chung
             </h2>
             <div className="grid grid-cols-2 grid-flow-row gap-4">
               <Input
@@ -119,6 +111,7 @@ const CreateCourse = () => {
                 register={register}
                 errors={errors}
                 required
+                onChange={(e) => setNameCourse(e.target.value)}
               />
               <Input
                 id="total_student"
@@ -199,6 +192,16 @@ const CreateCourse = () => {
                   render={({ field }) => <RichTextEditor field={field} />}
                 />
               </div>
+            </div>
+
+            <div className="space-y-5">
+              <h2 className="text-slate-500 text-xl font-bold">
+                Bước 2: Tạo lịch học
+              </h2>
+              <Booking
+                nameCourse={nameCourse}
+                onChangeBooking={handleBooking}
+              />
             </div>
 
             <button

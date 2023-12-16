@@ -35,7 +35,7 @@ interface ScheduleState {
   status?: string;
 }
 
-const Booking = ({ onChangeBooking }) => {
+const Booking = ({ nameCourse, onChangeBooking }) => {
   const today = dayjs();
   const [state, setState] = useState<ScheduleState>({});
   const calendarRef = useRef(null);
@@ -98,7 +98,6 @@ const Booking = ({ onChangeBooking }) => {
   };
 
   const handleEmptySlotClick = (clickInfo: any) => {
-    console.log("chua co event", clickInfo);
     setAddNewEvent(clickInfo.startStr);
     setModal(true);
     const newChildren = (
@@ -135,18 +134,19 @@ const Booking = ({ onChangeBooking }) => {
 
     const classDurationMinutes = 90;
 
-    const { lesson, schedule } = generateSchedule(
+    const { schedule } = generateSchedule(
+      nameCourse,
       startDate || dayjs(),
       endDate || dayjs().add(1, "year"),
       classDurationMinutes,
       multiDays
     );
 
-    onChangeBooking(lesson, schedule, startDate?.format(), endDate?.format());
+    onChangeBooking(schedule, startDate?.format(), endDate?.format());
 
     setEvents(schedule);
     setResetMultiSelect(false);
-  }, [selectedRangeTime, onChangeBooking, multiDays]);
+  }, [selectedRangeTime, onChangeBooking, multiDays, nameCourse]);
 
   const handleSubmit = () => {
     const startDateTime = moment(addNewTime["$d"]);
@@ -163,7 +163,7 @@ const Booking = ({ onChangeBooking }) => {
 
     const newEvent: Schedule = {
       id: nanoid(),
-      title: "Test",
+      title: `${nameCourse} Created`,
       start: newStart,
       end: newEnd,
     };
@@ -199,7 +199,7 @@ const Booking = ({ onChangeBooking }) => {
         if (item.id === state?.clickInfo?.event.id) {
           return {
             ...item,
-            title: "Updated Title",
+            title: `${nameCourse} Updated`,
             start: newStart,
             end: newEnd,
           };

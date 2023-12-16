@@ -1,50 +1,52 @@
 import express from "express";
-import { UserModel } from "../models/user.model.js";
 import expressAsyncHandler from "express-async-handler";
-import jwt from "jsonwebtoken";
+import { isAuth } from "../middlewares.js";
+import { UserModel } from "../models/user.model.js";
 import ReviewModel from "../models/review.model.js";
 import CourseModel from "../models/course.model.js";
+import CartModel from "../models/cart.model.js";
 
 const userRouter = express.Router();
 
 /** GET PROFILE */
 userRouter.get(
   "/profile",
+  isAuth,
   expressAsyncHandler(async (req, res) => {
-    const { token } = req.cookies;
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const { _id } = decoded;
-
     try {
-      let user = await UserModel.findById(_id);
+      const { _id } = req.user;
+      const user = await UserModel.findById(_id);
 
-      if (user) {
-        const reviews = await ReviewModel.find({
-          _id: { $in: user.review_Ids },
-        });
-
-        // Lặp qua từng đánh giá và thêm thông tin từ model Course dựa trên course_id
-        for (let i = 0; i < reviews.length; i++) {
-          const course_id = reviews[i].course_id;
-
-          // Tìm thông tin từ model Course dựa trên course_id
-          const course = await CourseModel.findById(course_id);
-
-          // Nếu tìm thấy thông tin của course, thêm thông tin name vào đánh giá
-          if (course) {
-            reviews[i].course_name = course.name;
-          }
-        }
-
-        // Thay thế trường reviews trong đối tượng người dùng với thông tin đã được cập nhật
-        user.reviews = reviews;
-        console.log(reviews);
-        return res.send(user);
-      } else {
-        res.status(404).send({ message: "User not found" });
+      if (!user) {
+        return res.status(404).send({ message: "Không tìm thấy user" });
       }
+
+      const reviews = await ReviewModel.find({ user_id: _id });
+      const reviewsWithCourseNames = await Promise.all(
+        reviews.map(async (review) => {
+          const course = await CourseModel.findById(review.course_id);
+          return course ? { ...review._doc, course_name: course.name } : review;
+        })
+      );
+
+      const userCart = await CartModel.find({ user_id: _id });
+      const cartsWithCourseDetails = await Promise.all(
+        userCart.map(async (cartItem) => {
+          const course = await CourseModel.findById(cartItem.course_id);
+          const author = await UserModel.findById(course.user_id);
+          return course
+            ? { ...cartItem._doc, course_details: course, author: author.name }
+            : cartItem;
+        })
+      );
+
+      return res.send({
+        user,
+        reviews: reviewsWithCourseNames,
+        carts: cartsWithCourseDetails,
+      });
     } catch (err) {
-      res.status(500).send({ message: "Server error" });
+      res.status(500).send({ message: "Lỗi server" });
     }
   })
 );

@@ -1,14 +1,14 @@
-import UserLayout from "../layouts/UserLayout";
-import Container from "../components/Container";
-import { PayPalButtons } from "@paypal/react-paypal-js";
 import { useState, useContext, useEffect } from "react";
-import { Store } from "../context/Store";
-import { formatPrice } from "../utils/formatPrice";
-import BackButton from "../components/buttons/BackButton";
+import { useNavigate } from "react-router-dom";
+import { PayPalButtons } from "@paypal/react-paypal-js";
 import { Divider } from "@mui/material";
 import toast from "react-hot-toast";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import UserLayout from "../layouts/UserLayout";
+import Container from "../components/Container";
+import { Store } from "../context/Store";
+import { formatPrice } from "../utils/formatPrice";
+import BackButton from "../components/buttons/BackButton";
 
 const Checkout = () => {
   const navigator = useNavigate();
@@ -27,11 +27,14 @@ const Checkout = () => {
 
   useEffect(() => {
     if (paidFor) {
-      const body = { cartItems, user_id: userInfo._id };
-      axios.post(`http://localhost:8080/api/cart`, body);
+      const body = { cartItems };
+      axios.post(`http://localhost:8080/api/cart`, body, {
+        withCredentials: true,
+      });
       ctxDispatch({ type: "CART_CLEAR" });
+      navigator(`/`);
     }
-  }, [paidFor, cartItems, userInfo]);
+  }, [paidFor, cartItems, userInfo, ctxDispatch, navigator]);
 
   if (error) {
     toast.error(error);

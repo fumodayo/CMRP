@@ -11,6 +11,8 @@ import categoryRoutes from "./routes/category.routes.js";
 import instructorRouter from "./routes/instructor.routes.js";
 import userRouter from "./routes/user.routes.js";
 import cartRouter from "./routes/cart.routes.js";
+import feedbackRouter from "./routes/feedback.routes.js";
+import certificateRouter from "./routes/certificate.routes.js";
 
 export const app = express();
 
@@ -33,4 +35,6 @@ app.use("/api/review", reviewRouter);
 app.use("/api/admin", adminRouter);
 app.use("/api/user", userRouter);
 app.use("/api/cart", cartRouter);
+app.use("/api/feedback", feedbackRouter);
+app.use("/api/certificate", certificateRouter);
 app.use("/api/upload", uploadRoutes);

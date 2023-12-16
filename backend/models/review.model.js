@@ -7,7 +7,7 @@ const reviewSchema = new mongoose.Schema({
   course_id: { type: String, require: true },
   content: { type: String, require: true },
   rating: { type: Number, required: true },
-  createdAt: { type: String, require: true },
+  createdAt: { type: String, default: new Date().toISOString() },
 });
 
 const ReviewModel = mongoose.model("Review", reviewSchema);

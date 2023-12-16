@@ -64,12 +64,11 @@ reviewRouter.get(
   })
 );
 
-/** GET REVIEWS AUTHOR */
+/** GET REVIEWS AUTHOR BY ID,TYPE,RATING */
 reviewRouter.get(
   "/author/:id/:type/:rating",
   expressAsyncHandler(async (req, res) => {
     try {
-      console.log(req.params);
       const authorId = req.params.id;
       const typeFilter = req.params.type !== "all" ? req.params.type : null; // Lọc theo type
       const ratingFilter =

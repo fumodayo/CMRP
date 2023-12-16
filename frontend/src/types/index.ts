@@ -15,7 +15,6 @@ export type Course = {
   _id?: string;
   name?: string;
   user_id?: string;
-  author?: string;
   isCertificate?: boolean;
   image?: string;
   thumbnail?: string; // Link youtube
@@ -38,22 +37,23 @@ export type Course = {
   description?: string;
   requirement?: string;
   schedule?: Schedule[];
-  total_rating?: number; // Tổng rating
-  total_review?: number; // Tổng của reviewIds
-  total_student?: number; // Tổng của học viên theo yêu cầu
   total_lesson?: number; // Tổng của schedule
+  total_rating?: number; // Tổng rating
+  total_student?: number; // Tổng của học viên theo yêu cầu
+  student_Ids?: string[]; // Mảng chứa tổng những học viên đã đăng ký
   total_enroll?: number; // Tổng của số lượng học viên đăng ký hiện tại
   /* 
     AWAITING (Đang chờ thanh toán tiền)
     REJECTED (Bị từ chối)
     PENDING (Đang chờ được duyệt)
-    OPEN (Duyệt xong và bắt đầu cho học viên đăng ký) 
-    IN_PROGRESS 
+    PUBLIC (Duyệt xong và bắt đầu cho học viên đăng ký)
+    NONPUBLIC (Đã duyệt xong mà instructor không muốn PUBLIC)
+    IN_PROGRESS (Bắt đầu dạy và không còn có thể đăng ký)
     COMPLETED (Được phép review)
-  */
+    */
   status?: string;
-  student_Ids?: string[];
-  reviews_Ids?: string[];
+  reviews_Ids?: string[]; // Review của mọi người về khóa học
+  total_review?: number; // Tổng của review nhận được
 };
 
 export type Review = {
@@ -66,6 +66,11 @@ export type Review = {
   createdAt?: string;
   content?: string;
   rating?: number;
+  sentiment?: number[];
+  // Mảng này lần lượt chứa:[ NEG, POS, NEU]
+  // NEU: Tiêu cực
+  // POS: Tích cực
+  // NEU: Trung lập
 };
 
 export type CartItem = {
@@ -83,6 +88,7 @@ export type CartItem = {
     COMPLETED (Đã thanh toán)
   */
   status?: string;
+  course_details?: any;
 };
 
 export type User = {
@@ -95,21 +101,20 @@ export type User = {
   bio?: string;
   isCertificate?: boolean;
   category?: string[];
-  total_course_created?: number;
-  total_review_created?: number;
   total_course?: number;
   total_review?: number;
-  course_Ids?: string[];
-  review_Ids?: string[];
-  course_created_Ids?: string[];
-  review_created_Ids?: string[];
+  course_Ids?: string[]; // Khóa học đã đăng ký
+  review_Ids?: string[]; // Review đã được tạo ra
   real_name?: string;
   cccd_number?: number;
   dateOfBirth?: string;
   createdAt?: string;
+  income?: number; // Tổng số tiền kiếm được
+  pending_money?: number; // Số tiền được phép rút
+  status?: string; // Trạng thái của user: ACTIVE và INACTIVE
 };
 
-export type CertificateTypes = {
+export type Certificate = {
   _id?: string;
   user_id?: string;
   category?: string[];
@@ -118,6 +123,19 @@ export type CertificateTypes = {
     PENDING
     COMPLETED
     REJECTED
+  */
+  status?: string;
+};
+
+export type FeedBack = {
+  _id?: string;
+  user_id?: string;
+  course_id?: string;
+  createdAt?: string;
+  content?: string;
+  /*
+    PENDING
+    COMPLETED
   */
   status?: string;
 };

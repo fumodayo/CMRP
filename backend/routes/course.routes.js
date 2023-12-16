@@ -6,11 +6,11 @@ import { v4 as uuidv4 } from "uuid";
 
 const courseRouter = express.Router();
 
-const PAGE_SIZE = 8;
-
+/** SEARCH & FILTER COURSE */
 courseRouter.get(
   "/",
   expressAsyncHandler(async (req, res) => {
+    const PAGE_SIZE = 8;
     const { query } = req;
     const page = query.page || 1;
     const pageSize = query.pageSize || PAGE_SIZE;
@@ -18,7 +18,7 @@ courseRouter.get(
     const searchQuery = query.search || "";
 
     const filter = {
-      status: { $in: ["OPEN", "IN_PROGRESS", "COMPLETED"] },
+      status: { $in: ["OPEN"] },
     };
 
     if (courseCategory) {
@@ -58,6 +58,7 @@ courseRouter.get(
   })
 );
 
+/** GET COURSE DETAIL */
 courseRouter.get(
   "/:id",
   expressAsyncHandler(async (req, res) => {
@@ -104,7 +105,7 @@ courseRouter.post(
     } = req.body;
 
     try {
-      const newCourse = await CourseModel.create({
+      await CourseModel.create({
         _id: uuidv4(),
         author,
         name,
@@ -122,21 +123,21 @@ courseRouter.post(
         endDate,
       });
 
-      res.status(201).json(newCourse);
+      res.status(201).json("Tạo khóa học thành công");
     } catch (error) {
-      console.error("Error creating course:", error);
-      res.status(500).json({ message: "Server error" });
+      res.status(500).json({ message: "Lỗi server" });
     }
   })
 );
 
+/** GET SIMILAR COURSE */
 courseRouter.post(
   "/similar",
   expressAsyncHandler(async (req, res) => {
     const { _id } = req.body;
 
     let query = {
-      status: { $in: ["OPEN", "IN_PROGRESS", "COMPLETED"] },
+      status: { $in: ["OPEN"] },
     };
 
     if (_id) {

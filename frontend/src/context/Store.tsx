@@ -44,12 +44,7 @@ function reducer(state: State, action: Action): State {
       const cartItems = state.cart.cartItems;
       const existingItem = cartItems.find((item) => item._id === newItem._id);
 
-      // Kiểm tra userInfo có mảng course_Ids
-      const userInfo = state.userInfo || {};
-      const { course_Ids } = userInfo;
-
-      if (existingItem || (course_Ids && course_Ids.includes(newItem._id))) {
-        // Nếu sản phẩm đã tồn tại trong giỏ hàng hoặc trong mảng course_Ids của userInfo
+      if (existingItem) {
         // Không thực hiện thêm vào giỏ hàng
         return { ...state };
       } else {

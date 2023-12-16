@@ -8,11 +8,12 @@ import History from "../../components/listings/History";
 import Helper from "../../components/listings/Helper";
 import ReviewHistory from "../../components/listings/ReviewHistory";
 import axios from "axios";
-import { User } from "../../types";
+import { User, CartItem, Review } from "../../types";
 import { Input, Modal, Select } from "antd";
 import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
 import { TextareaAutosize } from "@mui/material";
+import { extractUsername } from "../../utils/extractUsername";
 
 function classNames(...classes: any) {
   return classes.filter(Boolean).join(" ");
@@ -27,6 +28,12 @@ interface CourseItemProps {
   total_students?: number;
   time?: string;
 }
+
+type Individual = {
+  user: User;
+  carts: CartItem[];
+  reviews: Review[];
+};
 
 export const CourseItem: React.FC<CourseItemProps> = ({
   image,
@@ -71,11 +78,11 @@ export const CourseItem: React.FC<CourseItemProps> = ({
 
   return (
     <div className="flex items-center cursor-pointer">
-      <div className="grid grid-cols-4 grid-flow-row gap-6 hover:bg-neutral-100 p-5 rounded-xl">
-        <div className="relative w-full h-[160px]">
+      <div className="grid grid-cols-4 grid-flow-row gap-4 hover:bg-neutral-100 p-5 rounded-xl">
+        <div className="relative w-full h-[120px]">
           {image && (
             <img
-              className="relative h-[160px] rounded-xl object-cover"
+              className="relative h-[120px] rounded-xl object-cover"
               src={image}
               alt="course"
             />
@@ -113,9 +120,7 @@ export const CourseItem: React.FC<CourseItemProps> = ({
             style={{ height: 50 }}
           >
             <div className="flex flex-col space-y-3">
-              <h1 className="font-medium">
-                Chọn các vấn đề thường gặp
-              </h1>
+              <h1 className="font-medium">Chọn các vấn đề thường gặp</h1>
               <Select
                 defaultValue="Nội dung không giống như quảng cáo"
                 onChange={(value) => setComment(value)}
@@ -146,7 +151,11 @@ export const CourseItem: React.FC<CourseItemProps> = ({
 };
 
 const Profile = () => {
-  const [user, setUser] = useState<User>();
+  const [individual, setIndividual] = useState<Individual>({
+    user: {},
+    carts: [],
+    reviews: [],
+  });
 
   const headerTabs = [
     "Lịch sử thanh toán",
@@ -160,29 +169,38 @@ const Profile = () => {
         `http://localhost:8080/api/user/profile`,
         { withCredentials: true }
       );
-      setUser(data);
+      setIndividual(data);
     };
     fetchData();
   }, []);
 
-  console.log(user);
+  if (!individual) {
+    return null;
+  }
+
+  console.log(individual);
+
+  const { avatar, name, bio } = individual.user;
 
   return (
     <UserLayout>
       <Container>
         <BackButton />
-        {user && (
-          <div className="flex space-x-10 py-5">
-            <div className="w-1/3">
+        {individual && (
+          <div className="flex space-x-5 py-5">
+            <div className="w-1/4">
               <div className="py-5 px-3 max-w-[300px] min-h-[500px] space-y-5 border border-neutral-300 rounded-xl shadow-md">
                 <div className="flex flex-col items-center justify-center">
                   <img
                     className="relative h-[100px] w-[100px] rounded-xl object-cover mb-2"
-                    src={user.avatar}
+                    src={
+                      avatar ||
+                      "https://cdn-icons-png.flaticon.com/512/3177/3177440.png"
+                    }
                     alt="avatar"
                   />
                   <p className="text-lg font-medium text-neutral-700">
-                    {user.name}
+                    {extractUsername(name)}
                   </p>
                 </div>
                 <div className="flex flex-col">
@@ -190,25 +208,27 @@ const Profile = () => {
                     Giới thiệu
                   </p>
                   <div className="min-h-[200px] bg-neutral-50 p-5 text-neutral-400">
-                    {user.bio}
+                    {bio}
                   </div>
                 </div>
               </div>
             </div>
-            <div className="w-2/3">
+            <div className="w-3/4 space-y-3">
               <h1 className="text-2xl text-neutral-900 font-semibold mb-2">
                 Các khóa học
               </h1>
               <div className="flex flex-col space-y-5">
-                <CourseItem
-                  image="/images/course.png"
-                  time="2023-10-12T00:00:00.000Z"
-                  name="Effective Developer"
-                  author="Ths. Lê Thanh Sang"
-                  type="Online"
-                  rating={4.2}
-                  total_students={27}
-                />
+                {individual.carts.map((item) => (
+                  <CourseItem
+                    image={item.course_details.image}
+                    time={item.course_details.startDate}
+                    name={item.course_details.name}
+                    author={item.author}
+                    type={item.course_details.type}
+                    rating={item.course_details.total_rating}
+                    total_students={item.course_details.total_student}
+                  />
+                ))}
               </div>
               <div>
                 <Tab.Group>
@@ -230,13 +250,13 @@ const Profile = () => {
                   </Tab.List>
                   <Tab.Panels style={{ paddingTop: "20px" }}>
                     <Tab.Panel>
-                      <History />
+                      <History carts={individual.carts} />
                     </Tab.Panel>
                     <Tab.Panel>
                       <Helper />
                     </Tab.Panel>
                     <Tab.Panel>
-                      <ReviewHistory reviews={user.review_Ids} />
+                      <ReviewHistory />
                     </Tab.Panel>
                   </Tab.Panels>
                 </Tab.Group>

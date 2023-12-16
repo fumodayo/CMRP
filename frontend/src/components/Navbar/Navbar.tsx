@@ -20,10 +20,11 @@ const StyledBadge = styled(Badge)<BadgeProps>(({ theme }) => ({
 }));
 
 const Navbar = () => {
+  const navigate = useNavigate();
   const { state, dispatch: ctxDispatch } = useContext(Store) || {};
   const {
-    cart: { cartItems },
     userInfo,
+    cart: { cartItems },
   } = state;
   const [search, setSearch] = useState("");
 
@@ -35,7 +36,6 @@ const Navbar = () => {
     });
   };
 
-  const navigate = useNavigate();
 
   const signoutHandler = async () => {
     await axios.get("http://localhost:8080/api/auth/logout", {
@@ -101,7 +101,10 @@ const Navbar = () => {
           {userInfo ? (
             <li className="flex justify-between items-center space-x-2">
               {/* USER PROFILE */}
-              <div className="flex items-center" onClick={() => navigate("/profile")}>
+              <div
+                className="flex items-center"
+                onClick={() => navigate("/profile")}
+              >
                 <img
                   className="relative w-[40px] h-[40px] rounded-xl object-cover mr-1"
                   src={

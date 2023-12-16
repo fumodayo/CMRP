@@ -29,7 +29,7 @@ const courseSchema = new mongoose.Schema({
   status: { type: String, default: "AWAITING" },
   student_Ids: { type: Array, default: [] },
   reviews_Ids: { type: Array, default: [] },
-  createdAt: { type: String, required: true },
+  createdAt: { type: String, default: new Date().toISOString() },
 });
 
 const CourseModel = mongoose.model("Course", courseSchema);
