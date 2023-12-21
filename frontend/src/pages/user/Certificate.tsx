@@ -91,111 +91,17 @@ const Certificate = () => {
     real_name: "",
     dateOfBirth: "",
   });
-
-  const [authentic, setAuthentic] = useState({
-    id: 0,
-    category: [],
-    images: [],
-  });
-
-  const [allCertificateData, setAllCertificateData] = useState<any[]>([]);
-
-  // Thêm danh sách các chứng chỉ đã tạo
-  const [certificateSteps, setCertificateSteps] = useState<JSX.Element[]>([]);
-  const [key, setKey] = useState(1);
-
-  // Thêm hàm để tạo mới bước chứng chỉ
-  const addCertificateStep = () => {
-    setKey((prevKey) => prevKey + 1);
-    const newCertificateStep = (
-      <CertificateStep id={key} onAuthentic={setAuthentic} />
-    );
-    setCertificateSteps([...certificateSteps, newCertificateStep]);
-  };
-
-  useEffect(() => {
-    if (authentic.images.length > 0 && authentic.category.length > 0) {
-      // Kiểm tra xem authentic có ID mới không trùng với các phần tử trong allCertificateData
-      const isNewAuthentic = !allCertificateData.some(
-        (item) => item.id === authentic.id
-      );
-
-      if (isNewAuthentic) {
-        setAllCertificateData((prevData) => [...prevData, authentic]);
-      }
-    }
-  }, [authentic, allCertificateData]);
-
-  // Thêm hàm để xóa bước chứng chỉ đã tạo
-  const removeCertificateStep = (index: number) => {
-    const updatedSteps = certificateSteps.filter((_, i) => i !== index);
-    setCertificateSteps(updatedSteps);
-
-    // Update allCertificateData after removing the step
-    setAllCertificateData((prevData) => {
-      const updatedData = prevData.filter((_, i) => i !== index);
-      return updatedData;
-    });
-  };
+  const [certificateData, setCertificateData] = useState([]);
 
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
-  // // Function to upload an image to Cloudinary
-  // const uploadToCloudinary = async (imageUrl) => {
-  //   try {
-  //     const formData = new FormData();
-  //     formData.append("file", imageUrl); // 'file' là tên của field chứa hình ảnh cần tải lên
-  //     formData.append("api_key", "457796921621652");
-  //     formData.append("upload_preset", "YOUR_UPLOAD_PRESET");
-  //     const response = await axios.post(
-  //       `https://api.cloudinary.com/v1_1/du93troxt/image/upload`, // Replace with your Cloudinary upload URL
-  //       formData
-  //     );
-  //     console.log(response);
-  //     return response.data.secure_url; // Return the secure URL of the uploaded image
-  //   } catch (error) {
-  //     console.error("Error uploading image to Cloudinary:", error);
-  //     return null;
-  //   }
-  // };
-
-  // // Function to handle image uploading for allCertificateData
-  // const uploadImagesToCloudinary = async (certificateData) => {
-  //   const updatedCertificateData = await Promise.all(
-  //     certificateData.map(async (cert) => {
-  //       const images = cert.images.map(async (image) => {
-  //         const uploadedUrl = await uploadToCloudinary(image.preview); // Upload each image to Cloudinary
-  //         return { ...image, preview: uploadedUrl }; // Replace the preview URL with Cloudinary's URL
-  //       });
-  //       const updatedImages = await Promise.all(images);
-  //       return { ...cert, images: updatedImages }; // Update the images array with Cloudinary URLs
-  //     })
-  //   );
-  //   return updatedCertificateData;
-  // };
-
   const handleNext = async () => {
     if (activeStep === 0) {
       console.log("cccd", cccdData);
     } else {
-      // const updatedData = await uploadImagesToCloudinary(allCertificateData);
-      console.log(allCertificateData);
-      // const formData = new FormData();
-      // images.forEach((image) => formData.append("file", image));
-      // formData.append("upload_preset", "mwdchmys");
-
-      // const { data } = await axios.post(
-      //   `http://localhost:8080/api/upload/multi`,
-      //   formData,
-      //   {
-      //     headers: {
-      //       "Content-Type": "multipart/form-data",
-      //     },
-      //   }
-      // );
-      // console.log(data);
+      console.log("certificate", certificateData);
     }
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
@@ -231,18 +137,7 @@ const Certificate = () => {
           {activeStep === 0 ? (
             <CCCDStep onCCCDData={setCccdData} />
           ) : (
-            <div>
-              <CertificateStep id={0} onAuthentic={setAuthentic} />
-              {certificateSteps.map((step, index) => (
-                <div key={index}>
-                  {step}
-                  <Button onClick={() => removeCertificateStep(index)}>
-                    Xóa
-                  </Button>
-                </div>
-              ))}
-              <Button onClick={addCertificateStep}>Thêm chứng chỉ</Button>
-            </div>
+            <CertificateStep onAuthentic={setCertificateData} />
           )}
         </div>
         <div className="flex justify-between">

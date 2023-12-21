@@ -18,11 +18,11 @@ import Review from "./pages/Review";
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 import Dashboard from "./pages/instructor/Dashboard";
 import Reviews from "./pages/instructor/Reviews";
-import Schedule from "./pages/instructor/Schedule";
 import Settings from "./pages/instructor/Settings";
 import AdminCertificate from "./pages/admin/Certificate";
-import Support from "./pages/admin/Support";
 import Courses from "./pages/admin/Courses";
+import CreateCourseInstructor from "./pages/instructor/CreateCourseInstructor";
+import CertificateInstructor from "./pages/instructor/CertificateInstructor";
 
 function App() {
   const initialOptions = {
@@ -87,18 +87,26 @@ function App() {
                 }
               />
               <Route
-                path="/instructor/schedule"
-                element={
-                  <ProtectedRoute>
-                    <Schedule />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
                 path="/instructor/settings"
                 element={
                   <ProtectedRoute>
                     <Settings />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/instructor/create-course"
+                element={
+                  <ProtectedRoute>
+                    <CreateCourseInstructor />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/instructor/certificate"
+                element={
+                  <ProtectedRoute>
+                    <CertificateInstructor />
                   </ProtectedRoute>
                 }
               />
@@ -123,14 +131,6 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <Courses />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/admin/support"
-                element={
-                  <ProtectedRoute>
-                    <Support />
                   </ProtectedRoute>
                 }
               />

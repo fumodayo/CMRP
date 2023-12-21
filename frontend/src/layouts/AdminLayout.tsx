@@ -2,7 +2,6 @@ import Footer from "../components/Footer";
 import Sidebar from "../components/Sidebar/Sidebar";
 import { MdSpaceDashboard } from "react-icons/md";
 import { PiCertificateDuotone } from "react-icons/pi";
-import { BiSupport } from "react-icons/bi";
 import { ImBooks } from "react-icons/im";
 
 interface AdminLayoutProps {
@@ -26,17 +25,14 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
       icon: ImBooks,
       link: "/admin/course",
     },
-    {
-      name: "CSKH",
-      icon: BiSupport,
-      link: "/admin/support",
-    },
   ];
 
   return (
     <div>
       <Sidebar sidebarItems={sidebarItems} />
-      {children}
+      <div className="ml-[90px] 2xl:ml-[280px] 2xl:mr-[50px] my-5 min-h-screen">
+        {children}
+      </div>
       <Footer />
     </div>
   );

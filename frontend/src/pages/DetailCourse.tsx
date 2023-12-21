@@ -106,9 +106,8 @@ const DetailCourse = () => {
     schedule,
     user_id,
     total_rating,
-    total_review,
+    reviews,
     total_student,
-    total_lesson,
     total_enroll,
   } = courseData;
 
@@ -158,7 +157,7 @@ const DetailCourse = () => {
                 />
                 <span>|</span>
                 <div>
-                  {total_enroll}/{total_student} Học viên
+                  Đang có {total_enroll}/{total_student} Học viên
                 </div>
               </div>
               <div className="flex space-x-3 items-center">
@@ -169,13 +168,11 @@ const DetailCourse = () => {
                     alt="author"
                   />
                 </div>
-                <span className="text-zinc-400">{author}</span>
-                <span>|</span>
                 <span
                   onClick={() => navigator(`/review/${user_id}`)}
                   className="text-zinc-400 hover:underline cursor-pointer"
                 >
-                  Review ({total_review})
+                  Xem tất cả đánh giá về {author}
                 </span>
               </div>
               <Tab.Group>
@@ -236,10 +233,10 @@ const DetailCourse = () => {
                   <h3 className="font-medium text-zinc-500 text-lg flex space-x-3">
                     <div className="flex items-center justify-center">
                       <AiFillStar className="mr-1 text-emerald-400" />
-                      Offline
+                      {type && type.toUpperCase()}
                     </div>
                     <span>|</span>
-                    <div>{total_lesson} bài học</div>
+                    <div>{schedule && schedule.length} bài học</div>
                     {address && address.name && (
                       <>
                         <span>|</span>
@@ -272,13 +269,13 @@ const DetailCourse = () => {
                 </div>
               </div>
               {location.state !== "WATCH ONLY" && (
-                <>
+                <div className="flex space-x-5 py-5">
                   {status === "IN_COURSE" ? (
                     <h1 className="font-medium text-emerald-400 text-lg">
                       Bạn đang học khóa học này
                     </h1>
                   ) : (
-                    <div className="flex space-x-5 py-5">
+                    <>
                       <div
                         onClick={addToCartHandler}
                         className="min-w-[250px] flex items-center justify-center text-lg rounded-xl ring-2 ring-emerald-200 px-5 py-3 hover:shadow-md cursor-pointer "
@@ -294,9 +291,9 @@ const DetailCourse = () => {
                       >
                         Mua ngay
                       </div>
-                    </div>
+                    </>
                   )}
-                </>
+                </div>
               )}
             </div>
           </div>

@@ -9,12 +9,18 @@ import { useEffect, useMemo, useState } from "react";
 import axios from "axios";
 import Comment from "../components/listings/Comment";
 import Chart from "../components/listings/Chart";
+import { calculateAverageRating } from "../utils/calculateAverageRating";
 
 const Review = () => {
   const params = useParams();
   const navigate = useNavigate();
 
-  const [reviewsData, setReviewsData] = useState(null);
+  const [reviewsData, setReviewsData] = useState({
+    avatar: "",
+    name: "",
+    category: [],
+    courses: [],
+  });
   const [type, setType] = useState("");
   const [rating, setRating] = useState("");
 
@@ -30,6 +36,8 @@ const Review = () => {
     };
     fetchData();
   }, [params, rating, type]);
+
+  console.log(reviewsData?.courses);
 
   const averageRating = useMemo(() => {
     let totalRating = 0;
@@ -74,7 +82,7 @@ const Review = () => {
     }));
   }, [reviewsData]);
 
-  console.log(sentimentRating);
+  // console.log(sentimentRating);
 
   if (!reviewsData) {
     return null;
@@ -192,7 +200,7 @@ const Review = () => {
                       {course.type}
                     </div>
                     <div className="flex text-center text-zinc-400 text-sm font-normal space-x-3">
-                      {course.total_rating.toFixed(1)}
+                      {calculateAverageRating(course.reviews)}
                       <AiFillStar className="text-yellow-400 mx-1" size={15} />|
                       <span>{course.total_student} Học viên</span>
                     </div>

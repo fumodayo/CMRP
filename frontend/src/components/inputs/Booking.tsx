@@ -20,6 +20,7 @@ import MultiSelect from "./MultiSelect";
 import { nanoid } from "nanoid";
 import Modal from "../Modal";
 import moment from "moment";
+import toast from "react-hot-toast";
 
 type Schedule = {
   id: string;
@@ -35,7 +36,12 @@ interface ScheduleState {
   status?: string;
 }
 
-const Booking = ({ nameCourse, onChangeBooking }) => {
+interface BookingProps {
+  nameCourse: string;
+  onChangeBooking: any;
+}
+
+const Booking: React.FC<BookingProps> = ({ nameCourse, onChangeBooking }) => {
   const today = dayjs();
   const [state, setState] = useState<ScheduleState>({});
   const calendarRef = useRef(null);
@@ -89,36 +95,44 @@ const Booking = ({ nameCourse, onChangeBooking }) => {
   };
 
   const handleEventClick = (clickInfo: EventClickArg) => {
-    if (clickInfo) {
-      setState({ clickInfo, status: "UPDATE" });
-      setModal(true);
-      const date = clickInfo.event.start.toISOString();
-      setAddNewEvent(date);
+    if (selectedRangeTime[0] && selectedRangeTime[1]) {
+      if (clickInfo) {
+        setState({ clickInfo, status: "UPDATE" });
+        setModal(true);
+        const date = clickInfo.event.start.toISOString();
+        setAddNewEvent(date);
+      }
+    } else {
+      toast.error("Vui lòng chọn ngày bắt đầu, ngày kết thúc trước!");
     }
   };
 
   const handleEmptySlotClick = (clickInfo: any) => {
-    setAddNewEvent(clickInfo.startStr);
-    setModal(true);
-    const newChildren = (
-      <div>
-        <h2>Giờ bắt đầu buổi học</h2>
-        <LocalizationProvider
-          dateAdapter={AdapterDayjs}
-          dateLibInstance={dayjs}
-          adapterLocale={"vi"}
-          localeText={
-            viVN.components.MuiLocalizationProvider.defaultProps.localeText
-          }
-        >
-          <MobileTimePicker
-            ampm={false}
-            onChange={(time) => setAddNewTime(time)}
-          />
-        </LocalizationProvider>
-      </div>
-    );
-    setChildrenSetup(newChildren);
+    if (selectedRangeTime[0] && selectedRangeTime[1]) {
+      setAddNewEvent(clickInfo.startStr);
+      setModal(true);
+      const newChildren = (
+        <div>
+          <h2>Giờ bắt đầu buổi học</h2>
+          <LocalizationProvider
+            dateAdapter={AdapterDayjs}
+            dateLibInstance={dayjs}
+            adapterLocale={"vi"}
+            localeText={
+              viVN.components.MuiLocalizationProvider.defaultProps.localeText
+            }
+          >
+            <MobileTimePicker
+              ampm={false}
+              onChange={(time) => setAddNewTime(time)}
+            />
+          </LocalizationProvider>
+        </div>
+      );
+      setChildrenSetup(newChildren);
+    } else {
+      toast.error("Vui lòng chọn ngày bắt đầu, ngày kết thúc trước!");
+    }
   };
 
   const [isResetMultiSelect, setResetMultiSelect] = useState(false);
@@ -142,11 +156,17 @@ const Booking = ({ nameCourse, onChangeBooking }) => {
       multiDays
     );
 
-    onChangeBooking(schedule, startDate?.format(), endDate?.format());
-
     setEvents(schedule);
     setResetMultiSelect(false);
   }, [selectedRangeTime, onChangeBooking, multiDays, nameCourse]);
+
+  useEffect(() => {
+    onChangeBooking({
+      schedule: events,
+      startDate: selectedRangeTime[0]?.format(),
+      endDate: selectedRangeTime[1]?.format(),
+    });
+  }, [events, selectedRangeTime]);
 
   const handleSubmit = () => {
     const startDateTime = moment(addNewTime["$d"]);
@@ -212,8 +232,6 @@ const Booking = ({ nameCourse, onChangeBooking }) => {
     }
   };
 
-  console.log(events);
-
   return (
     <div>
       <LocalizationProvider
@@ -232,7 +250,7 @@ const Booking = ({ nameCourse, onChangeBooking }) => {
             calendars={2}
             value={selectedRangeTime}
             onChange={handleRangeTimeChange}
-            minDate={today}
+            // minDate={today}
           />
           <MultiSelect
             array={[
@@ -286,7 +304,7 @@ const Booking = ({ nameCourse, onChangeBooking }) => {
           right: "dayGridMonth,timeGridWeek,timeGridDay",
         }}
         initialView="dayGridMonth"
-        editable={true}
+        editable={false}
         selectable={true}
         selectMirror={true}
         dayMaxEvents={true}

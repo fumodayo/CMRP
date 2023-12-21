@@ -4,7 +4,7 @@ import axios from "axios";
 
 interface CategoryProps {
   field?: any;
-  onChange?: () => void;
+  onChange?: any;
 }
 
 const Category: React.FC<CategoryProps> = ({ field, onChange }) => {

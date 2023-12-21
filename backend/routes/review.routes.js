@@ -70,19 +70,19 @@ reviewRouter.get(
   expressAsyncHandler(async (req, res) => {
     try {
       const authorId = req.params.id;
-      const typeFilter = req.params.type !== "all" ? req.params.type : null; // Lọc theo type
+      const typeFilter = req.params.type !== "all" ? req.params.type : null;
       const ratingFilter =
-        req.params.rating !== "all" ? parseInt(req.params.rating) : null; // Lọc theo rating
+        req.params.rating !== "all" ? parseInt(req.params.rating) : null;
 
       const author = await UserModel.findById(authorId);
       if (!author) {
-        return res.status(404).send({ message: "Author not found" });
+        return res.status(404).send({ message: "Không tìm thấy người dạy" });
       }
 
       const authorInfo = {
         avatar: author.avatar,
         name: author.name,
-        category: author.category, // Giả sử category là một trường của tác giả
+        category: author.category,
       };
 
       let courses = [];
@@ -107,20 +107,20 @@ reviewRouter.get(
       const reviewsWithUsers = [];
 
       for (const course of courses) {
-        const reviews = [];
-        const courseInfo = { ...course.toObject() }; // Copy thông tin course
-
-        for (const reviewId of course.reviews_Ids) {
-          let review = null;
-          if (ratingFilter !== null) {
-            review = await ReviewModel.findOne({
-              _id: reviewId,
-              rating: ratingFilter,
-            }); // Lọc theo rating
-          } else {
-            review = await ReviewModel.findById(reviewId);
-          }
-          if (review) {
+        let courseReviews = [];
+        if (ratingFilter !== null) {
+          courseReviews = await ReviewModel.find({
+            course_id: course._id,
+            rating: ratingFilter,
+          });
+        } else {
+          courseReviews = await ReviewModel.find({
+            course_id: course._id,
+          });
+        }
+        if (courseReviews.length > 0) {
+          const reviews = [];
+          for (const review of courseReviews) {
             const user = await UserModel.findOne({ _id: review.user_id });
             if (user) {
               reviews.push({
@@ -130,11 +130,11 @@ reviewRouter.get(
               });
             }
           }
-        }
-
-        if (reviews.length > 0) {
-          courseInfo.reviews = reviews; // Thêm thông tin reviews vào courseInfo
-          reviewsWithUsers.push(courseInfo); // Thêm courseInfo vào danh sách trả về
+          const courseInfo = {
+            ...course.toObject(),
+            reviews: reviews,
+          };
+          reviewsWithUsers.push(courseInfo);
         }
       }
 
@@ -143,9 +143,7 @@ reviewRouter.get(
         courses: reviewsWithUsers,
       });
     } catch (err) {
-      return res
-        .status(500)
-        .send({ message: "Error fetching data", error: err });
+      return res.status(500).send({ message: "Lỗi server", error: err });
     }
   })
 );

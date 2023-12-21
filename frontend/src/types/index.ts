@@ -37,7 +37,6 @@ export type Course = {
   description?: string;
   requirement?: string;
   schedule?: Schedule[];
-  total_lesson?: number; // Tổng của schedule
   total_rating?: number; // Tổng rating
   total_student?: number; // Tổng của học viên theo yêu cầu
   student_Ids?: string[]; // Mảng chứa tổng những học viên đã đăng ký
@@ -52,8 +51,9 @@ export type Course = {
     COMPLETED (Được phép review)
     */
   status?: string;
-  reviews_Ids?: string[]; // Review của mọi người về khóa học
-  total_review?: number; // Tổng của review nhận được
+
+  author?: string;
+  feedbacks?: any[];
 };
 
 export type Review = {
@@ -101,17 +101,17 @@ export type User = {
   bio?: string;
   isCertificate?: boolean;
   category?: string[];
-  total_course?: number;
-  total_review?: number;
-  course_Ids?: string[]; // Khóa học đã đăng ký
-  review_Ids?: string[]; // Review đã được tạo ra
-  real_name?: string;
-  cccd_number?: number;
-  dateOfBirth?: string;
   createdAt?: string;
+  /* */
+  real_name?: string;
+  cccd_number?: string;
+  dateOfBirth?: string;
+  /* */
   income?: number; // Tổng số tiền kiếm được
   pending_money?: number; // Số tiền được phép rút
   status?: string; // Trạng thái của user: ACTIVE và INACTIVE
+
+  feedbacks?: any[];
 };
 
 export type Certificate = {
@@ -125,6 +125,9 @@ export type Certificate = {
     REJECTED
   */
   status?: string;
+  createdAt?: string;
+
+  realName?: string;
 };
 
 export type FeedBack = {

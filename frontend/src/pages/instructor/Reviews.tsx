@@ -9,9 +9,17 @@ import axios from "axios";
 import Comment from "../../components/listings/Comment";
 import { Store } from "../../context/Store";
 import InstructorLayout from "../../layouts/InstructorLayout";
+import { calculateAverageRating } from "../../utils/calculateAverageRating";
+import { Button } from "antd";
+import { Link } from "react-router-dom";
 
 const Reviews = () => {
-  const [reviewsData, setReviewsData] = useState(null);
+  const [reviewsData, setReviewsData] = useState({
+    avatar: "",
+    name: "",
+    category: [],
+    courses: [],
+  });
   const [type, setType] = useState("");
   const [rating, setRating] = useState("");
   const { state } = useContext(Store);
@@ -59,6 +67,8 @@ const Reviews = () => {
     },
   ];
 
+  console.log(reviewsData);
+
   const handleTypeChange = (item: string) => {
     setType(item);
   };
@@ -67,96 +77,109 @@ const Reviews = () => {
     setRating(item);
   };
 
+  if (reviewsData.courses.length === 0) {
+    return (
+      <InstructorLayout>
+        <section className="space-y-2 flex flex-col items-center justify-center h-[700px]">
+          <p className="text-xl font-medium">Bạn chưa có đánh giá nào</p>
+          <Link to={"/create-course"}>
+            <Button color="" type="primary" ghost shape="round" size="large">
+              <p className="font-medium">Tạo khóa học mới</p>
+            </Button>
+          </Link>
+        </section>
+      </InstructorLayout>
+    );
+  }
+
   return (
     <InstructorLayout>
-      <Container>
-        <section className="space-y-5">
-          <div className="flex justify-between">
-            <h1>
-              Đánh giá của <span className="font-medium">{name}</span>
-            </h1>
-            {/* <p>Tạo khóa học đầu tiên từ {convertDateTime(author.firstTime)}</p> */}
-          </div>
-          <div className="flex items-center space-x-3">
-            <p>Các lĩnh vực đào tạo</p>
-            <div className="flex space-x-2">
-              {category && (
-                <Chip
-                  types={category}
-                  currentType={type}
-                  onCurrentType={handleTypeChange}
-                />
-              )}
-            </div>
-          </div>
-          <div className="flex bg-zinc-200 px-7 py-5 space-x-5">
-            <div className="flex flex-col items-center">
-              <p className="text-xl font-medium">
-                <span className="text-4xl">4.9</span> trên 5
-              </p>
-              <Rating
-                name="half-rating-read"
-                size="large"
-                defaultValue={4.9}
-                precision={0.1}
-                readOnly
-              />
-            </div>
-            <div className="flex space-x-2 py-5">
+      <section className="space-y-5">
+        <div className="flex justify-between">
+          <h1>
+            Đánh giá của <span className="font-medium">{name}</span>
+          </h1>
+          {/* <p>Tạo khóa học đầu tiên từ {convertDateTime(author.firstTime)}</p> */}
+        </div>
+        <div className="flex items-center space-x-3">
+          <p>Các lĩnh vực đào tạo</p>
+          <div className="flex space-x-2">
+            {category && (
               <Chip
-                types={rangeStars}
-                currentType={rating}
-                onCurrentType={handleRatingChange}
+                types={category}
+                currentType={type}
+                onCurrentType={handleTypeChange}
               />
-            </div>
+            )}
           </div>
-          {courses &&
-            courses.map((course: any) => (
-              <div key={course._id}>
-                <div className="flex space-x-5 items-center">
-                  <div className="relative h-[140px]">
-                    <img
-                      className="relative h-[140px] rounded-xl object-cover"
-                      src={course.image}
-                      alt="course"
-                    />
-                    <div className="absolute bottom-0 rounded-bl-xl bg-red-500 px-3 py-1 text-sm text-white">
-                      Khóa học kết thúc
-                    </div>
-                  </div>
-                  <div className="space-y-1">
-                    <h2 className="text-xl font-bold text-slate-700">
-                      {course.name}
-                    </h2>
-                    <div className="text-zinc-400 text-sm font-normal">
-                      {course.author}
-                    </div>
-                    <div className="text-zinc-400 text-sm font-semibold">
-                      {course.type}
-                    </div>
-                    <div className="flex text-center text-zinc-400 text-sm font-normal space-x-3">
-                      {course.total_rating.toFixed(1)}
-                      <AiFillStar className="text-yellow-400 mx-1" size={15} />|
-                      <span>{course.total_student} Học viên</span>
-                    </div>
+        </div>
+        <div className="flex bg-zinc-200 px-7 py-5 space-x-5">
+          <div className="flex flex-col items-center">
+            <p className="text-xl font-medium">
+              <span className="text-4xl">4.9</span> trên 5
+            </p>
+            <Rating
+              name="half-rating-read"
+              size="large"
+              defaultValue={4.9}
+              precision={0.1}
+              readOnly
+            />
+          </div>
+          <div className="flex space-x-2 py-5">
+            <Chip
+              types={rangeStars}
+              currentType={rating}
+              onCurrentType={handleRatingChange}
+            />
+          </div>
+        </div>
+        {courses &&
+          courses.map((course: any) => (
+            <div key={course._id}>
+              <div className="flex space-x-5 items-center">
+                <div className="relative h-[140px]">
+                  <img
+                    className="relative h-[140px] rounded-xl object-cover"
+                    src={course.image}
+                    alt="course"
+                  />
+                  <div className="absolute bottom-0 rounded-bl-xl bg-red-500 px-3 py-1 text-sm text-white">
+                    Khóa học kết thúc
                   </div>
                 </div>
-                <div className="space-y-3">
-                  {course.reviews.map((review) => (
-                    <Comment
-                      key={review._id}
-                      avatar={review.avatar}
-                      name={review.author}
-                      rating={review.rating}
-                      createdAt={review.createdAt}
-                      content={review.content}
-                    />
-                  ))}
+                <div className="space-y-1">
+                  <h2 className="text-xl font-bold text-slate-700">
+                    {course.name}
+                  </h2>
+                  <div className="text-zinc-400 text-sm font-normal">
+                    {course.author}
+                  </div>
+                  <div className="text-zinc-400 text-sm font-semibold">
+                    {course.type}
+                  </div>
+                  <div className="flex text-center text-zinc-400 text-sm font-normal space-x-3">
+                    {calculateAverageRating(course.reviews)}
+                    <AiFillStar className="text-yellow-400 mx-1" size={15} />|
+                    <span>{course.total_student} Học viên</span>
+                  </div>
                 </div>
               </div>
-            ))}
-        </section>
-      </Container>
+              <div className="space-y-3">
+                {course.reviews.map((review) => (
+                  <Comment
+                    key={review._id}
+                    avatar={review.avatar}
+                    name={review.author}
+                    rating={review.rating}
+                    createdAt={review.createdAt}
+                    content={review.content}
+                  />
+                ))}
+              </div>
+            </div>
+          ))}
+      </section>
     </InstructorLayout>
   );
 };

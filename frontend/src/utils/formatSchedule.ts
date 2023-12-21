@@ -1,8 +1,8 @@
 interface Event {
-  id: string;
-  title: string;
-  start: string;
-  end: string;
+  id?: string;
+  title?: string;
+  start?: string;
+  end?: string;
 }
 
 import { DateTime } from "luxon";
@@ -53,8 +53,12 @@ function getTimeRange(eventGroup: Event[]): string {
 export const formatSchedule = (events: Event[]) => {
   const groupedEvents: { [key: string]: Event[] } = {};
 
+  if (!events || events.length === 0) {
+    return [];
+  }
+
   events.forEach((event) => {
-    const key = event.title;
+    const key = event.title || "";
     if (!groupedEvents[key]) {
       groupedEvents[key] = [];
     }

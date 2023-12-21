@@ -3,6 +3,7 @@ import expressAsyncHandler from "express-async-handler";
 import CourseModel from "../models/course.model.js";
 import { UserModel } from "../models/user.model.js";
 import { v4 as uuidv4 } from "uuid";
+import ReviewModel from "../models/review.model.js";
 
 const courseRouter = express.Router();
 
@@ -62,17 +63,28 @@ courseRouter.get(
 courseRouter.get(
   "/:id",
   expressAsyncHandler(async (req, res) => {
-    const course = await CourseModel.findById(req.params.id);
+    const { id } = req.params;
+    const course = await CourseModel.findById(id);
+
+    if (!course) {
+      return res.status(404).send({ message: "Không tìm thấy khóa học" });
+    }
+
     const instructor = await UserModel.findById(course.user_id);
 
     if (!instructor) {
-      return res.status(404).send({ message: "Instructor not found" });
+      return res
+        .status(404)
+        .send({ message: "Không tìm thấy thông tin người dạy" });
     }
+
+    const reviews = await ReviewModel.find({ course_id: id });
 
     const coursesWithUserInfo = {
       ...course.toObject(),
       author: instructor.name,
       author_image: instructor.avatar,
+      reviews: reviews,
     };
 
     if (course) {
