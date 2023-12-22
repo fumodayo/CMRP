@@ -16,7 +16,7 @@ cartRouter.post(
     try {
       const { _id } = req.user;
       const { cartItems } = req.body;
-      console.log(cartItems);
+      console.log(_id);
 
       await Promise.all(
         cartItems.map(async (item) => {
@@ -25,11 +25,6 @@ cartRouter.post(
             user_id: _id,
             course_id: item._id,
           };
-
-          const user = await UserModel.findById(_id);
-          user.course_Ids.push(item._id);
-          user.total_course = user.total_course + 1;
-          await user.save();
 
           const course = await CourseModel.findById(item._id);
           course.student_Ids.push(_id);

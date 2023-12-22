@@ -1,11 +1,12 @@
 import { useCallback, useEffect, useState } from "react";
-import { message } from "antd";
+import { Button, message } from "antd";
 import InstructorLayout from "../../layouts/InstructorLayout";
 import {
   ProFormDigit,
   ProFormMoney,
   ProFormSelect,
   ProFormText,
+  ProFormUploadButton,
   ProFormUploadDragger,
   StepsForm,
 } from "@ant-design/pro-components";
@@ -77,6 +78,32 @@ const CreateCourseInstructor = () => {
             console.log({ ...values, ...bookingData, ...detailCourse });
             message.success("hoàn thành");
           }}
+          submitter={{
+            render: (props) => {
+              if (props.step === 0) {
+                return (
+                  <div className="my-10">
+                    <Button onClick={() => props.onSubmit?.()}>
+                      Tiếp theo {">"}
+                    </Button>
+                  </div>
+                );
+              }
+
+              return [
+                <div className="my-10">
+                  <Button key="gotoTwo" onClick={() => props.onPre?.()}>
+                    {"<"} Trở lại
+                  </Button>
+                  ,
+                  <Button key="goToTree" onClick={() => props.onSubmit?.()}>
+                    Hoàn thành √
+                  </Button>
+                  ,
+                </div>,
+              ];
+            },
+          }}
         >
           <StepsForm.StepForm
             name="detail"
@@ -145,7 +172,12 @@ const CreateCourseInstructor = () => {
                   />
                 )}
                 <ProFormText label="Link youtube giới thiệu" name="thumbnail" />
-                <ProFormUploadDragger name="image" label="Hình ảnh khóa học" />
+                <ProFormUploadButton
+                  action="http://localhost:8080/api/upload/single"
+                  title="Tải hình ảnh lên"
+                  name="image"
+                  label="Hình ảnh khóa học"
+                />
                 <ProFormSelect
                   label="Thể loại"
                   name="category"

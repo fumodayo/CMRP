@@ -29,7 +29,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
 
   return (
     <div>
-      <Sidebar sidebarItems={sidebarItems} />
+      <Sidebar role="admin" sidebarItems={sidebarItems} />
       <div className="ml-[90px] 2xl:ml-[280px] 2xl:mr-[50px] my-5 min-h-screen">
         {children}
       </div>

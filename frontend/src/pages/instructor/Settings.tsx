@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import Container from "../../components/Container";
 import InstructorLayout from "../../layouts/InstructorLayout";
 import { User } from "../../types";
 import axios from "axios";
 import { extractUsername } from "../../utils/extractUsername";
-import { Button, Form, Input } from "antd";
+import { Button, Form, Input, Upload } from "antd";
 import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
+import ImgCrop from "antd-img-crop";
 
 const { TextArea } = Input;
 
@@ -16,9 +16,12 @@ type Individual = {
   reviews: any[];
 };
 
-type FieldType = {
-  name?: string;
-  bio?: string;
+const getSrcFromFile = (file) => {
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file.originFileObj);
+    reader.onload = () => resolve(reader.result);
+  });
 };
 
 const Settings = () => {
@@ -39,9 +42,41 @@ const Settings = () => {
     fetchData();
   }, []);
 
-  const onFinish = (values: any) => {
-    console.log("Success:", values);
-    toast.success("Thay đổi thành công");
+  const [fileList, setFileList] = useState([]);
+
+  const onChange = ({ fileList: newFileList }) => {
+    setFileList(newFileList);
+  };
+
+  const onPreview = async (file) => {
+    const src = file.url || (await getSrcFromFile(file));
+    const imgWindow = window.open(src);
+
+    if (imgWindow) {
+      const image = new Image();
+      image.src = src;
+      imgWindow.document.write(image.outerHTML);
+    } else {
+      window.location.href = src;
+    }
+  };
+
+  const onFinish = async (values: any) => {
+    let body;
+    if (fileList.length > 0) {
+      body = { ...values, avatar: fileList[0]?.response.url };
+    } else {
+      body = { ...values };
+    }
+    const { data } = await axios.put(
+      `http://localhost:8080/api/instructor/update-profile`,
+      body,
+      { withCredentials: true }
+    );
+    console.log(data)
+    if (data) {
+      toast.success("Thay đổi thành công");
+    }
   };
 
   const onFinishFailed = (errorInfo: any) => {
@@ -99,11 +134,31 @@ const Settings = () => {
             onFinishFailed={onFinishFailed}
             autoComplete="off"
           >
-            <Form.Item<FieldType> label="Tên người dùng" name="name">
+            <Form.Item<User> label="Ảnh đạt diện">
+              <ImgCrop
+                modalTitle="Cắt hình ảnh"
+                showGrid
+                rotationSlider
+                aspectSlider
+                showReset
+              >
+                <Upload
+                  maxCount={1}
+                  action="http://localhost:8080/api/upload/single"
+                  listType="picture-card"
+                  fileList={fileList}
+                  onChange={onChange}
+                  onPreview={onPreview}
+                >
+                  {fileList.length < 3 && "+ Tải ảnh lên"}
+                </Upload>
+              </ImgCrop>
+            </Form.Item>
+            <Form.Item<User> label="Tên người dùng" name="name">
               <Input />
             </Form.Item>
 
-            <Form.Item<FieldType> label="Giới thiệu bản thân" name="bio">
+            <Form.Item<User> label="Giới thiệu bản thân" name="bio">
               <TextArea />
             </Form.Item>
 

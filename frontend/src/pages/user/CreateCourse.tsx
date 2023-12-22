@@ -1,225 +1,254 @@
-import { useCallback, useContext, useEffect, useState } from "react";
-import { ClipLoader } from "react-spinners";
-import { HiArrowSmRight } from "react-icons/hi";
-import { Controller, useForm } from "react-hook-form";
-import Container from "../../components/Container";
-import Input from "../../components/inputs/Input";
-import RichTextEditor from "../../components/inputs/RichTextEditor";
-import Select from "../../components/inputs/Select";
-import UserLayout from "../../layouts/UserLayout";
+import { useCallback, useEffect, useState } from "react";
+import { Button, message } from "antd";
+import {
+  ProFormDigit,
+  ProFormMoney,
+  ProFormSelect,
+  ProFormText,
+  ProFormUploadButton,
+  ProFormUploadDragger,
+  StepsForm,
+} from "@ant-design/pro-components";
+import axios from "axios";
+import { CKEditor } from "@ckeditor/ckeditor5-react";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import Booking from "../../components/inputs/Booking";
-import { useNavigate } from "react-router-dom";
-import UploadSingleImage from "../../components/inputs/UploadSingleImage";
-import { Store } from "../../context/Store";
-import Category from "../../components/listings/Category";
-import toast from "react-hot-toast";
+import UserLayout from "../../layouts/UserLayout";
+
+const checkPrice = (_: any, value) => {
+  if (value > 20000) {
+    return Promise.resolve();
+  }
+  return Promise.reject(new Error("Số tiền phải lớn hơn 20.000đ"));
+};
+
+const validatePositiveNumber = (_, value) => {
+  if (value > 0) {
+    return Promise.resolve();
+  }
+  return Promise.reject(new Error("Số phải lớn hơn 0"));
+};
 
 const CreateCourse = () => {
-  const navigator = useNavigate();
-  const { state } = useContext(Store) ?? {};
-  const userInfo = state?.userInfo;
-
-  const [isLoading, setIsLoading] = useState(false);
   const [isShowInputAddress, setIsShowInputAddress] = useState(false);
   const [nameCourse, setNameCourse] = useState("");
-
-  const [bookingData, setBookingData] = useState({
-    lesson: 0,
-    schedule: [],
-    startDate: null,
-    endDate: null,
+  const [categoriesData, setCategoryData] = useState([]);
+  const [detailCourse, setDetailCourse] = useState({
+    short_description: "",
+    description: "",
+    requirement: "",
   });
 
-  const handleBooking = useCallback(
-    (lesson: number, schedule: any, startDate: any, endDate: any) => {
-      setBookingData({ lesson, schedule, startDate, endDate });
-    },
-    []
-  );
+  useEffect(() => {
+    const fetchData = async () => {
+      const { data } = await axios.get(`http://localhost:8080/api/category`);
+      const categories = data.map((item) => ({
+        label: item.name,
+        value: item.value,
+      }));
+      setCategoryData(categories);
+    };
+    fetchData();
+  }, []);
 
-  const {
-    control,
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
-
-  const onSubmit = useCallback(
-    async (course: any) => {
-      setIsLoading(true);
-      const formData = new FormData();
-      formData.append("file", course.image[0]);
-
-      // const { data } = await axios.post(
-      //   `http://localhost:8080/api/upload/single`,
-      //   formData,
-      //   {
-      //     headers: {
-      //       "Content-Type": "multipart/form-data",
-      //     },
-      //   }
-      // );
-
-      const createCourse = {
-        author: userInfo.name,
-        name: course.name,
-        // image: data.url,
-        category: course.category,
-        price: parseInt(course.price),
-        requirement: course.requirement,
-        short_description: course.short_description,
-        thumbnail: course.thumbnail,
-        total_student: parseInt(course.total_student),
-        type: course.type,
-        schedule: bookingData.schedule,
-        lesson: bookingData.lesson,
-        startDate: bookingData.startDate,
-        endDate: bookingData.endDate,
-      };
-      toast.success("Thành công");
-      console.log(createCourse);
-
-      // const res = await axios.post(
-      //   `http://localhost:8080/api/course`,
-      //   createCourse
-      // );
-
-      // console.log(res.data);
-
-      // navigator(`/certificate`);
-    },
-    [bookingData, userInfo.name]
-  );
+  const handleDetailChange = (editor, field) => {
+    const value = editor.getData();
+    setDetailCourse({ ...detailCourse, [field]: value });
+  };
 
   const handleSelectChange = (selected: string) => {
     setIsShowInputAddress(selected === "offline" || selected === "hybrid");
   };
 
+  const [bookingData, setBookingData] = useState({
+    schedule: [],
+    startDate: null,
+    endDate: null,
+  });
+
+  const handleBooking = useCallback((value) => {
+    setBookingData(value);
+  }, []);
+
   return (
     <UserLayout>
-      <Container>
-        <section className="space-y-5">
-          <h1 className="text-slate-700 text-2xl font-bold">Tạo khóa học</h1>
-          <form className="space-y-5" onSubmit={handleSubmit(onSubmit)}>
-            <h2 className="text-slate-500 text-xl font-bold">
-              Bước 1: Tạo thông tin chung
-            </h2>
-            <div className="grid grid-cols-2 grid-flow-row gap-4">
-              <Input
-                id="name"
-                placeholder="Tên khóa học"
-                register={register}
-                errors={errors}
-                required
-                onChange={(e) => setNameCourse(e.target.value)}
-              />
-              <Input
-                id="total_student"
-                placeholder="Số lượng học viên tối thiểu"
-                type="number"
-                register={register}
-                errors={errors}
-                required
-              />
-              <Input
-                id="price"
-                placeholder="Giá buổi học"
-                type="number"
-                register={register}
-                errors={errors}
-                required
-              />
-              <div>
-                <Controller
+      <div className="mt-10">
+        <StepsForm
+          onFinish={async (values) => {
+            console.log({ ...values, ...bookingData, ...detailCourse });
+            message.success("hoàn thành");
+          }}
+          submitter={{
+            render: (props) => {
+              if (props.step === 0) {
+                return (
+                  <div className="my-10">
+                    <Button onClick={() => props.onSubmit?.()}>
+                      Tiếp theo {">"}
+                    </Button>
+                  </div>
+                );
+              }
+
+              return [
+                <div className="my-10">
+                  <Button key="gotoTwo" onClick={() => props.onPre?.()}>
+                    {"<"} Trở lại
+                  </Button>
+                  ,
+                  <Button key="goToTree" onClick={() => props.onSubmit?.()}>
+                    Hoàn thành √
+                  </Button>
+                  ,
+                </div>,
+              ];
+            },
+          }}
+        >
+          <StepsForm.StepForm
+            name="detail"
+            title="Khóa học"
+            onFinish={async (values) => {
+              setNameCourse(values.name);
+              return true;
+            }}
+          >
+            <div className="flex gap-10">
+              <div className="1/2">
+                <ProFormText
+                  name="name"
+                  label="Tên khóa học"
+                  width="md"
+                  rules={[
+                    { required: true, message: "Vui lòng nhập tên khóa học" },
+                  ]}
+                />
+                <ProFormDigit
+                  label="Số lượng học viên tối thiểu"
+                  name="total_student"
+                  width="md"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Vui lòng nhập số lượng học viên",
+                    },
+                    { validator: validatePositiveNumber },
+                  ]}
+                />
+                <ProFormMoney
+                  label="Giá buổi học"
+                  name="price"
+                  rules={[{ required: true, validator: checkPrice }]}
+                  width="md"
+                  fieldProps={{
+                    precision: 1000,
+                    formatter: (value) =>
+                      `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+                  }}
+                />
+                <ProFormSelect
+                  label="Loại hình"
                   name="type"
-                  control={control}
-                  render={({ field }) => (
-                    <Select field={field} onSelectChange={handleSelectChange} />
-                  )}
+                  rules={[
+                    { required: true, message: "Vui lòng chọn loại hình" },
+                  ]}
+                  options={[
+                    { value: "online", label: "Online" },
+                    { value: "offline", label: "Offline" },
+                    { value: "hybrid", label: "Hybrid" },
+                  ]}
+                  onChange={(value) => handleSelectChange(value)}
                 />
                 {isShowInputAddress && (
-                  <Input
-                    id="address"
-                    placeholder="Địa chỉ dạy"
-                    register={register}
-                    errors={errors}
-                    required
+                  <ProFormText
+                    label="Địa chỉ dạy học"
+                    name="address"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Vui lòng nhập địa chỉ dạy học",
+                      },
+                    ]}
                   />
                 )}
-              </div>
-              <Input
-                id="thumbnail"
-                placeholder="Link youtube giới thiệu khóa học"
-                register={register}
-                errors={errors}
-              />
-
-              <UploadSingleImage register={register} errors={errors} />
-            </div>
-            <div className="py-5">
-              <Controller
-                name="category"
-                control={control}
-                render={({ field }) => <Category field={field} />}
-              />
-            </div>
-
-            <div className="flex items-start justify-between space-x-10">
-              <div className="w-1/3">
-                <h3>Tóm tắt</h3>
-                <Controller
-                  name="short_description"
-                  control={control}
-                  defaultValue=""
-                  render={({ field }) => <RichTextEditor field={field} />}
+                <ProFormText label="Link youtube giới thiệu" name="thumbnail" />
+                <ProFormUploadButton
+                  rules={[{ required: true, message: "Vui lòng tải ảnh lên" }]}
+                  action="http://localhost:8080/api/upload/single"
+                  title="Tải hình ảnh lên"
+                  name="image"
+                  label="Hình ảnh khóa học"
+                />
+                <ProFormSelect
+                  label="Thể loại"
+                  name="category"
+                  fieldProps={{
+                    mode: "multiple",
+                  }}
+                  rules={[
+                    { required: true, message: "Vui lòng chọn thể loại" },
+                  ]}
+                  options={categoriesData}
                 />
               </div>
-              <div className="w-1/3">
-                <h3>Nội dung</h3>
-                <Controller
-                  name="description"
-                  control={control}
-                  defaultValue=""
-                  render={({ field }) => <RichTextEditor field={field} />}
-                />
-              </div>
-              <div className="w-1/3">
-                <h3>Yêu cầu</h3>
-                <Controller
-                  name="requirement"
-                  control={control}
-                  defaultValue=""
-                  render={({ field }) => <RichTextEditor field={field} />}
-                />
+              <div className="1/2 space-y-5">
+                <div className="min-w-[600px]">
+                  <label>Tóm tắt</label>
+                  <CKEditor
+                    editor={ClassicEditor}
+                    config={{
+                      toolbar: {
+                        items: ["italic", "bold"],
+                      },
+                    }}
+                    onChange={(_, editor) =>
+                      handleDetailChange(editor, "short_description")
+                    }
+                  />
+                </div>
+                <div className="min-w-[600px]">
+                  <label>Nội dung</label>
+                  <CKEditor
+                    editor={ClassicEditor}
+                    config={{
+                      toolbar: {
+                        items: ["italic", "bold"],
+                      },
+                    }}
+                    onChange={(_, editor) =>
+                      handleDetailChange(editor, "description")
+                    }
+                  />
+                </div>
+                <div className="min-w-[600px]">
+                  <label>Yêu cầu</label>
+                  <CKEditor
+                    editor={ClassicEditor}
+                    config={{
+                      toolbar: {
+                        items: ["italic", "bold"],
+                      },
+                    }}
+                    onChange={(_, editor) =>
+                      handleDetailChange(editor, "requirement")
+                    }
+                  />
+                </div>
               </div>
             </div>
-
-            <div className="space-y-5">
-              <h2 className="text-slate-500 text-xl font-bold">
-                Bước 2: Tạo lịch học
-              </h2>
-              <Booking
-                nameCourse={nameCourse}
-                onChangeBooking={handleBooking}
-              />
-            </div>
-
-            <button
-              type="submit"
-              className="relative overflow-hidden font-semibold inline-flex justify-center items-center focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-500 disabled:pointer-events-none disabled:opacity-50 active:translate-y-px whitespace-nowrap bg-emerald-600 hover:bg-emerald-700 shadow-sm text-white py-3 sm:py-2.5 px-3.5 text-sm rounded-md w-[200px] mt-4"
-            >
-              {isLoading ? (
-                <ClipLoader size={25} color="green" />
-              ) : (
-                <>
-                  Tạo khóa học
-                  <HiArrowSmRight size={25} className="ml-2" />
-                </>
-              )}
-            </button>
-          </form>
-        </section>
-      </Container>
+          </StepsForm.StepForm>
+          <StepsForm.StepForm
+            name="schedule"
+            title="Lịch học"
+            onFinish={async () => {
+              return true;
+            }}
+          >
+            <Booking nameCourse={nameCourse} onChangeBooking={handleBooking} />
+          </StepsForm.StepForm>
+          <Button className="custom-button-prev">Back</Button>
+        </StepsForm>
+      </div>
     </UserLayout>
   );
 };

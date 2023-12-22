@@ -28,7 +28,7 @@ export const SidebarItem: React.FC<SidebarItemProps> = ({
   );
 };
 
-const Sidebar = ({ sidebarItems }) => {
+const Sidebar = ({ role, sidebarItems }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const currentPath = location.pathname;
@@ -37,7 +37,7 @@ const Sidebar = ({ sidebarItems }) => {
     <nav className="fixed top-0 left-0 h-screen w-[250px] bg-white border border-r-slate-100 shadow-sm">
       <div className="flex items-center justify-center m-5">
         <div
-          onClick={() => navigate("/")}
+          onClick={() => navigate(`/${role}`)}
           className="flex flex-start items-center text-slate-500 text-sm font-bold cursor-pointer"
         >
           <img

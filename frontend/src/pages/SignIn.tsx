@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Store } from "../context/Store";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { ClipLoader } from "react-spinners";
 import { HiArrowSmRight } from "react-icons/hi";
 import Input from "../components/inputs/Input";
@@ -10,9 +10,6 @@ import { User } from "../types";
 
 const SignIn = () => {
   const navigate = useNavigate();
-  const { search } = useLocation();
-  const redirectUrl = new URLSearchParams(search).get("redirect");
-  const redirect = redirectUrl ? redirectUrl : "/";
 
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -40,7 +37,15 @@ const SignIn = () => {
       );
       ctxDispatch({ type: "USER_SIGNIN", payload: data.data });
       localStorage.setItem("user_info", JSON.stringify(data.data));
-      navigate(redirect || "/");
+      const roles = data.data.role;
+
+      if (roles.includes("instructor")) {
+        navigate("/instructor");
+      } else if (roles.includes("admin")) {
+        navigate("/admin");
+      } else {
+        navigate("/");
+      }
     } catch (error: any) {
       setErrorMessage(error.response.data.message);
     }

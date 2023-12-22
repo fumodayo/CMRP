@@ -36,7 +36,6 @@ const Navbar = () => {
     });
   };
 
-
   const signoutHandler = async () => {
     await axios.get("http://localhost:8080/api/auth/logout", {
       withCredentials: true,
@@ -72,12 +71,14 @@ const Navbar = () => {
             </div>
           </li>
           <li>
-            <div
-              onClick={() => navigate("/instructor")}
-              className="rounded-xl ring-1 ring-gray-200 px-3 py-1 hover:shadow-md cursor-pointer"
-            >
-              Chế độ người dạy
-            </div>
+            {userInfo?.role?.includes("instructor") && (
+              <div
+                onClick={() => navigate("/instructor")}
+                className="rounded-xl ring-1 ring-gray-200 px-3 py-1 hover:shadow-md cursor-pointer"
+              >
+                Chế độ người dạy
+              </div>
+            )}
           </li>
           <li className="flex justify-between items-center space-x-5">
             <div className="flex space-x-10 items-center">

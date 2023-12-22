@@ -5,6 +5,8 @@ import { UserModel } from "../models/user.model.js";
 import ReviewModel from "../models/review.model.js";
 import CourseModel from "../models/course.model.js";
 import CartModel from "../models/cart.model.js";
+import FeedbackModel from "../models/feedback.model.js";
+import { v4 as uuidv4 } from "uuid";
 
 const userRouter = express.Router();
 
@@ -39,6 +41,7 @@ userRouter.get(
             : cartItem;
         })
       );
+      console.log(userCart);
 
       return res.send({
         user,
@@ -47,6 +50,27 @@ userRouter.get(
       });
     } catch (err) {
       res.status(500).send({ message: "Lỗi server" });
+    }
+  })
+);
+
+/** POST FEEDBACK */
+userRouter.post(
+  "/",
+  isAuth,
+  expressAsyncHandler(async (req, res) => {
+    const { _id } = req.user;
+    const { course_id, content } = req.body;
+    try {
+      await FeedbackModel.create({
+        _id: uuidv4(),
+        user_id: _id,
+        course_id,
+        content,
+      });
+      res.status(201).json({ message: "Tạo thành công" });
+    } catch (error) {
+      res.status(500).json({ message: "Lỗi server" });
     }
   })
 );

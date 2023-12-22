@@ -24,7 +24,7 @@ const courseSchema = new mongoose.Schema({
   student_Ids: { type: Array, default: [] },
   total_enroll: { type: Number, default: 0 },
   total_student: { type: Number, default: 0 },
-  status: { type: String, default: "AWAITING" },
+  status: { type: String, default: "PENDING" },
   createdAt: { type: String, default: new Date().toISOString() },
 });
 

@@ -23,6 +23,7 @@ import AdminCertificate from "./pages/admin/Certificate";
 import Courses from "./pages/admin/Courses";
 import CreateCourseInstructor from "./pages/instructor/CreateCourseInstructor";
 import CertificateInstructor from "./pages/instructor/CertificateInstructor";
+import InstructorRoute from "./components/InstructorRoute";
 
 function App() {
   const initialOptions = {
@@ -73,67 +74,46 @@ function App() {
               <Route
                 path="/instructor"
                 element={
-                  <ProtectedRoute>
+                  <InstructorRoute>
                     <Dashboard />
-                  </ProtectedRoute>
+                  </InstructorRoute>
                 }
               />
               <Route
                 path="/instructor/reviews"
                 element={
-                  <ProtectedRoute>
+                  <InstructorRoute>
                     <Reviews />
-                  </ProtectedRoute>
+                  </InstructorRoute>
                 }
               />
               <Route
                 path="/instructor/settings"
                 element={
-                  <ProtectedRoute>
+                  <InstructorRoute>
                     <Settings />
-                  </ProtectedRoute>
+                  </InstructorRoute>
                 }
               />
               <Route
                 path="/instructor/create-course"
                 element={
-                  <ProtectedRoute>
+                  <InstructorRoute>
                     <CreateCourseInstructor />
-                  </ProtectedRoute>
+                  </InstructorRoute>
                 }
               />
               <Route
                 path="/instructor/certificate"
                 element={
-                  <ProtectedRoute>
+                  <InstructorRoute>
                     <CertificateInstructor />
-                  </ProtectedRoute>
+                  </InstructorRoute>
                 }
               />
-              <Route
-                path="/admin"
-                element={
-                  <ProtectedRoute>
-                    <AdminDashboard />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/admin/certificate"
-                element={
-                  <ProtectedRoute>
-                    <AdminCertificate />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/admin/course"
-                element={
-                  <ProtectedRoute>
-                    <Courses />
-                  </ProtectedRoute>
-                }
-              />
+              <Route path="/admin" element={<AdminDashboard />} />
+              <Route path="/admin/certificate" element={<AdminCertificate />} />
+              <Route path="/admin/course" element={<Courses />} />
               <Route path="/*" element={<NotFound />} />
             </Routes>
           </main>

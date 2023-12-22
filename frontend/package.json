@@ -30,6 +30,7 @@
     "@mui/x-date-pickers-pro": "^6.17.0",
     "@paypal/react-paypal-js": "^8.1.3",
     "antd": "^5.12.4",
+    "antd-img-crop": "^4.18.0",
     "axios": "^1.5.1",
     "ckeditor-tailwind-reset": "^1.0.5",
     "date-fns": "^2.30.0",

@@ -10,7 +10,7 @@ const InstructorRoute: React.FC<InstructorRouteProps> = ({ children }) => {
   const { state } = useContext(Store) ?? {};
   const userInfo = state?.userInfo;
 
-  return userInfo && userInfo.role === "instructor" ? (
+  return userInfo && userInfo.role.includes("instructor") ? (
     children
   ) : (
     <Navigate to="/signin" />
