@@ -5,16 +5,10 @@ import axios from "axios";
 import { extractUsername } from "../../utils/extractUsername";
 import { Button, Form, Input, Upload } from "antd";
 import toast from "react-hot-toast";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import ImgCrop from "antd-img-crop";
 
 const { TextArea } = Input;
-
-type Individual = {
-  user: User;
-  carts: any[];
-  reviews: any[];
-};
 
 const getSrcFromFile = (file) => {
   return new Promise((resolve) => {
@@ -27,7 +21,7 @@ const getSrcFromFile = (file) => {
 const Settings = () => {
   const navigate = useNavigate();
 
-  const [individual, setIndividual] = useState<Individual>({
+  const [individual, setIndividual] = useState<User>({
     user: {},
     carts: [],
     reviews: [],
@@ -36,7 +30,7 @@ const Settings = () => {
   useEffect(() => {
     const fetchData = async () => {
       const { data } = await axios.get(
-        `http://localhost:8080/api/user/profile`,
+        `http://localhost:8080/api/instructor/profile`,
         { withCredentials: true }
       );
       setIndividual(data);
@@ -89,7 +83,7 @@ const Settings = () => {
     return null;
   }
 
-  const { avatar, name, bio } = individual.user;
+  const { avatar, name, bio } = individual;
 
   return (
     <InstructorLayout>

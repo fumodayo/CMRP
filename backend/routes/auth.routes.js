@@ -24,7 +24,11 @@ authRouter.post(
       return res.status(400).send({ message: "Sai tài khoản hoặc mật khẩu" });
     }
 
-    sendToken(res, user, 200, "Login successful");
+    if (user.status === "INACTIVE") {
+      return res.status(401).send({ message: "Tài khoản đã bị khóa, hãy liên hệ SĐT: 037631478" });
+    } else {
+      sendToken(res, user, 200, "Login successful");
+    }
   })
 );
 
@@ -37,7 +41,7 @@ authRouter.post(
     if (!email || !password) {
       return res
         .status(400)
-        .json({ success: false, message: "Missing email or password" });
+        .json({ success: false, message: "Không có email và password" });
     }
 
     let user = await UserModel.findOne({ email });

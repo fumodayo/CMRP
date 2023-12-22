@@ -1,9 +1,6 @@
 import { Rating } from "@mui/material";
-import UserLayout from "../../layouts/UserLayout";
-import BackButton from "../../components/buttons/BackButton";
 import Chip from "../../components/listings/Chip";
 import { AiFillStar } from "react-icons/ai";
-import Container from "../../components/Container";
 import { useEffect, useState, useContext, useMemo } from "react";
 import axios from "axios";
 import Comment from "../../components/listings/Comment";
@@ -20,6 +17,7 @@ const Reviews = () => {
     name: "",
     category: [],
     courses: [],
+    certificates: [],
   });
   const [type, setType] = useState("");
   const [rating, setRating] = useState("");
@@ -54,7 +52,7 @@ const Reviews = () => {
         } else if (positive > negative && positive > neutral) {
           sentimentValues["Tích cực"]++;
         } else {
-          sentimentValues["Trung lập"]++;
+          sentimentValues["Trung lập"]++; 
         }
       });
     });
@@ -72,7 +70,9 @@ const Reviews = () => {
     return null;
   }
 
-  const { category, name, courses } = reviewsData;
+  console.log(reviewsData);
+
+  const { category, name, courses, certificates } = reviewsData;
 
   const rangeStars = [
     {
@@ -138,6 +138,7 @@ const Reviews = () => {
           <div className="flex space-x-2">
             {category && (
               <Chip
+                certificate={certificates}
                 types={category}
                 currentType={type}
                 onCurrentType={handleTypeChange}
@@ -153,8 +154,8 @@ const Reviews = () => {
             <Rating
               name="half-rating-read"
               size="large"
-              defaultValue={4.9}
-              precision={0.1}
+              defaultValue={5}
+              precision={1}
               readOnly
             />
           </div>

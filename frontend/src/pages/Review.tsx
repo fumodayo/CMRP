@@ -20,6 +20,7 @@ const Review = () => {
     name: "",
     category: [],
     courses: [],
+    certificates: [],
   });
   const [type, setType] = useState("");
   const [rating, setRating] = useState("");

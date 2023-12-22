@@ -45,6 +45,38 @@ adminRouter.get(
   })
 );
 
+/** GET ALL CERTIFATE */
+adminRouter.get(
+  "/certificate",
+  isAdmin,
+  expressAsyncHandler(async (req, res) => {
+    try {
+      const certificates = await CertificateModel.find({});
+      const data = [];
+
+      for (const certificate of certificates) {
+        const user = await UserModel.findById(certificate.user_id);
+        if (user) {
+          data.push({
+            ...certificate.toObject(),
+            name: user.name,
+          });
+        }
+      }
+
+      if (data.length > 0) {
+        return res.status(200).json(data);
+      } else {
+        return res
+          .status(404)
+          .json({ message: "Không tìm thấy giấy xác thực" });
+      }
+    } catch (error) {
+      return res.status(500).json({ message: "Lỗi server" });
+    }
+  })
+);
+
 /** CHANGE STATUS USER: ACTIVE <-> INACTIVE*/
 adminRouter.put(
   "/user-status/:id",

@@ -15,6 +15,7 @@ const userSchema = new mongoose.Schema({
   real_name: { type: String, default: "" },
   cccd_number: { type: String, default: "" },
   dateOfBirth: { type: String, default: "" },
+  status: { type: String, default: "ACTIVE" },
   createdAt: { type: String, default: new Date().toISOString() },
 });
 

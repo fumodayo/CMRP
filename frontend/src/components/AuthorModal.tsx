@@ -22,13 +22,11 @@ const AuthorModal: React.FC<AuthorModalProps> = ({
 
   useEffect(() => {
     const fetchData = async () => {
-      const id = "instructor_1";
       const { data } = await axios.get(
-        `http://localhost:8080/api/admin/user/${id}`
+        `http://localhost:8080/api/admin/user/${user_id}`
       );
       setUser(data);
     };
-    console.log(user_id);
     fetchData();
   }, [user_id]);
 

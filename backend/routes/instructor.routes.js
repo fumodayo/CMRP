@@ -21,6 +21,22 @@ instructorRouter.get(
   })
 );
 
+/** PROFILE */
+instructorRouter.get(
+  "/profile",
+  isAuth,
+  expressAsyncHandler(async (req, res) => {
+    const { _id } = req.user;
+    const user = await UserModel.findById(_id);
+
+    if (!user) {
+      return res.status(404).send({ message: "Không tìm thấy user" });
+    }
+
+    return res.send(user);
+  })
+);
+
 /** EDIT COURSE */
 // instructorRouter.get(
 //   "/course/:id",

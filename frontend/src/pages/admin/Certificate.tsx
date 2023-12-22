@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { Image } from "lightbox.js-react";
 import "lightbox.js-react/dist/index.css";
 import { Tag, Table, Space, Button } from "antd";
-import Container from "../../components/Container";
 import AdminLayout from "../../layouts/AdminLayout";
 import { Category, Certificate } from "../../types";
 import { formatDate } from "../../utils/formatDate";
@@ -19,47 +18,27 @@ const uniqueTypes = (data: Certificate[], kind: string) => {
 };
 
 const AdminCertificate = () => {
-  const [data, setData] = useState<Certificate[]>([
-    {
-      _id: "ce_1",
-      realName: "Thảo Nguyễn",
-      images: [
-        "https://sununi.edu.vn/wp-content/uploads/2023/05/Ha-Phuong-723x1024.png",
-        "https://quangcaosieutoc.com//upload/chung-chi-google-min.jpg",
-      ],
-      status: "PENDING",
-      category: ["CNTT", "728nc"],
-      createdAt: "2024-11-26T00:00:00.000Z",
-    },
-    {
-      _id: "ce_2",
-      realName: "Thảo Nguyễn",
-      images: [
-        "https://sununi.edu.vn/wp-content/uploads/2023/05/Ha-Phuong-723x1024.png",
-        "https://quangcaosieutoc.com//upload/chung-chi-google-min.jpg",
-      ],
-      status: "CONFIRM",
-      category: ["CNTT", "7s889j"],
-      createdAt: "2024-11-25T00:00:00.000Z",
-    },
-    {
-      _id: "ce_3",
-      realName: "John Damn",
-      images: [
-        "https://sununi.edu.vn/wp-content/uploads/2023/05/Ha-Phuong-723x1024.png",
-        "https://quangcaosieutoc.com//upload/chung-chi-google-min.jpg",
-      ],
-      status: "FAILURE",
-      category: ["CNTT"],
-      createdAt: "2023-11-26T00:00:00.000Z",
-    },
-  ]);
+  const [data, setData] = useState<Certificate[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const { data } = await axios.get(
+        `http://localhost:8080/api/admin/certificate`,
+        {
+          withCredentials: true,
+        }
+      );
+      console.log("data", data);
+      setData(data);
+    };
+    fetchData();
+  }, []);
 
   const [filterByAuthor, setFilterByAuthor] = useState<any[]>([]);
   const [filterByCategory, setFilterByCategory] = useState<any[]>([]);
 
   useEffect(() => {
-    const author = uniqueTypes(data, "realName");
+    const author = uniqueTypes(data, "name");
     const fetchCategories = async () => {
       const { data } = await axios.get(`http://localhost:8080/api/category`);
       const categories = data.map((item: Category) => ({
@@ -105,7 +84,7 @@ const AdminCertificate = () => {
   };
 
   const [isOpenAuthorModal, setIsOpenAuthorModal] = useState(false);
-  const [selectedUserId, setSelectedUserId] = useState("");
+  const [selectedUserId, setSelectedUserId] = useState("user_1");
 
   const handleSelectedAuthor = (user_id: string) => {
     setSelectedUserId(user_id);
@@ -125,8 +104,8 @@ const AdminCertificate = () => {
     },
     {
       title: "Họ và tên",
-      dataIndex: "realName",
-      key: "realName",
+      dataIndex: "name",
+      key: "name",
       filters: filterByAuthor,
       onFilter: (value: any, record: Certificate) =>
         record.realName?.indexOf(value) === 0,
@@ -165,7 +144,7 @@ const AdminCertificate = () => {
         },
         {
           text: "Đã xác nhận",
-          value: "CONFIRM",
+          value: "COMPELETED",
         },
         {
           text: "Chưa đạt",
@@ -182,7 +161,7 @@ const AdminCertificate = () => {
             color = "volcano";
             text = "CHƯA XỬ LÝ";
             break;
-          case "CONFIRM":
+          case "COMPLETED":
             color = "green";
             text = "ĐÃ XÁC NHẬN";
             break;
