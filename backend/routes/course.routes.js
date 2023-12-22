@@ -19,7 +19,7 @@ courseRouter.get(
     const searchQuery = query.search || "";
 
     const filter = {
-      status: { $in: ["OPEN"] },
+      status: { $in: ["PUBLIC"] },
     };
 
     if (courseCategory) {
@@ -149,7 +149,7 @@ courseRouter.post(
     const { _id } = req.body;
 
     let query = {
-      status: { $in: ["OPEN"] },
+      status: { $in: ["PUBLIC"] },
     };
 
     if (_id) {

@@ -4,7 +4,7 @@ import BackButton from "../../components/buttons/BackButton";
 import Chip from "../../components/listings/Chip";
 import { AiFillStar } from "react-icons/ai";
 import Container from "../../components/Container";
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState, useContext, useMemo } from "react";
 import axios from "axios";
 import Comment from "../../components/listings/Comment";
 import { Store } from "../../context/Store";
@@ -12,6 +12,7 @@ import InstructorLayout from "../../layouts/InstructorLayout";
 import { calculateAverageRating } from "../../utils/calculateAverageRating";
 import { Button } from "antd";
 import { Link } from "react-router-dom";
+import Chart from "../../components/listings/Chart";
 
 const Reviews = () => {
   const [reviewsData, setReviewsData] = useState({
@@ -37,6 +38,35 @@ const Reviews = () => {
     };
     fetchData();
   }, [rating, type, userInfo]);
+
+  const sentimentRating = useMemo(() => {
+    const sentimentValues = {
+      "Tiêu cực": 0,
+      "Tích cực": 0,
+      "Trung lập": 0,
+    };
+
+    reviewsData?.courses.forEach((course) => {
+      course.reviews.forEach((review) => {
+        const [negative, positive, neutral] = review.sentiment;
+        if (negative > positive && negative > neutral) {
+          sentimentValues["Tiêu cực"]++;
+        } else if (positive > negative && positive > neutral) {
+          sentimentValues["Tích cực"]++;
+        } else {
+          sentimentValues["Trung lập"]++;
+        }
+      });
+    });
+
+    const sortedSentiments = [
+      { name: "Tích cực", value: sentimentValues["Tích cực"] },
+      { name: "Tiêu cực", value: sentimentValues["Tiêu cực"] },
+      { name: "Trung lập", value: sentimentValues["Trung lập"] },
+    ];
+
+    return sortedSentiments;
+  }, [reviewsData]);
 
   if (!reviewsData) {
     return null;
@@ -99,7 +129,9 @@ const Reviews = () => {
           <h1>
             Đánh giá của <span className="font-medium">{name}</span>
           </h1>
-          {/* <p>Tạo khóa học đầu tiên từ {convertDateTime(author.firstTime)}</p> */}
+          <div className="w-[800px]">
+            <Chart sentimentRating={sentimentRating} />
+          </div>
         </div>
         <div className="flex items-center space-x-3">
           <p>Các lĩnh vực đào tạo</p>

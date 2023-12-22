@@ -5,7 +5,7 @@ import axios from "axios";
 import { extractUsername } from "../../utils/extractUsername";
 import { Button, Form, Input, Upload } from "antd";
 import toast from "react-hot-toast";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import ImgCrop from "antd-img-crop";
 
 const { TextArea } = Input;
@@ -25,6 +25,8 @@ const getSrcFromFile = (file) => {
 };
 
 const Settings = () => {
+  const navigate = useNavigate();
+
   const [individual, setIndividual] = useState<Individual>({
     user: {},
     carts: [],
@@ -73,7 +75,7 @@ const Settings = () => {
       body,
       { withCredentials: true }
     );
-    console.log(data)
+    console.log(data);
     if (data) {
       toast.success("Thay đổi thành công");
     }
@@ -114,8 +116,8 @@ const Settings = () => {
               <div className="min-h-[200px] bg-neutral-50 p-5 text-neutral-400">
                 {bio}
               </div>
-              <Button>
-                <Link to="/instructor/certificate">Gửi xác thực</Link>
+              <Button onClick={() => navigate("/instructor/certificate")}>
+                Gửi xác thực
               </Button>
             </div>
           </div>

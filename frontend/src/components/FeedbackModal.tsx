@@ -5,6 +5,7 @@ import { Button, Modal, Tag, Table } from "antd";
 import toast from "react-hot-toast";
 import { formatDate } from "../utils/formatDate";
 import moment from "moment";
+import axios from "axios";
 
 interface FeedbackModalProps {
   feedbacks: FeedBack[];
@@ -23,18 +24,22 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({
     setTicket(feedbacks);
   }, [feedbacks]);
 
-  const handleConfirm = (id: string) => {
+  const handleConfirm = async (id: string) => {
     const updatedItems = ticket.map((item) => {
       if (item._id === id && item.status === "PENDING") {
         return {
           ...item,
-          status: "DONE",
+          status: "COMPLETED",
         };
       }
       return item;
     });
-    toast.success("Xử lý thành công");
     setTicket(updatedItems);
+    const body = { status: "COMPLETED" };
+    await axios.put(`http://localhost:8080/api/admin/feedback/${id}`, body, {
+      withCredentials: true,
+    });
+    toast.success("Xử lý thành công");
   };
 
   const columns: ColumnsType<any> = [
@@ -63,7 +68,7 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({
         },
         {
           text: "Đã xử lý",
-          value: "DONE",
+          value: "COMPLETED",
         },
       ],
       onFilter: (value: any, record: Course) => record.status === value,

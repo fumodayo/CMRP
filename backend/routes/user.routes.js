@@ -56,11 +56,12 @@ userRouter.get(
 
 /** POST FEEDBACK */
 userRouter.post(
-  "/",
+  "/feedback",
   isAuth,
   expressAsyncHandler(async (req, res) => {
     const { _id } = req.user;
     const { course_id, content } = req.body;
+    
     try {
       await FeedbackModel.create({
         _id: uuidv4(),

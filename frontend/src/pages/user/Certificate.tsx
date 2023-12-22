@@ -1,7 +1,7 @@
 import Container from "../../components/Container";
 import UserLayout from "../../layouts/UserLayout";
 import { Stepper, Step, StepLabel, Button } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import BadgeIcon from "@mui/icons-material/Badge";
 import WorkspacePremiumIcon from "@mui/icons-material/WorkspacePremium";
 import { StepIconProps } from "@mui/material/StepIcon";
@@ -13,6 +13,7 @@ import CCCDStep from "../../components/steps/CCCDStep";
 import CertificateStep from "../../components/steps/CertificateStep";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { Store } from "../../context/Store";
 
 const ColorlibConnector = styled(StepConnector)(({ theme }) => ({
   [`&.${stepConnectorClasses.alternativeLabel}`]: {
@@ -84,6 +85,9 @@ function ColorlibStepIcon(props: StepIconProps) {
 const steps = ["Xác minh bản thân", "Xác minh chứng chỉ"];
 
 const Certificate = () => {
+  const { state } = useContext(Store);
+  const { userInfo } = state;
+
   const navigator = useNavigate();
   const [activeStep, setActiveStep] = useState(0);
   const [cccdData, setCccdData] = useState({
@@ -107,10 +111,28 @@ const Certificate = () => {
   };
 
   // useEffect(() => {
+  //   // const role = userInfo.role.push("instructor");
+  //   // console.log("role", userInfo);
+  //   // const data = { ...userInfo, role };
+  //   // console.log(data);
+  //   console.log(userInfo);
+  //   // localStorage.setItem("user_info", data);
+  // }, [userInfo]);
+
+  // useEffect(() => {
   //   if (activeStep === steps.length) {
   //     navigator("/");
   //   }
   // }, [activeStep, navigator]);
+
+  const handleSkipCertificate = () => {
+    if (!userInfo.role.includes("instructor")) {
+      userInfo.role.push("instructor");
+    }
+
+    localStorage.setItem("user_info", JSON.stringify(userInfo));
+    navigator("/instructor");
+  };
 
   return (
     <UserLayout>
@@ -152,6 +174,7 @@ const Certificate = () => {
             {activeStep === steps.length - 1 ? "Hoàn thành" : "Tiếp theo"}
           </Button>
         </div>
+        <Button onClick={handleSkipCertificate}>Bỏ qua</Button>
       </Container>
     </UserLayout>
   );

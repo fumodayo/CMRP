@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { Button, message } from "antd";
 import {
   ProFormDigit,
@@ -6,7 +6,6 @@ import {
   ProFormSelect,
   ProFormText,
   ProFormUploadButton,
-  ProFormUploadDragger,
   StepsForm,
 } from "@ant-design/pro-components";
 import axios from "axios";
@@ -14,6 +13,8 @@ import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import Booking from "../../components/inputs/Booking";
 import UserLayout from "../../layouts/UserLayout";
+import { useNavigate } from "react-router-dom";
+import { Store } from "../../context/Store";
 
 const checkPrice = (_: any, value) => {
   if (value > 20000) {
@@ -30,6 +31,11 @@ const validatePositiveNumber = (_, value) => {
 };
 
 const CreateCourse = () => {
+  const navigator = useNavigate();
+
+  const { state } = useContext(Store);
+  const { userInfo } = state;
+
   const [isShowInputAddress, setIsShowInputAddress] = useState(false);
   const [nameCourse, setNameCourse] = useState("");
   const [categoriesData, setCategoryData] = useState([]);
@@ -77,6 +83,9 @@ const CreateCourse = () => {
           onFinish={async (values) => {
             console.log({ ...values, ...bookingData, ...detailCourse });
             message.success("hoàn thành");
+            if (userInfo.isCertificate === false) {
+              navigator("/certificate");
+            }
           }}
           submitter={{
             render: (props) => {
@@ -171,13 +180,23 @@ const CreateCourse = () => {
                     ]}
                   />
                 )}
-                <ProFormText label="Link youtube giới thiệu" name="thumbnail" />
+                <ProFormText
+                  rules={[
+                    {
+                      pattern:
+                        /^(https?:\/\/)?(www\.youtube\.com|youtu\.?be)\/.+/,
+                      message: "Vui lòng nhập đúng định dạng link YouTube.",
+                    },
+                  ]}
+                  label="Link youtube giới thiệu"
+                  name="thumbnail"
+                />
                 <ProFormUploadButton
                   rules={[{ required: true, message: "Vui lòng tải ảnh lên" }]}
                   action="http://localhost:8080/api/upload/single"
                   title="Tải hình ảnh lên"
                   name="image"
-                  label="Hình ảnh khóa học"
+                  label="Hình ảnh khóa học (Nên upload ảnh có kích thước không quá nhỏ)"
                 />
                 <ProFormSelect
                   label="Thể loại"

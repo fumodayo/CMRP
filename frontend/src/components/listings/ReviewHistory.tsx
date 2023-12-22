@@ -1,24 +1,19 @@
 import { Table } from "antd";
 import type { ColumnsType } from "antd/es/table";
+import { Review } from "../../types";
+import { formatDate } from "../../utils/formatDate";
+import moment from "moment";
 
-interface DataType {
-  _id: string;
-  createdAt: string;
-  name: string;
-  rating: number;
-  content: string;
-}
-
-const columns: ColumnsType<DataType> = [
+const columns: ColumnsType<Review> = [
   {
-    title: "ID",
-    dataIndex: "_id",
-    key: "_id",
-  },
-  {
-    title: "Thời gian",
+    title: "Ngày tạo",
     dataIndex: "createdAt",
     key: "createdAt",
+    render: (createdAt) => {
+      return formatDate(createdAt);
+    },
+    sorter: (a, b) => moment(a.createdAt).unix() - moment(b.createdAt).unix(),
+    defaultSortOrder: "descend",
   },
   {
     title: "Khóa học",
@@ -54,6 +49,7 @@ const ReviewHistory = () => {
       content: "Cũng ổn",
     },
   ];
+
   return <Table columns={columns} dataSource={reviews} />;
 };
 

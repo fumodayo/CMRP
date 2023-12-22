@@ -378,37 +378,49 @@ const Courses = () => {
     setIsOpenCourseModal(true);
   };
 
-  const handleConfirm = (id: string) => {
+  const handleConfirm = async (id: string) => {
     const updatedData = data.map((item) => {
       if (item._id === id) {
         return { ...item, status: "PUBLIC" };
       }
       return item;
     });
-    toast.success("Mở khóa học thành công");
     setData(updatedData);
+    const body = { status: "PUBLIC" };
+    await axios.put(`http://localhost:8080/api/admin/course/${id}`, body, {
+      withCredentials: true,
+    });
+    toast.success("Mở khóa học thành công");
   };
 
-  const handleReject = (id: string) => {
+  const handleReject = async (id: string) => {
     const updatedData = data.map((item) => {
       if (item._id === id) {
         return { ...item, status: "REJECTED" };
       }
       return item;
+    });
+    setData(updatedData);
+    const body = { status: "REJECTED" };
+    await axios.put(`http://localhost:8080/api/admin/course/${id}`, body, {
+      withCredentials: true,
     });
     toast.success("Đóng khóa học thành công");
-    setData(updatedData);
   };
 
-  const handleClose = (id: string) => {
+  const handleClose = async (id: string) => {
     const updatedData = data.map((item) => {
       if (item._id === id) {
         return { ...item, status: "REJECTED" };
       }
       return item;
     });
-    toast.success("Khóa khóa học thành công");
     setData(updatedData);
+    const body = { status: "REJECTED" };
+    await axios.put(`http://localhost:8080/api/admin/course/${id}`, body, {
+      withCredentials: true,
+    });
+    toast.success("Khóa khóa học thành công");
   };
 
   const columns: ColumnsType<Course> = [
@@ -608,6 +620,25 @@ const Courses = () => {
           );
         }
         return null;
+      },
+    },
+    {
+      title: "Báo cáo mới",
+      key: "feedbacks",
+      dataIndex: "feedbacks",
+      sorter: (a, b) => a.feedbacks.length - b.feedbacks.length,
+      render: (_, record) => {
+        const pendingFeedbacks = record.feedbacks.filter(
+          (feedback) => feedback.status === "PENDING"
+        );
+
+        return pendingFeedbacks.length > 0 ? (
+          <div className="flex items-end text-xl text-red-500 font-bold">
+            {pendingFeedbacks.length}
+          </div>
+        ) : (
+          <div>_</div>
+        );
       },
     },
     {

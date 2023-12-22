@@ -37,7 +37,7 @@ const Review = () => {
     fetchData();
   }, [params, rating, type]);
 
-  console.log(reviewsData?.courses);
+  console.log(reviewsData);
 
   const averageRating = useMemo(() => {
     let totalRating = 0;
@@ -88,7 +88,7 @@ const Review = () => {
     return null;
   }
 
-  const { category, name, courses } = reviewsData;
+  const { category, name, courses, certificates } = reviewsData;
 
   const rangeStars = [
     {
@@ -139,6 +139,7 @@ const Review = () => {
             <div className="flex space-x-2">
               {category && (
                 <Chip
+                  certificate={certificates}
                   types={category}
                   currentType={type}
                   onCurrentType={handleTypeChange}

@@ -1,43 +1,31 @@
-import { useState } from "react";
-
 const colorMap = {
-  "TIÊU CỰC": "bg-blue-500",
-  "TÍCH CỰC": "bg-yellow-500",
-  "TRUNG LẬP": "bg-green-500",
+  "TIÊU CỰC": "bg-red-500",
+  "TÍCH CỰC": "bg-blue-500",
+  "TRUNG LẬP": "bg-gray-500",
 };
 
 const Chart = ({ sentimentRating }) => {
-  const [hovered, setHovered] = useState(null);
-
   const total = sentimentRating.reduce((acc, val) => acc + val.value, 0);
   const percentages = sentimentRating.map(
     (value) => (value.value / total) * 100
   );
 
-  const handleHover = (index) => {
-    setHovered(index);
-  };
-
   return (
     <div className="flex items-center">
+      <p className="min-w-[150px] font-medium">Tổng: {total} đánh giá</p>
       {sentimentRating.map((value, index) => (
         <div
           key={index}
-          className={`relative h-16 rounded-md ${
+          className={`relative h-20 rounded-md ${
             colorMap[value.name.toUpperCase()] || ""
           } border-r border-white`}
           style={{ width: `${percentages[index]}%` }}
-          onMouseOver={() => handleHover(index)}
-          onMouseOut={() => setHovered(null)}
         >
-          {hovered === index && (
-            <div className="absolute top-0 left-0 w-full h-full p-1 bg-white bg-opacity-75 font-medium text-sm">
-              <p>
-                Có {value.value} đánh giá: {value.name}
-              </p>
-              <p>Chiếm: {percentages[index].toFixed(2)}% </p>
-            </div>
-          )}
+          <div className="absolute top-0 left-0 w-full h-full px-3 py-3 bg-white bg-opacity-10 font-medium text-sm text-white">
+            <p className="uppercase">{value.name}</p>
+            <p>{value.value} đánh giá </p>
+            <p> {percentages[index].toFixed(2)}%</p>
+          </div>
         </div>
       ))}
     </div>

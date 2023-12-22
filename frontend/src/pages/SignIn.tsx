@@ -39,10 +39,10 @@ const SignIn = () => {
       localStorage.setItem("user_info", JSON.stringify(data.data));
       const roles = data.data.role;
 
-      if (roles.includes("instructor")) {
-        navigate("/instructor");
-      } else if (roles.includes("admin")) {
+      if (roles.includes("admin")) {
         navigate("/admin");
+      } else if (roles.includes("instructor")) {
+        navigate("/instructor");
       } else {
         navigate("/");
       }

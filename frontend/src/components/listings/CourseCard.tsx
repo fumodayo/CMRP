@@ -3,6 +3,7 @@ import { AiFillStar } from "react-icons/ai";
 import { formatPrice } from "../../utils/formatPrice";
 import { countdownDaysToEvent } from "../../utils/countdownDaysToEvent";
 import VerifiedUserIcon from "@mui/icons-material/VerifiedUser";
+import { Tooltip } from "antd";
 
 interface CourseCardProps {
   id?: string;
@@ -54,7 +55,12 @@ const CourseCard: React.FC<CourseCardProps> = ({
           <div className="text-zinc-400 text-sm font-normal">
             {author}
             {isCertificate && (
-              <VerifiedUserIcon fontSize="small" className="ml-1 text-emerald-500" />
+              <Tooltip title="Đã xác thực">
+                <VerifiedUserIcon
+                  fontSize="small"
+                  className="ml-1 text-emerald-500"
+                />
+              </Tooltip>
             )}
           </div>
           <div className="flex items-center text-zinc-400 text-sm font-normal justify-center space-x-3">

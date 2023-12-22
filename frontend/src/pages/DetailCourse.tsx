@@ -59,18 +59,8 @@ const DetailCourse = () => {
   const [status, setStatus] = useState("");
 
   useEffect(() => {
-    const { _id } = userInfo;
+    const { _id } = userInfo || {};
     const { id } = params;
-
-    if (_id && courseData) {
-      const checkIfUserInCourse = (id: string, course_Ids: any) => {
-        return course_Ids.includes(id);
-      };
-
-      if (checkIfUserInCourse(_id, courseData.student_Ids)) {
-        setStatus("IN_COURSE");
-      }
-    }
 
     if (id && cartItems) {
       const checkIfCourseInCart = (id: string, cartItems: any) => {
@@ -81,7 +71,28 @@ const DetailCourse = () => {
         setStatus("IN_CART");
       }
     }
+
+    if (_id && courseData) {
+      const checkIfUserInCourse = (id: string, course_Ids: any) => {
+        return course_Ids.includes(id);
+      };
+
+      if (checkIfUserInCourse(_id, courseData.student_Ids)) {
+        console.log(1);
+        setStatus("IN_COURSE");
+      }
+    }
   }, [userInfo, params, courseData, cartItems]);
+
+  const [isFullStudent, setIsFullStudent] = useState(false);
+
+  useEffect(() => {
+    if (courseData) {
+      courseData.total_student === courseData.total_enroll
+        ? setIsFullStudent(true)
+        : setIsFullStudent(false);
+    }
+  }, [courseData]);
 
   if (!courseData) {
     return null;
@@ -109,18 +120,21 @@ const DetailCourse = () => {
     reviews,
     total_student,
     total_enroll,
+    student_Ids,
   } = courseData;
 
   const addToCartHandler = () => {
-    const courseItem: CartItem = {
+    const courseItem: Course = {
       _id: _id,
       image: image,
       endDate: endDate,
       name: name,
       author: author,
       type: type,
-      rating: total_rating,
+      total_rating: total_rating,
       total_student: total_student,
+      total_enroll: total_enroll,
+      student_Ids: student_Ids,
       price: price,
     };
 
@@ -213,12 +227,16 @@ const DetailCourse = () => {
             <div className="w-1/2 flex flex-col justify-between rounded-xl border-dashed border-2 border-emerald-200 pt-10 pb-3 px-5 items-center">
               <div className="space-y-5">
                 <div className="relative">
-                  <YouTube
-                    iframeClassName="relative rounded-2xl w-[500px] h-[300px]"
-                    videoId={thumbnail?.split("=").pop()}
-                    onPlay={() => setShowTitle(false)}
-                    onPause={() => setShowTitle(true)}
-                  />
+                  {thumbnail ? (
+                    <YouTube
+                      iframeClassName="relative rounded-2xl w-[500px] h-[300px]"
+                      videoId={thumbnail?.split("=").pop()}
+                      onPlay={() => setShowTitle(false)}
+                      onPause={() => setShowTitle(true)}
+                    />
+                  ) : (
+                    <img src={image} className="w-full h-full" />
+                  )}
                   {isShowTitle && (
                     <div className="absolute bottom-0 rounded-bl-xl rounded-tr-xl bg-red-500 px-6 py-4 text-sm text-white">
                       {countdownDaysToEvent(startDate)}
@@ -273,6 +291,10 @@ const DetailCourse = () => {
                   {status === "IN_COURSE" ? (
                     <h1 className="font-medium text-emerald-400 text-lg">
                       Bạn đang học khóa học này
+                    </h1>
+                  ) : isFullStudent ? (
+                    <h1 className="font-medium text-emerald-400 text-lg">
+                      Khóa học đã đủ học viên
                     </h1>
                   ) : (
                     <>

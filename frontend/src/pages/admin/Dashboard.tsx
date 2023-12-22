@@ -1,7 +1,6 @@
 import { useRef, useState } from "react";
 import "lightbox.js-react/dist/index.css";
 import { Tag, Table, Space, Button, Input, InputRef } from "antd";
-import Container from "../../components/Container";
 import AdminLayout from "../../layouts/AdminLayout";
 import { FeedBack, User } from "../../types";
 import toast from "react-hot-toast";
@@ -13,6 +12,7 @@ import { BiSearchAlt } from "react-icons/bi";
 import type { FilterConfirmProps } from "antd/es/table/interface";
 import FeedbackModal from "../../components/FeedbackModal";
 import AuthorModal from "../../components/AuthorModal";
+import axios from "axios";
 
 type UserIndex = keyof User;
 
@@ -76,7 +76,7 @@ const AdminDashboard = () => {
     setSearchText("");
   };
 
-  const handleConfirm = (id: string) => {
+  const handleConfirm = async (id: string) => {
     const updatedData = data.map((item) => {
       if (item._id === id) {
         return {
@@ -86,8 +86,12 @@ const AdminDashboard = () => {
       }
       return item;
     });
-    toast.success("Khoá tài khoản thành công");
     setData(updatedData);
+    const body = { status: "INACTIVE" };
+    await axios.put(`http://localhost:8080/api/admin/user-status/${id}`, body, {
+      withCredentials: true,
+    });
+    toast.success("Khoá tài khoản thành công");
   };
 
   const getColumnSearchProps = (dataIndex: UserIndex): ColumnType<User> => ({
@@ -313,6 +317,25 @@ const AdminDashboard = () => {
             </Space>
           );
         }
+      },
+    },
+    {
+      title: "Báo cáo mới",
+      key: "feedbacks",
+      dataIndex: "feedbacks",
+      sorter: (a, b) => a.feedbacks.length - b.feedbacks.length,
+      render: (_, record) => {
+        const pendingFeedbacks = record.feedbacks.filter(
+          (feedback) => feedback.status === "PENDING"
+        );
+
+        return pendingFeedbacks.length > 0 ? (
+          <div className="flex items-end text-xl text-red-500 font-bold">
+            {pendingFeedbacks.length}
+          </div>
+        ) : (
+          <div>_</div>
+        );
       },
     },
     {

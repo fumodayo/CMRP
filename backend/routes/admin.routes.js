@@ -11,6 +11,7 @@ const adminRouter = express.Router();
 /** GET USERS */
 adminRouter.get(
   "/user",
+  isAdmin,
   expressAsyncHandler(async (req, res) => {
     const users = await UserModel.find({});
     if (users) {
@@ -50,7 +51,7 @@ adminRouter.put(
   isAdmin,
   expressAsyncHandler(async (req, res) => {
     const userId = req.params.id;
-    const status = req.body;
+    const { status } = req.body;
 
     try {
       const user = await UserModel.findById(userId);
@@ -75,7 +76,8 @@ adminRouter.put(
   isAdmin,
   expressAsyncHandler(async (req, res) => {
     const feedbackId = req.params.id;
-    
+    const { status } = req.body;
+
     try {
       const feedback = await FeedbackModel.findById(feedbackId);
 
@@ -83,7 +85,7 @@ adminRouter.put(
         return res.status(404).json({ message: "Feedback không tồn tại" });
       }
 
-      feedback.status = "COMPLETED";
+      feedback.status = status;
 
       await feedback.save();
       res.status(200).json({ message: "Thay đổi thành công" });
@@ -99,7 +101,7 @@ adminRouter.put(
   isAdmin,
   expressAsyncHandler(async (req, res) => {
     const courseId = req.params.id;
-    const status = req.body;
+    const { status } = req.body;
 
     try {
       const course = await CourseModel.findById(courseId);
@@ -124,7 +126,7 @@ adminRouter.put(
   isAdmin,
   expressAsyncHandler(async (req, res) => {
     const certificateId = req.params.id;
-    const status = req.body;
+    const { status } = req.body;
 
     try {
       const certificate = await CertificateModel.findById(certificateId);

@@ -1,5 +1,7 @@
 import { Table } from "antd";
 import type { ColumnsType } from "antd/es/table";
+import { formatDate } from "../../utils/formatDate";
+import moment from "moment";
 
 interface DataType {
   _id: string;
@@ -15,9 +17,14 @@ const columns: ColumnsType<DataType> = [
     key: "_id",
   },
   {
-    title: "Thời gian",
+    title: "Ngày tạo",
     dataIndex: "createdAt",
     key: "createdAt",
+    render: (createdAt) => {
+      return formatDate(createdAt);
+    },
+    sorter: (a, b) => moment(a.createdAt).unix() - moment(b.createdAt).unix(),
+    defaultSortOrder: "descend",
   },
   {
     title: "Trạng thái",

@@ -74,7 +74,7 @@ const AdminCertificate = () => {
     setFilterByAuthor(author);
   }, [data]);
 
-  const handleConfirm = (id: string) => {
+  const handleConfirm = async (id: string) => {
     const updatedData = data.map((item) => {
       if (item._id === id) {
         return { ...item, status: "CONFIRM" };
@@ -82,10 +82,14 @@ const AdminCertificate = () => {
       return item;
     });
     setData(updatedData);
+    const body = { status: "CONFIRM" };
+    await axios.put(`http://localhost:8080/api/admin/certificate/${id}`, body, {
+      withCredentials: true,
+    });
     toast.success("Xác nhận chứng chỉ đạt");
   };
 
-  const handleReject = (id: string) => {
+  const handleReject = async (id: string) => {
     const updatedData = data.map((item) => {
       if (item._id === id) {
         return { ...item, status: "FAILURE" };
@@ -93,6 +97,10 @@ const AdminCertificate = () => {
       return item;
     });
     setData(updatedData);
+    const body = { status: "FAILURE" };
+    await axios.put(`http://localhost:8080/api/admin/certificate/${id}`, body, {
+      withCredentials: true,
+    });
     toast.success("Xác nhận chứng chỉ chưa đạt");
   };
 

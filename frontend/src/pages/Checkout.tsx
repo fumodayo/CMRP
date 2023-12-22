@@ -20,10 +20,18 @@ const Checkout = () => {
     userInfo,
     cart: { cartItems },
   } = state;
+  console.log(userInfo);
+  console.log(cartItems);
 
   const total = cartItems.reduce((accumulator, currentValue) => {
     return accumulator + currentValue.price;
   }, 0);
+
+  const isCourseInvalid = cartItems.some((item) => {
+    const isUserEnrolled = userInfo && item.student_Ids.includes(userInfo._id);
+
+    return isUserEnrolled;
+  });
 
   useEffect(() => {
     if (paidFor) {
@@ -82,11 +90,13 @@ const Checkout = () => {
                   navigator("/signin");
                   return actions.reject();
                 }
-                const hasAlreadyBoughtCourse = false;
+                const hasAlreadyBoughtCourse = isCourseInvalid;
+                console.log(hasAlreadyBoughtCourse);
 
                 if (hasAlreadyBoughtCourse) {
-                  setError("You already buy this course");
-
+                  toast.error("Khóa học này đang học");
+                  ctxDispatch({ type: "CART_CLEAR" });
+                  navigator(`/`);
                   return actions.reject();
                 } else {
                   return actions.resolve();

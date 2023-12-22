@@ -10,16 +10,17 @@ import ReviewHistory from "../../components/listings/ReviewHistory";
 import axios from "axios";
 import { User, CartItem, Review } from "../../types";
 import { Input, Modal, Select } from "antd";
-import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
-import { TextareaAutosize } from "@mui/material";
 import { extractUsername } from "../../utils/extractUsername";
+
+const { TextArea } = Input;
 
 function classNames(...classes: any) {
   return classes.filter(Boolean).join(" ");
 }
 
 interface CourseItemProps {
+  _id?: string;
   image?: string;
   name?: string;
   author?: string;
@@ -36,6 +37,7 @@ type Individual = {
 };
 
 export const CourseItem: React.FC<CourseItemProps> = ({
+  _id,
   image,
   name,
   author,
@@ -49,7 +51,15 @@ export const CourseItem: React.FC<CourseItemProps> = ({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [comment, setComment] = useState("");
 
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
+    const body = {
+      course_id: _id,
+      content: comment,
+    };
+
+    await axios.post("http://localhost:8080/api/user/feedback", body, {
+      withCredentials: true,
+    });
     toast.success("Gửi thành công");
     setIsModalOpen(false);
   };
@@ -134,11 +144,9 @@ export const CourseItem: React.FC<CourseItemProps> = ({
               <h1 className="font-medium">
                 Hãy ghi vẫn đề cụ thể của bạn ở đây:
               </h1>
-              <TextareaAutosize
+              <TextArea
                 className="w-80 h-52 text-sm font-sans font-normal leading-5 px-3 py-2 rounded-lg shadow-md shadow-slate-100 dark:shadow-slate-900 focus:shadow-outline-purple dark:focus:shadow-outline-purple focus:shadow-lg border border-solid border-slate-300 hover:border-purple-500 dark:hover:border-purple-500 focus:border-purple-500 dark:focus:border-purple-500 dark:border-slate-600 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-300 focus-visible:outline-0"
                 placeholder="Nội dung không giống như quảng cáo..."
-                minRows={2}
-                maxRows={3}
                 value={comment}
                 onChange={(e) => setComment(e.target.value)}
               />
@@ -177,8 +185,6 @@ const Profile = () => {
   if (!individual) {
     return null;
   }
-
-  console.log(individual);
 
   const { avatar, name, bio } = individual.user;
 
@@ -220,6 +226,7 @@ const Profile = () => {
               <div className="flex flex-col space-y-5">
                 {individual.carts.map((item) => (
                   <CourseItem
+                    _id={item.course_details._id}
                     image={item.course_details.image}
                     time={item.course_details.startDate}
                     name={item.course_details.name}

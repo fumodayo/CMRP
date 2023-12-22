@@ -3,6 +3,7 @@ import ReviewModel from "../models/review.model.js";
 import { UserModel } from "../models/user.model.js";
 import CourseModel from "../models/course.model.js";
 import expressAsyncHandler from "express-async-handler";
+import CertificateModel from "../models/certificate.model.js";
 
 const reviewRouter = express.Router();
 
@@ -138,9 +139,15 @@ reviewRouter.get(
         }
       }
 
+      const certificates = await CertificateModel.distinct("category", {
+        user_id: authorId,
+        status: "COMPLETED",
+      });
+
       return res.status(200).send({
         ...authorInfo,
         courses: reviewsWithUsers,
+        certificates: certificates,
       });
     } catch (err) {
       return res.status(500).send({ message: "Lỗi server", error: err });
