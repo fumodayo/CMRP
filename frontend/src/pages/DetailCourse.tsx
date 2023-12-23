@@ -126,6 +126,7 @@ const DetailCourse = () => {
   const addToCartHandler = () => {
     const courseItem: Course = {
       _id: _id,
+      user_id: user_id,
       image: image,
       endDate: endDate,
       name: name,
@@ -258,10 +259,11 @@ const DetailCourse = () => {
                     {address && address.name && (
                       <>
                         <span>|</span>
-                        <div className="flex items-center justify-center hover:underline cursor-pointer">
+                        <div className="flex items-center justify-center hover:underline">
                           <FaMapMarkerAlt className="mr-1 text-emerald-400" />
                           <a
-                            href={`https://www.google.com/maps/place/${address.lat},${address.lng}`}
+                            className="truncate max-w-[300px]"
+                            // href={`https://www.google.com/maps/place/${address.lat},${address.lng}`}
                           >
                             {address.name}
                           </a>
@@ -321,7 +323,7 @@ const DetailCourse = () => {
           </div>
           <div>
             <h1 className="text-neutral-700 text-lg font-semibold">
-              Các khóa học liên quan:
+              Có thể bạn sẽ thích:
             </h1>
             <SimilarCourses id={_id} />
           </div>

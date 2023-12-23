@@ -1,6 +1,5 @@
 import { CloseOutlined, PlusOutlined } from "@ant-design/icons";
 import { Button, Card, Form, Select, Typography, Upload } from "antd";
-import InstructorLayout from "../../layouts/InstructorLayout";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
@@ -14,6 +13,7 @@ const normFile = (e: any) => {
 const CertificateStep = ({ onAuthentic }) => {
   const [form] = Form.useForm();
   const [categoriesData, setCategoryData] = useState([]);
+  const [storage, setStorage] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -27,16 +27,34 @@ const CertificateStep = ({ onAuthentic }) => {
     fetchData();
   }, []);
 
+  const handleFormChange = (_, allValues) => {
+    if (allValues && Array.isArray(allValues.items)) {
+      const transformedData = allValues.items.map((item) => {
+        const category = item?.category || "";
+        const images = Array.isArray(item?.images)
+          ? item.images.map((image) => image?.response?.url || "")
+          : [];
+
+        return {
+          category,
+          images,
+        };
+      });
+
+      setStorage(transformedData);
+    }
+  };
+
   useEffect(() => {
-    const data = form.getFieldsValue();
-    onAuthentic(data.items);
-  }, [form]);
+    onAuthentic(storage);
+  }, [storage]);
 
   return (
     <Form
       labelCol={{ span: 6 }}
       wrapperCol={{ span: 18 }}
       form={form}
+      onValuesChange={handleFormChange}
       name="dynamic_form_complex"
       style={{ maxWidth: 600 }}
       autoComplete="off"
@@ -69,6 +87,9 @@ const CertificateStep = ({ onAuthentic }) => {
                 </Form.Item>
                 <Form.Item
                   name={[field.name, "images"]}
+                  rules={[
+                    { required: true, message: "Vui lòng chọn hình ảnh" },
+                  ]}
                   label="Tải ảnh lên"
                   valuePropName="fileList"
                   getValueFromEvent={normFile}

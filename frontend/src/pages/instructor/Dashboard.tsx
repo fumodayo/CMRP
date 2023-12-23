@@ -29,9 +29,6 @@ const Dashboard = () => {
     fetchData();
   }, [userInfo]);
 
-  const income = 1000000;
-  const pending_money = 5000000;
-
   const handleConfirm = () => {
     toast.success("Đã chuyển tiền");
     setIsModalOpen(false);
@@ -78,6 +75,30 @@ const Dashboard = () => {
   //   setSelectedEditSchedule(course_id);
   //   setIsOpenEditScheduleModal(true);
   // };
+
+  const handleNonpublicCourse = async (course_id) => {
+    const body = { status: "NONPUBLIC" };
+    await axios.put(
+      `http://localhost:8080/api/instructor/course/${course_id}`,
+      body,
+      {
+        withCredentials: true,
+      }
+    );
+
+    // const updatedData = courseData.map((item) => {
+    //   if (item._id === course_id) {
+    //     return {
+    //       ...item,
+    //       status: "NONPUBLIC",
+    //     };
+    //   }
+    //   return item;
+    // });
+    // setCourseData(updatedData);
+
+    toast.success("Ẩn thành công");
+  };
 
   const columns: ColumnsType<any> = [
     {
@@ -246,7 +267,7 @@ const Dashboard = () => {
       dataIndex: "_id",
       key: "actions",
       render: (_id, record) => {
-        if (record.status === "IN_PROGRESS") {
+        if (record.status === "PENDING") {
           return (
             <Space>
               <Button
@@ -268,7 +289,11 @@ const Dashboard = () => {
         } else if (record.status === "PUBLIC") {
           return (
             <Space>
-              <Button type="primary" danger onClick={() => console.log(_id)}>
+              <Button
+                type="primary"
+                danger
+                onClick={() => handleNonpublicCourse(_id)}
+              >
                 Ẩn khóa học
               </Button>
             </Space>
@@ -290,7 +315,7 @@ const Dashboard = () => {
         onCancel={handleCancel}
         okType="danger"
       >
-        Có phải bạn muốn rút {formatPrice(pending_money)}đ
+        Có phải bạn muốn rút {formatPrice(userInfo.pending_money)}đ
       </Modal>
       <EditCourseModal
         course_id={selectedEditCourse}
@@ -313,22 +338,24 @@ const Dashboard = () => {
           <div className="bg-slate-200 rounded-2xl px-5 py-2 flex flex-col justify-center">
             <p className="font-medium text-2xl">Doanh thu tháng này</p>
             <p className="font-medium text-2xl">
-              {formatPrice(income)}
+              {formatPrice(userInfo.income)}
               <span className="text-emerald-500 ml-1">đ</span>
             </p>
           </div>
           <div className="bg-slate-200 rounded-2xl px-5 py-2 flex flex-col justify-center">
             <p className="font-medium text-2xl">Số tiền có thể rút</p>
             <p className="font-medium text-2xl">
-              {formatPrice(pending_money)}
+              {formatPrice(userInfo.pending_money)}
               <span className="text-emerald-500 ml-1">đ</span>
             </p>
-            <p
-              onClick={() => setIsModalOpen(true)}
-              className="font-medium hover:underline cursor-pointer text-sm text-red-500"
-            >
-              Rút tiền
-            </p>
+            {userInfo.pending > 0 && (
+              <p
+                onClick={() => setIsModalOpen(true)}
+                className="font-medium hover:underline cursor-pointer text-sm text-red-500"
+              >
+                Rút tiền
+              </p>
+            )}
           </div>
         </div>
         <div className="flex justify-between">

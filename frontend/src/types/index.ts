@@ -42,9 +42,8 @@ export type Course = {
   student_Ids?: string[]; // Mảng chứa tổng những học viên đã đăng ký
   total_enroll?: number; // Tổng của số lượng học viên đăng ký hiện tại
   /* 
-    AWAITING (Đang chờ thanh toán tiền)
-    REJECTED (Bị từ chối)
     PENDING (Đang chờ được duyệt)
+    REJECTED (Bị từ chối)
     PUBLIC (Duyệt xong và bắt đầu cho học viên đăng ký)
     NONPUBLIC (Đã duyệt xong mà instructor không muốn PUBLIC)
     IN_PROGRESS (Bắt đầu dạy và không còn có thể đăng ký)

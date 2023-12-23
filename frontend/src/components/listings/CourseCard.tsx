@@ -48,7 +48,7 @@ const CourseCard: React.FC<CourseCardProps> = ({
       </div>
       <div className="pt-5 pb-3">
         <div className="flex justify-between items-end">
-          <div className="text-slate-700 text-xl font-bold">{name}</div>
+          <div className="text-slate-700 text-xl font-bold truncate">{name}</div>
           <div className="text-zinc-400 text-sm font-bold">{type}</div>
         </div>
         <div className="flex justify-between items-end pb-1">

@@ -8,7 +8,7 @@ import History from "../../components/listings/History";
 import Helper from "../../components/listings/Helper";
 import ReviewHistory from "../../components/listings/ReviewHistory";
 import axios from "axios";
-import { User, CartItem, Review } from "../../types";
+import { User, CartItem, Review, FeedBack } from "../../types";
 import { Input, Modal, Select } from "antd";
 import toast from "react-hot-toast";
 import { extractUsername } from "../../utils/extractUsername";
@@ -34,6 +34,7 @@ type Individual = {
   user: User;
   carts: CartItem[];
   reviews: Review[];
+  feedbacks: FeedBack[];
 };
 
 export const CourseItem: React.FC<CourseItemProps> = ({
@@ -116,9 +117,7 @@ export const CourseItem: React.FC<CourseItemProps> = ({
         <span className="flex items-center justify-start text-red-500 font-medium hover:underline">
           {status ? (
             <p onClick={() => setIsModalOpen(true)}>Yêu cầu trợ giúp</p>
-          ) : (
-            "Hủy"
-          )}
+          ) : null}
           <Modal
             title="Gửi yêu cầu trợ giúp"
             okText="Gửi"
@@ -163,6 +162,7 @@ const Profile = () => {
     user: {},
     carts: [],
     reviews: [],
+    feedbacks: [],
   });
 
   const headerTabs = [
@@ -187,6 +187,8 @@ const Profile = () => {
   }
 
   const { avatar, name, bio } = individual.user;
+
+  console.log(individual);
 
   return (
     <UserLayout>
@@ -260,10 +262,10 @@ const Profile = () => {
                       <History carts={individual.carts} />
                     </Tab.Panel>
                     <Tab.Panel>
-                      <Helper />
+                      <Helper feedbacks={individual.feedbacks} />
                     </Tab.Panel>
                     <Tab.Panel>
-                      <ReviewHistory />
+                      <ReviewHistory reviews={individual.reviews} />
                     </Tab.Panel>
                   </Tab.Panels>
                 </Tab.Group>

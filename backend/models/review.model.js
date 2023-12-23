@@ -6,7 +6,8 @@ const reviewSchema = new mongoose.Schema({
   user_id: { type: String, required: true },
   course_id: { type: String, require: true },
   content: { type: String, require: true },
-  rating: { type: Number, required: true },
+  rating: { type: Number },
+  sentiment: { type: Array, default: [] },
   createdAt: { type: String, default: new Date().toISOString() },
 });
 

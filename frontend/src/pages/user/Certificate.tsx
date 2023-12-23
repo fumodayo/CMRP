@@ -1,7 +1,7 @@
 import Container from "../../components/Container";
 import UserLayout from "../../layouts/UserLayout";
 import { Stepper, Step, StepLabel, Button } from "@mui/material";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import BadgeIcon from "@mui/icons-material/Badge";
 import WorkspacePremiumIcon from "@mui/icons-material/WorkspacePremium";
 import { StepIconProps } from "@mui/material/StepIcon";
@@ -11,9 +11,10 @@ import StepConnector, {
 } from "@mui/material/StepConnector";
 import CCCDStep from "../../components/steps/CCCDStep";
 import CertificateStep from "../../components/steps/CertificateStep";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Store } from "../../context/Store";
+import axios from "axios";
+import toast from "react-hot-toast";
 
 const ColorlibConnector = styled(StepConnector)(({ theme }) => ({
   [`&.${stepConnectorClasses.alternativeLabel}`]: {
@@ -82,6 +83,19 @@ function ColorlibStepIcon(props: StepIconProps) {
   );
 }
 
+const convertToISOString = (dateString: string) => {
+  if (dateString.length !== 8) {
+    return null;
+  }
+
+  const day = dateString.substring(0, 2);
+  const month = dateString.substring(2, 4);
+  const year = dateString.substring(4);
+
+  const formattedDate = new Date(`${year}-${month}-${day}T00:00:00.000Z`);
+  return formattedDate.toISOString();
+};
+
 const steps = ["Xác minh bản thân", "Xác minh chứng chỉ"];
 
 const Certificate = () => {
@@ -103,27 +117,24 @@ const Certificate = () => {
 
   const handleNext = async () => {
     if (activeStep === 0) {
-      console.log("cccd", cccdData);
+      const body = {
+        ...cccdData,
+        dateOfBirth: convertToISOString(cccdData.dateOfBirth),
+      };
+      await axios.post(`http://localhost:8080/api/user/cccd`, body, {
+        withCredentials: true,
+      });
+      toast.success("Gửi xác thực thành công");
     } else {
-      console.log("certificate", certificateData);
+      const body = { certificates: certificateData };
+      await axios.post(`http://localhost:8080/api/user/certificate`, body, {
+        withCredentials: true,
+      });
+      toast.success("Gửi chứng chỉ thành công");
+      navigator("/instructor");
     }
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
-
-  // useEffect(() => {
-  //   // const role = userInfo.role.push("instructor");
-  //   // console.log("role", userInfo);
-  //   // const data = { ...userInfo, role };
-  //   // console.log(data);
-  //   console.log(userInfo);
-  //   // localStorage.setItem("user_info", data);
-  // }, [userInfo]);
-
-  // useEffect(() => {
-  //   if (activeStep === steps.length) {
-  //     navigator("/");
-  //   }
-  // }, [activeStep, navigator]);
 
   const handleSkipCertificate = () => {
     if (!userInfo.role.includes("instructor")) {

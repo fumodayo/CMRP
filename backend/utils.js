@@ -14,6 +14,8 @@ export const sendToken = (res, user, statusCode, message) => {
     name: user.name,
     avatar: user.avatar,
     isCertificate: user.isCertificate,
+    income: user.income,
+    pending_money: user.pending_money,
   };
 
   res

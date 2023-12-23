@@ -1,19 +1,22 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { Button, message } from "antd";
-import InstructorLayout from "../../layouts/InstructorLayout";
 import {
   ProFormDigit,
   ProFormMoney,
   ProFormSelect,
   ProFormText,
   ProFormUploadButton,
-  ProFormUploadDragger,
   StepsForm,
 } from "@ant-design/pro-components";
 import axios from "axios";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import Booking from "../../components/inputs/Booking";
+import { useNavigate } from "react-router-dom";
+import { Store } from "../../context/Store";
+import toast from "react-hot-toast";
+import { Course } from "../../types";
+import InstructorLayout from "../../layouts/InstructorLayout";
 
 const checkPrice = (_: any, value) => {
   if (value > 20000) {
@@ -30,8 +33,13 @@ const validatePositiveNumber = (_, value) => {
 };
 
 const CreateCourseInstructor = () => {
+  const navigator = useNavigate();
+
+  const { state } = useContext(Store);
+  const { userInfo } = state;
+
   const [isShowInputAddress, setIsShowInputAddress] = useState(false);
-  const [nameCourse, setNameCourse] = useState("");
+  const [nameCourse, setNameCourse] = useState<Course>();
   const [categoriesData, setCategoryData] = useState([]);
   const [detailCourse, setDetailCourse] = useState({
     short_description: "",
@@ -74,10 +82,6 @@ const CreateCourseInstructor = () => {
     <InstructorLayout>
       <div className="mt-10">
         <StepsForm
-          onFinish={async (values) => {
-            console.log({ ...values, ...bookingData, ...detailCourse });
-            message.success("hoàn thành");
-          }}
           submitter={{
             render: (props) => {
               if (props.step === 0) {
@@ -109,7 +113,7 @@ const CreateCourseInstructor = () => {
             name="detail"
             title="Khóa học"
             onFinish={async (values) => {
-              setNameCourse(values.name);
+              setNameCourse(values);
               return true;
             }}
           >
@@ -171,12 +175,23 @@ const CreateCourseInstructor = () => {
                     ]}
                   />
                 )}
-                <ProFormText label="Link youtube giới thiệu" name="thumbnail" />
+                <ProFormText
+                  rules={[
+                    {
+                      pattern:
+                        /^(https?:\/\/)?(www\.youtube\.com|youtu\.?be)\/.+/,
+                      message: "Vui lòng nhập đúng định dạng link YouTube.",
+                    },
+                  ]}
+                  label="Link youtube giới thiệu"
+                  name="thumbnail"
+                />
                 <ProFormUploadButton
+                  rules={[{ required: true, message: "Vui lòng tải ảnh lên" }]}
                   action="http://localhost:8080/api/upload/single"
                   title="Tải hình ảnh lên"
                   name="image"
-                  label="Hình ảnh khóa học"
+                  label="Hình ảnh khóa học (Nên upload ảnh có kích thước không quá nhỏ)"
                 />
                 <ProFormSelect
                   label="Thể loại"
@@ -240,11 +255,43 @@ const CreateCourseInstructor = () => {
             name="schedule"
             title="Lịch học"
             onFinish={async () => {
-              return true;
+              if (bookingData.startDate && bookingData.endDate) {
+                const body = {
+                  ...nameCourse,
+                  ...bookingData,
+                  ...detailCourse,
+                  image: nameCourse.image[0].response.url,
+                  address: {
+                    name: nameCourse?.address,
+                    lat: 0,
+                    lng: 0,
+                  },
+                };
+                console.log(body);
+
+                await axios.post(
+                  `http://localhost:8080/api/instructor/post-course`,
+                  body,
+                  { withCredentials: true }
+                );
+
+                message.success("Tạo khóa học thành công");
+                if (userInfo.isCertificate === false) {
+                  navigator("/certificate");
+                }
+                return true;
+              } else {
+                toast.error("Thêm ngày bắt đầu ngày kết thúc");
+                return false;
+              }
             }}
           >
-            <Booking nameCourse={nameCourse} onChangeBooking={handleBooking} />
+            <Booking
+              nameCourse={nameCourse?.name}
+              onChangeBooking={handleBooking}
+            />
           </StepsForm.StepForm>
+          <Button className="custom-button-prev">Back</Button>
         </StepsForm>
       </div>
     </InstructorLayout>

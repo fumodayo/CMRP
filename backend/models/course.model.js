@@ -12,10 +12,9 @@ const courseSchema = new mongoose.Schema({
   type: { type: String, required: true },
   thumbnail: { type: String, default: "" },
   address: {
-    type: {
-      Object,
-    },
-    default: {},
+    name: { type: String, default: "" },
+    lat: { type: Number, default: 0 },
+    lng: { type: Number, default: 0 },
   },
   short_description: { type: String, default: "" },
   description: { type: String, default: "" },

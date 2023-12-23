@@ -3,6 +3,7 @@ import { Button, Card, Form, Select, Typography, Upload } from "antd";
 import InstructorLayout from "../../layouts/InstructorLayout";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 const normFile = (e: any) => {
   if (Array.isArray(e)) {
@@ -26,6 +27,25 @@ const CertificateInstructor = () => {
     };
     fetchData();
   }, []);
+
+  const handleSubmit = async () => {
+    const data = form.getFieldsValue();
+    const categories = data.items.map((item) => ({
+      label: item.name,
+      value: item.value,
+    }));
+    console.log(categories);
+
+    const body = { certificates: categories };
+    await axios.post(
+      `http://localhost:8080/api/instructor/post-certificate`,
+      body,
+      {
+        withCredentials: true,
+      }
+    );
+    toast.success("Gửi chứng chỉ thành công");
+  };
 
   return (
     <InstructorLayout>
@@ -91,13 +111,7 @@ const CertificateInstructor = () => {
           )}
         </Form.List>
 
-        <Form.Item noStyle shouldUpdate>
-          {() => (
-            <Typography>
-              <pre>{JSON.stringify(form.getFieldsValue(), null, 2)}</pre>
-            </Typography>
-          )}
-        </Form.Item>
+        <Button onClick={handleSubmit}>Gửi</Button>
       </Form>
     </InstructorLayout>
   );

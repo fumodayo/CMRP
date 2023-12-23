@@ -126,103 +126,115 @@ const Review = () => {
     <UserLayout>
       <Container>
         <BackButton />
-        <section className="space-y-5">
-          <div className="flex justify-between">
-            <h1>
-              Đánh giá của <span className="font-medium">{name}</span>
-            </h1>
-            <div className="w-[800px]">
-              <Chart sentimentRating={sentimentRating} />
-            </div>
-          </div>
-          <div className="flex items-center space-x-3">
-            <p>Các lĩnh vực đào tạo</p>
-            <div className="flex space-x-2">
-              {category && (
-                <Chip
-                  certificate={certificates}
-                  types={category}
-                  currentType={type}
-                  onCurrentType={handleTypeChange}
-                />
-              )}
-            </div>
-          </div>
-          <div className="flex bg-zinc-200 px-7 py-5 space-x-5">
-            <div className="flex flex-col items-center">
-              <p className="text-xl font-medium">
-                <span className="text-4xl">{averageRating}</span> trên 5
-              </p>
-              <Rating
-                name="half-rating-read"
-                size="large"
-                defaultValue={0}
-                value={averageRating}
-                precision={0.1}
-                readOnly
-              />
-            </div>
-            <div className="flex space-x-2 py-5">
-              <Chip
-                types={rangeStars}
-                currentType={rating}
-                onCurrentType={handleRatingChange}
-              />
-            </div>
-          </div>
-          {courses &&
-            courses.map((course: any) => (
-              <div key={course._id}>
-                <div
-                  className="flex space-x-5 items-center hover:bg-zinc-200 px-5 py-3 rounded-xl cursor-pointer"
-                  onClick={() =>
-                    navigate(`/course/${course._id}`, {
-                      state: "WATCH ONLY",
-                    })
-                  }
-                >
-                  <div className="relative h-[140px]">
-                    <img
-                      className="relative h-[140px] rounded-xl object-cover"
-                      src={course.image}
-                      alt="course"
-                    />
-                    <div className="absolute bottom-0 rounded-bl-xl bg-red-500 px-3 py-1 text-sm text-white">
-                      Khóa học kết thúc
-                    </div>
-                  </div>
-                  <div className="space-y-1">
-                    <h2 className="text-xl font-bold text-slate-700">
-                      {course.name}
-                    </h2>
-                    <div className="text-zinc-400 text-sm font-normal">
-                      {course.author}
-                    </div>
-                    <div className="text-zinc-400 text-sm font-semibold">
-                      {course.type}
-                    </div>
-                    <div className="flex text-center text-zinc-400 text-sm font-normal space-x-3">
-                      {calculateAverageRating(course.reviews)}
-                      <AiFillStar className="text-yellow-400 mx-1" size={15} />|
-                      <span>{course.total_student} Học viên</span>
-                    </div>
-                  </div>
-                </div>
-                <div className="space-y-3">
-                  {course.reviews.map((review) => (
-                    <Comment
-                      key={review._id}
-                      avatar={review.avatar}
-                      name={review.author}
-                      rating={review.rating}
-                      createdAt={review.createdAt}
-                      content={review.content}
-                    />
-                  ))}
-                </div>
+        {courses.length > 0 ? (
+          <section className="space-y-5">
+            <div className="flex justify-between">
+              <h1>
+                Đánh giá của <span className="font-medium">{name}</span>
+              </h1>
+              <div className="w-[800px]">
+                <Chart sentimentRating={sentimentRating} />
               </div>
-            ))}
-        </section>
+            </div>
+            <div className="flex items-center space-x-3">
+              <p>Các lĩnh vực đào tạo</p>
+              <div className="flex space-x-2">
+                {category && (
+                  <Chip
+                    certificate={certificates}
+                    types={category}
+                    currentType={type}
+                    onCurrentType={handleTypeChange}
+                  />
+                )}
+              </div>
+            </div>
+            <div className="flex bg-zinc-200 px-7 py-5 space-x-5">
+              <div className="flex flex-col items-center">
+                <p className="text-xl font-medium">
+                  <span className="text-4xl">{averageRating}</span> trên 5
+                </p>
+                <Rating
+                  name="half-rating-read"
+                  size="large"
+                  defaultValue={0}
+                  value={averageRating}
+                  precision={0.1}
+                  readOnly
+                />
+              </div>
+              <div className="flex space-x-2 py-5">
+                <Chip
+                  types={rangeStars}
+                  currentType={rating}
+                  onCurrentType={handleRatingChange}
+                />
+              </div>
+            </div>
+            {courses &&
+              courses.map((course: any) => (
+                <div key={course._id}>
+                  <div
+                    className="flex space-x-5 items-center hover:bg-zinc-200 px-5 py-3 rounded-xl cursor-pointer"
+                    onClick={() =>
+                      navigate(`/course/${course._id}`, {
+                        state: "WATCH ONLY",
+                      })
+                    }
+                  >
+                    <div className="relative h-[140px]">
+                      <img
+                        className="relative h-[140px] rounded-xl object-cover"
+                        src={course.image}
+                        alt="course"
+                      />
+                      <div className="absolute bottom-0 rounded-bl-xl bg-red-500 px-3 py-1 text-sm text-white">
+                        Khóa học kết thúc
+                      </div>
+                    </div>
+                    <div className="space-y-1">
+                      <h2 className="text-xl font-bold text-slate-700">
+                        {course.name}
+                      </h2>
+                      <div className="text-zinc-400 text-sm font-normal">
+                        {course.author}
+                      </div>
+                      <div className="text-zinc-400 text-sm font-semibold">
+                        {course.type}
+                      </div>
+                      <div className="flex text-center text-zinc-400 text-sm font-normal space-x-3">
+                        {calculateAverageRating(course.reviews)}
+                        <AiFillStar
+                          className="text-yellow-400 mx-1"
+                          size={15}
+                        />
+                        |<span>{course.total_student} Học viên</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="space-y-3">
+                    {course.reviews.map((review) => (
+                      <Comment
+                        key={review._id}
+                        avatar={review.avatar}
+                        name={review.author}
+                        rating={review.rating}
+                        createdAt={review.createdAt}
+                        content={review.content}
+                      />
+                    ))}
+                  </div>
+                </div>
+              ))}
+          </section>
+        ) : (
+          <section className="flex justify-center items-center mt-20">
+            <h1>
+              Người dạy <span className="font-medium">{name}</span> chưa có đánh
+              giá nào cả
+            </h1>
+          </section>
+        )}
       </Container>
     </UserLayout>
   );

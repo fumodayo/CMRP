@@ -15,6 +15,8 @@ const userSchema = new mongoose.Schema({
   real_name: { type: String, default: "" },
   cccd_number: { type: String, default: "" },
   dateOfBirth: { type: String, default: "" },
+  income: { type: Number, default: 0 },
+  pending_money: { type: Number, default: 0 },
   status: { type: String, default: "ACTIVE" },
   createdAt: { type: String, default: new Date().toISOString() },
 });

@@ -15,6 +15,8 @@ import Booking from "../../components/inputs/Booking";
 import UserLayout from "../../layouts/UserLayout";
 import { useNavigate } from "react-router-dom";
 import { Store } from "../../context/Store";
+import toast from "react-hot-toast";
+import { Course } from "../../types";
 
 const checkPrice = (_: any, value) => {
   if (value > 20000) {
@@ -37,7 +39,7 @@ const CreateCourse = () => {
   const { userInfo } = state;
 
   const [isShowInputAddress, setIsShowInputAddress] = useState(false);
-  const [nameCourse, setNameCourse] = useState("");
+  const [nameCourse, setNameCourse] = useState<Course>();
   const [categoriesData, setCategoryData] = useState([]);
   const [detailCourse, setDetailCourse] = useState({
     short_description: "",
@@ -80,13 +82,6 @@ const CreateCourse = () => {
     <UserLayout>
       <div className="mt-10">
         <StepsForm
-          onFinish={async (values) => {
-            console.log({ ...values, ...bookingData, ...detailCourse });
-            message.success("hoàn thành");
-            if (userInfo.isCertificate === false) {
-              navigator("/certificate");
-            }
-          }}
           submitter={{
             render: (props) => {
               if (props.step === 0) {
@@ -118,7 +113,7 @@ const CreateCourse = () => {
             name="detail"
             title="Khóa học"
             onFinish={async (values) => {
-              setNameCourse(values.name);
+              setNameCourse(values);
               return true;
             }}
           >
@@ -260,10 +255,41 @@ const CreateCourse = () => {
             name="schedule"
             title="Lịch học"
             onFinish={async () => {
-              return true;
+              if (bookingData.startDate && bookingData.endDate) {
+                const body = {
+                  ...nameCourse,
+                  ...bookingData,
+                  ...detailCourse,
+                  image: nameCourse.image[0].response.url,
+                  address: {
+                    name: nameCourse?.address,
+                    lat: 0,
+                    lng: 0,
+                  },
+                };
+                console.log(body);
+
+                await axios.post(
+                  `http://localhost:8080/api/user/course`,
+                  body,
+                  { withCredentials: true }
+                );
+
+                message.success("Tạo khóa học thành công");
+                if (userInfo.isCertificate === false) {
+                  navigator("/certificate");
+                }
+                return true;
+              } else {
+                toast.error("Thêm ngày bắt đầu ngày kết thúc");
+                return false;
+              }
             }}
           >
-            <Booking nameCourse={nameCourse} onChangeBooking={handleBooking} />
+            <Booking
+              nameCourse={nameCourse?.name}
+              onChangeBooking={handleBooking}
+            />
           </StepsForm.StepForm>
           <Button className="custom-button-prev">Back</Button>
         </StepsForm>

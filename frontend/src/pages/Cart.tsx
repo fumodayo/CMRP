@@ -126,7 +126,7 @@ const Cart = () => {
           </div>
           <div className="py-10">
             <h1 className="text-neutral-700 text-lg font-semibold">
-              Các khóa học liên quan:
+              Có thể bạn sẽ thích:
             </h1>
             <SimilarCourses />
           </div>

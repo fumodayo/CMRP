@@ -25,7 +25,7 @@ const SimilarCourses: React.FC<SimilarCourseProps> = ({ id }) => {
       if (Ids.length > 0) {
         const { data } = await axios.post(
           "http://localhost:8080/api/course/similar",
-          { _id: Ids }
+          { different_Ids: Ids }
         );
         setCoursesData(data);
       }

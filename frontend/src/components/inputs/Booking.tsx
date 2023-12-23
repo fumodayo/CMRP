@@ -37,7 +37,7 @@ interface ScheduleState {
 }
 
 interface BookingProps {
-  nameCourse: string;
+  nameCourse?: string | " ";
   onChangeBooking: any;
 }
 
@@ -149,13 +149,12 @@ const Booking: React.FC<BookingProps> = ({ nameCourse, onChangeBooking }) => {
     const classDurationMinutes = 90;
 
     const { schedule } = generateSchedule(
-      nameCourse,
+      nameCourse || "",
       startDate || dayjs(),
       endDate || dayjs().add(1, "year"),
       classDurationMinutes,
       multiDays
     );
-
     setEvents(schedule);
     setResetMultiSelect(false);
   }, [selectedRangeTime, onChangeBooking, multiDays, nameCourse]);
@@ -242,7 +241,7 @@ const Booking: React.FC<BookingProps> = ({ nameCourse, onChangeBooking }) => {
           viVN.components.MuiLocalizationProvider.defaultProps.localeText
         }
       >
-        <div className="flex">
+        <div>
           <StaticDateRangePicker
             slotProps={{
               actionBar: { actions: [] },
@@ -250,7 +249,7 @@ const Booking: React.FC<BookingProps> = ({ nameCourse, onChangeBooking }) => {
             calendars={2}
             value={selectedRangeTime}
             onChange={handleRangeTimeChange}
-            // minDate={today}
+            minDate={today}
           />
           <MultiSelect
             array={[
@@ -262,16 +261,16 @@ const Booking: React.FC<BookingProps> = ({ nameCourse, onChangeBooking }) => {
               { name: "Thứ 7", value: 5 },
               { name: "Chủ nhật", value: 6 },
             ]}
-            name="Chọn ngày theo lịch trình của bạn"
+            name="Chọn thứ trong tuần mà bạn muốn dạy"
             onMultiSelectChange={handleMultiDaysChange}
             reset={isResetMultiSelect}
           />
-          <div className="flex flex-col">
+          <div className="flex p-5 space-x-3">
             {multiDays
               .sort((a, b) => a.day - b.day)
               .map((item, index) => (
                 <div key={index}>
-                  <p>{item.day === 6 ? "Chủ nhật" : `Thứ ${item.day + 2}`}</p>
+                  <p className="font-medium">{item.day === 6 ? "Chủ nhật" : `Thứ ${item.day + 2}`}</p>
                   <MobileTimePicker
                     ampm={false}
                     label="Giờ bắt đầu buổi học"
@@ -287,7 +286,7 @@ const Booking: React.FC<BookingProps> = ({ nameCourse, onChangeBooking }) => {
           onClick={handleReset}
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2"
         >
-          Reset
+          Tạo lại lịch
         </button>
       </LocalizationProvider>
       <FullCalendar

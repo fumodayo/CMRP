@@ -1,3 +1,5 @@
+import { DateTime } from "luxon";
+
 interface Event {
   id?: string;
   title?: string;
@@ -5,11 +7,9 @@ interface Event {
   end?: string;
 }
 
-import { DateTime } from "luxon";
-
-function getUniqueDays(eventGroup: Event[]): string {
+function getVietnameseWeekday(weekday: number): string {
   const daysMap: { [key: number]: string } = {
-    0: "Chủ Nhật",
+    7: "Chủ Nhật",
     1: "Thứ 2",
     2: "Thứ 3",
     3: "Thứ 4",
@@ -18,28 +18,36 @@ function getUniqueDays(eventGroup: Event[]): string {
     6: "Thứ 7",
   };
 
-  const uniqueDays = [
+  return daysMap[weekday];
+}
+
+function getUniqueDays(eventGroup: Event[]): string {
+  const daysList = [
     ...new Set(
-      eventGroup.map(
-        (event) =>
-          daysMap[
-            DateTime.fromISO(event.start).setZone("Asia/Ho_Chi_Minh").weekday
-          ]
+      eventGroup.map((event) =>
+        getVietnameseWeekday(
+          DateTime.fromISO(event.start || "").setZone("Asia/Ho_Chi_Minh")
+            .weekday
+        )
       )
     ),
   ]
     .sort()
     .join(", ");
 
-  return uniqueDays;
+  return daysList;
 }
 
 function getTimeRange(eventGroup: Event[]): string {
   const startTimes = eventGroup.map((event) =>
-    DateTime.fromISO(event.start).setZone("Asia/Ho_Chi_Minh").toMillis()
+    DateTime.fromISO(event.start || "")
+      .setZone("Asia/Ho_Chi_Minh")
+      .toMillis()
   );
   const endTimes = eventGroup.map((event) =>
-    DateTime.fromISO(event.end).setZone("Asia/Ho_Chi_Minh").toMillis()
+    DateTime.fromISO(event.end || "")
+      .setZone("Asia/Ho_Chi_Minh")
+      .toMillis()
   );
 
   const startTime = DateTime.fromMillis(Math.min(...startTimes)).toFormat(
@@ -50,7 +58,7 @@ function getTimeRange(eventGroup: Event[]): string {
   return `${startTime} đến ${endTime}`;
 }
 
-export const formatSchedule = (events: Event[]) => {
+export const formatSchedule = (events: Event[]): string[] => {
   const groupedEvents: { [key: string]: Event[] } = {};
 
   if (!events || events.length === 0) {
@@ -77,13 +85,13 @@ export const formatSchedule = (events: Event[]) => {
       timeStrings.push(`${daysList} từ ${timeRange}`);
     } else {
       const firstEvent = eventGroup[0];
-      const eventDate = DateTime.fromISO(firstEvent.start).setZone(
+      const eventDate = DateTime.fromISO(firstEvent.start || "").setZone(
         "Asia/Ho_Chi_Minh"
       );
 
-      const day = eventDate.weekday === 1 ? "Thứ 2" : "Thứ 4";
+      const day = getVietnameseWeekday(eventDate.weekday);
       const startTime = eventDate.toFormat("HH:mm");
-      const endTime = DateTime.fromISO(firstEvent.end)
+      const endTime = DateTime.fromISO(firstEvent.end || "")
         .setZone("Asia/Ho_Chi_Minh")
         .toFormat("HH:mm");
       const weekNumber = eventDate.weekNumber;

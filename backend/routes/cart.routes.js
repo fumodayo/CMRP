@@ -31,6 +31,10 @@ cartRouter.post(
           course.total_enroll = course.total_enroll + 1;
           await course.save();
 
+          const user = await UserModel.findById(item.user_id);
+          user.pending_money = user.pending_money + item.price;
+          await user.save();
+
           await CartModel.create(cartData);
         })
       );

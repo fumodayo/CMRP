@@ -9,52 +9,47 @@ import {
 
 export const categories: Category[] = [
   {
-    _id: "category_1",
+    _id: "cat_1",
     name: "kinh doanh",
     value: "kinh doanh",
   },
   {
-    _id: "category_2",
+    _id: "cat_2",
     name: "marketing",
     value: "marketing",
   },
   {
-    _id: "category_3",
+    _id: "cat_3",
+    name: "tài chính",
+    value: "tài chính",
+  },
+  {
+    _id: "cat_4",
     name: "phát triển bản thân",
     value: "phát triển bản thân",
   },
   {
-    _id: "category_4",
-    name: "CNTT",
-    value: "CNTT",
+    _id: "cat_5",
+    name: "cntt",
+    value: "cntt",
   },
   {
-    _id: "category_5",
-    name: "phần mềm",
-    value: "phần mềm",
+    _id: "cat_6",
+    name: "python",
+    value: "python",
   },
   {
-    _id: "category_6",
-    name: "sức khoẻ",
-    value: "sức khoẻ",
+    _id: "cat_7",
+    name: "tâm lý",
+    value: "tâm lý",
   },
   {
-    _id: "category_7",
-    name: "yoga",
-    value: "yoga",
+    _id: "cat_8",
+    name: "phong cách sống",
+    value: "phong cách sống",
   },
   {
-    _id: "category_8",
-    name: "âm nhạc",
-    value: "âm nhạc",
-  },
-  {
-    _id: "category_9",
-    name: "vẽ",
-    value: "vẽ",
-  },
-  {
-    _id: "category_10",
+    _id: "cat_9",
     name: "thiết kế",
     value: "thiết kế",
   },
@@ -69,116 +64,50 @@ export const courses: Course[] = [
       "https://www.cask.vn/wwwroot/resources/img/product/11-2023/2-ngang%20d%C6%B0%E1%BB%9Bi%201mb.png",
     thumbnail: "",
     price: 5600000,
-    createdAt: "2023-11-20T00:00:00.000Z",
+    createdAt: "2023-09-20T00:00:00.000Z",
     startDate: "2023-11-20T00:00:00.000Z",
-    endDate: "2023-12-20T00:00:00.000Z",
+    endDate: "2023-12-11T00:00:00.000Z",
     category: ["kinh doanh", "marketing"],
-    type: "online",
-    address: {},
+    type: "offline",
+    address: {
+      name: "238 Đ. Nam Kỳ Khởi Nghĩa, HCM",
+      lat: 10.787979437710913,
+      lng: 106.6855432232891,
+    },
     short_description: "",
-    description: `6 ĐIỀU CẦM VỀ
-      1 PHƯƠNG PHÁP XÁC ĐỊNH PHÂN KHÚC NGÀNH HÀNG & THẤU HIỂU KHÁCH HÀNG B2B
-      Thấu hiểu hành vi, xu hướng khách hàng trong từng phân khúc ngành hàng để đánh giá tiềm năng, xác định thứ tự ưu tiên & lựa chọn phân khúc phù hợp.
-      
-      2 NẮM VỮNG CÁC BƯỚC THIẾT KẾ & XÂY DỰNG CHIẾN LƯỢC SẢN PHẨM CẠNH TRANH
-      Nắm vững trình tự nghiên cứu và phương pháp xác định giá trị khác biệt so với đối thủ trong cùng phân khúc. Từ đó dễ dàng xây dựng chiến lược Offering & Product Portfolio hiệu quả.
-      
-      3 LÀM CHỦ NGHỆ THUẬT TRUYỀN THÔNG VỚI QUY TRÌNH XÂY DỰNG KẾ HOẠCH MARKETING BÀI BẢN, CHUYÊN SÂU
-      Dựa trên sự thấu hiểu đặc thù về Inbound Marketing và các kênh truyền thông, định hướng nên những hoạt động truyền thông phù hợp dựa với đặc điểm từng phân khúc ngành hàng.
-      
-      4 HIỂU & SỬ DỤNG CÁC CÔNG CỤ HỖ TRỢ QUẢN LÝ LEAD THEO FUNNEL VÀ CRM DATABASE
-      Biết cách sử dụng các công cụ hỗ trợ quản lý LEAD theo Funnel và CRM Database để tối ưu được hiệu quả mang lại, đồng thời tránh rủi ro thất thoát thông tin.
-      
-      5 'CẦM VỀ' CÁC MARKETING FRAMEWORK & TOOLKIT THỰC TIỄN
-      Nắm vững cách sử dụng thuần thục các framework & toolkit để xây dựng các B2B Marketing Campaign, Media Plan, Launch Plan... một cách đồng nhất và hiệu quả.
-      
-      6 TỰ TAY XÂY DỰNG MỘT B2B MARKETING PLAN HOÀN CHỈNH TỪ CHIẾN LƯỢC ĐẾN THỰC THI
-      Được tự tay xây dựng 1 B2B Marketing Plan hoàn chỉnh dưới sự hướng dẫn trực tiếp từ chuyên gia.`,
+    description: `
+    <ul>
+    <li>6 ĐIỀU CẦM VỀ
+      <ol>
+        <li>PHƯƠNG PHÁP XÁC ĐỊNH PHÂN KHÚC NGÀNH HÀNG & THẤU HIỂU KHÁCH HÀNG B2B<br>Thấu hiểu hành vi, xu hướng khách hàng trong từng phân khúc ngành hàng để đánh giá tiềm năng, xác định thứ tự ưu tiên & lựa chọn phân khúc phù hợp.</li>
+        <li>NẮM VỮNG CÁC BƯỚC THIẾT KẾ & XÂY DỰNG CHIẾN LƯỢC SẢN PHẨM CẠNH TRANH<br>Nắm vững trình tự nghiên cứu và phương pháp xác định giá trị khác biệt so với đối thủ trong cùng phân khúc. Từ đó dễ dàng xây dựng chiến lược Offering & Product Portfolio hiệu quả.</li>
+        <li>LÀM CHỦ NGHỆ THUẬT TRUYỀN THÔNG VỚI QUY TRÌNH XÂY DỰNG KẾ HOẠCH MARKETING BÀI BẢN, CHUYÊN SÂU<br>Dựa trên sự thấu hiểu đặc thù về Inbound Marketing và các kênh truyền thông, định hướng nên những hoạt động truyền thông phù hợp dựa với đặc điểm từng phân khúc ngành hàng.</li>
+        <li>HIỂU & SỬ DỤNG CÁC CÔNG CỤ HỖ TRỢ QUẢN LÝ LEAD THEO FUNNEL VÀ CRM DATABASE<br>Biết cách sử dụng các công cụ hỗ trợ quản lý LEAD theo Funnel và CRM Database để tối ưu được hiệu quả mang lại, đồng thời tránh rủi ro thất thoát thông tin.</li>
+        <li>'CẦM VỀ' CÁC MARKETING FRAMEWORK & TOOLKIT THỰC TIỄN<br>Nắm vững cách sử dụng thuần thục các framework & toolkit để xây dựng các B2B Marketing Campaign, Media Plan, Launch Plan... một cách đồng nhất và hiệu quả.</li>
+        <li>TỰ TAY XÂY DỰNG MỘT B2B MARKETING PLAN HOÀN CHỈNH TỪ CHIẾN LƯỢC ĐẾN THỰC THI<br>Được tự tay xây dựng 1 B2B Marketing Plan hoàn chỉnh dưới sự hướng dẫn trực tiếp từ chuyên gia.</li>
+      </ol>
+    </li>
+  </ul>
+  `,
     requirement: "",
     schedule: [
       {
-        id: "67322",
-        title: "",
-        start: "2023-08-02T00:00:00.000Z",
-        end: "2023-08-02T01:30:00.000Z",
+        id: "85287",
+        title: "Xây dựng chiến lược và vận hành B2B marketing",
+        start: "2023-11-26T10:00:00.000Z",
+        end: "2023-11-26T11:30:00.000Z",
       },
       {
-        id: "67930",
-        title: "",
-        start: "2023-08-04T00:00:00.000Z",
-        end: "2023-08-04T01:30:00.000Z",
+        id: "22254",
+        title: "Xây dựng chiến lược và vận hành B2B marketing",
+        start: "2023-12-03T10:00:00.000Z",
+        end: "2023-12-03T11:30:00.000Z",
       },
       {
-        id: "87371",
-        title: "",
-        start: "2023-08-07T00:00:00.000Z",
-        end: "2023-08-07T01:30:00.000Z",
-      },
-      {
-        id: "80937",
-        title: "",
-        start: "2023-08-09T00:00:00.000Z",
-        end: "2023-08-09T01:30:00.000Z",
-      },
-      {
-        id: "66587",
-        title: "",
-        start: "2023-08-11T00:00:00.000Z",
-        end: "2023-08-11T01:30:00.000Z",
-      },
-      {
-        id: "12917",
-        title: "",
-        start: "2023-08-14T00:00:00.000Z",
-        end: "2023-08-14T01:30:00.000Z",
-      },
-      {
-        id: "65579",
-        title: "",
-        start: "2023-08-16T00:00:00.000Z",
-        end: "2023-08-16T01:30:00.000Z",
-      },
-      {
-        id: "71490",
-        title: "",
-        start: "2023-08-18T00:00:00.000Z",
-        end: "2023-08-18T01:30:00.000Z",
-      },
-      {
-        id: "77418",
-        title: "",
-        start: "2023-08-21T00:00:00.000Z",
-        end: "2023-08-21T01:30:00.000Z",
-      },
-      {
-        id: "89663",
-        title: "",
-        start: "2023-08-23T00:00:00.000Z",
-        end: "2023-08-23T01:30:00.000Z",
-      },
-      {
-        id: "63114",
-        title: "",
-        start: "2023-08-25T00:00:00.000Z",
-        end: "2023-08-25T01:30:00.000Z",
-      },
-      {
-        id: "93960",
-        title: "",
-        start: "2023-08-28T00:00:00.000Z",
-        end: "2023-08-28T01:30:00.000Z",
-      },
-      {
-        id: "27668",
-        title: "",
-        start: "2023-08-30T00:00:00.000Z",
-        end: "2023-08-30T01:30:00.000Z",
-      },
-      {
-        id: "54643",
-        title: "",
-        start: "2023-09-01T00:00:00.000Z",
-        end: "2023-09-01T01:30:00.000Z",
+        id: "30200",
+        title: "Xây dựng chiến lược và vận hành B2B marketing",
+        start: "2023-12-10T10:00:00.000Z",
+        end: "2023-12-10T11:30:00.000Z",
       },
     ],
     total_rating: 0,
@@ -195,226 +124,637 @@ export const courses: Course[] = [
     ],
     status: "COMPLETED",
   },
-  
+  {
+    _id: "course_2",
+    name: "Sống trong ngân sách",
+    user_id: "user_2",
+    image:
+      "https://anvest.vn/wp-content/uploads/2023/05/240523-Lop-3.6-1200x628-1.jpg",
+    thumbnail: "",
+    price: 500000,
+    createdAt: "2023-09-20T00:00:00.000Z",
+    startDate: "2023-12-23T00:00:00.000Z",
+    endDate: "2024-01-23T00:00:00.000Z",
+    category: ["tài chính", "phát triển bản thân"],
+    type: "hybrid",
+    address: {
+      name: "238 Nam Kỳ Khởi Nghĩa, Phường 8, Quận 3, Tp.HCM",
+      lat: 10.784699838715778,
+      lng: 106.68917392159419,
+    },
+    short_description: `Sau khóa học, bạn sẽ có cái nhìn khác về vấn đề tiền bạc, biết cách làm chủ tiền bạc và có thể bắt đầu xây dựng cuộc sống mà mình mơ ước.`,
+    description: `
+    <ul>
+  <li>Hiểu về bản thân và cách ra các quyết định tài chính</li>
+  <li>Nhận diện được các thói quen, hành vi quản lý tài chính cản trở việc sống trong ngân sách</li>
+  <li>Lập kế hoạch chi tiêu trong 6 đến 12 tháng</li>
+</ul>
+  `,
+    requirement: "",
+    schedule: [
+      {
+        id: "85287",
+        title: "Sống trong ngân sách",
+        start: "2023-11-26T10:00:00.000Z",
+        end: "2023-11-26T11:30:00.000Z",
+      },
+      {
+        id: "22254",
+        title: "Sống trong ngân sách",
+        start: "2023-12-03T10:00:00.000Z",
+        end: "2023-12-03T11:30:00.000Z",
+      },
+      {
+        id: "30200",
+        title: "Sống trong ngân sách",
+        start: "2023-12-10T10:00:00.000Z",
+        end: "2023-12-10T11:30:00.000Z",
+      },
+    ],
+    total_rating: 0,
+    total_student: 10,
+    total_enroll: 0,
+    student_Ids: [],
+    status: "PUBLIC",
+  },
+  {
+    _id: "course_3",
+    name: "Lập trình Python",
+    user_id: "user_3",
+    image:
+      "https://cdn-skill.kynaenglish.vn/uploads/courses/1167/img/image_url-1603443876.jpg",
+    thumbnail: "https://www.youtube.com/watch?v=NZj6LI5a9vc",
+    price: 799000,
+    createdAt: "2023-09-20T00:00:00.000Z",
+    startDate: "2023-12-23T00:00:00.000Z",
+    endDate: "2024-01-23T00:00:00.000Z",
+    category: ["cntt", "python"],
+    type: "online",
+    address: {},
+    short_description: `Cung cấp các kiến thức về Python: Kiều kiện, vòng lặp, list, hàm, hướng đối tượng, exception, regular expression, file`,
+    description: `
+    <ul>
+    <li>Kiến thức cơ bản bao gồm:
+      <ul>
+        <li>in ấn</li>
+        <li>nhập liệu</li>
+        <li>điều kiện</li>
+        <li>vòng lặp</li>
+        <li>list</li>
+        <li>tupble</li>
+        <li>dictionary</li>
+        <li>hàm</li>
+      </ul>
+    </li>
+    <li>Kiến thức về Exception:
+      <ul>
+        <li>try-except</li>
+        <li>đối của ngoại lệ</li>
+        <li>kích hoạt ngoại lệ</li>
+        <li>tự định nghĩa ngoại lệ</li>
+      </ul>
+    </li>
+    <li>Kiến thức về I/O File:
+      <ul>
+        <li>Đọc file</li>
+        <li>Ghi file</li>
+        <li>Bổ sung dữ liệu cho file</li>
+        <li>Đọc + ghi file</li>
+        <li>Ghi + đọc file</li>
+        <li>Bổ sung + đọc file</li>
+        <li>Làm việc với thư mục</li>
+      </ul>
+    </li>
+    <li>Kiến thức về lập trình OOP:
+      <ul>
+        <li>Lớp</li>
+        <li>đối tượng</li>
+        <li>hàm tạo</li>
+        <li>Getter và Setter</li>
+        <li>thừa kế</li>
+      </ul>
+    </li>
+  </ul>
+  `,
+    requirement: `Không cần kinh nghiệm lập trình`,
+    schedule: [
+      {
+        id: "85287",
+        title: "Lập trình Python",
+        start: "2023-11-26T10:00:00.000Z",
+        end: "2023-11-26T11:30:00.000Z",
+      },
+      {
+        id: "22254",
+        title: "Lập trình Python",
+        start: "2023-12-03T10:00:00.000Z",
+        end: "2023-12-03T11:30:00.000Z",
+      },
+      {
+        id: "30200",
+        title: "Lập trình Python",
+        start: "2023-12-10T10:00:00.000Z",
+        end: "2023-12-10T11:30:00.000Z",
+      },
+    ],
+    total_rating: 0,
+    total_student: 10,
+    total_enroll: 0,
+    student_Ids: [],
+    status: "PUBLIC",
+  },
+  {
+    _id: "course_4",
+    name: "Đánh Thức Năng Lực Giao Tiếp Trong Bạn",
+    user_id: "user_4",
+    image: "https://i.ytimg.com/vi/8HzkwzkfR1k/maxresdefault.jpg",
+    thumbnail: "https://www.youtube.com/watch?v=8HzkwzkfR1k",
+    price: 789000,
+    createdAt: "2023-09-20T00:00:00.000Z",
+    startDate: "2023-12-23T00:00:00.000Z",
+    endDate: "2024-01-23T00:00:00.000Z",
+    category: ["tâm lý", "phát triển bản thân"],
+    type: "online",
+    address: {},
+    short_description: `Chào mừng bạn đến với khóa học "Đánh Thức Năng Lực Giao Tiếp Trong Bạn". Đây là khóa học dành cho những người can đảm, muốn làm chủ kỹ năng giao tiếp.`,
+    description: `
+    <ul>
+  <li>Trị Tận Gốc những trở ngại trong giao tiếp của bạn</li>
+  <li>Đánh Thức nguồn năng lượng bên trong của bản thân</li>
+  <li>Cởi Mở Tư Duy</li>
+  <li>Nắm Được Chìa Khóa của việc giao tiếp</li>
+  <li>Trở thành một người hoàn toàn mới</li>
+</ul>
+  `,
+    requirement: `<ul>
+    <li>Giám đốc kinh doanh, trưởng bộ phận kinh doanh, nhân viên kinh doanh</li>
+    <li>Giám đốc đối ngoại, trưởng bộ phận đối ngoại, nhân viên đối ngoại</li>
+    <li>Những người muốn vượt qua rào cản giao tiếp</li>
+    <li>Những người muốn làm chủ kỹ năng giao tiếp</li>
+  </ul>`,
+    schedule: [
+      {
+        id: "85287",
+        title: "Đánh Thức Năng Lực Giao Tiếp Trong Bạn",
+        start: "2023-11-26T10:00:00.000Z",
+        end: "2023-11-26T11:30:00.000Z",
+      },
+      {
+        id: "22254",
+        title: "Đánh Thức Năng Lực Giao Tiếp Trong Bạn",
+        start: "2023-12-03T10:00:00.000Z",
+        end: "2023-12-03T11:30:00.000Z",
+      },
+      {
+        id: "30200",
+        title: "Đánh Thức Năng Lực Giao Tiếp Trong Bạn",
+        start: "2023-12-10T10:00:00.000Z",
+        end: "2023-12-10T11:30:00.000Z",
+      },
+    ],
+    total_rating: 0,
+    total_student: 10,
+    total_enroll: 0,
+    student_Ids: [],
+    status: "PUBLIC",
+  },
+  {
+    _id: "course_5",
+    name: "Trở Thành Quý Cô Thanh Lịch cùng Tác Giả Sách Maggie Maggie",
+    user_id: "user_5",
+    image: "https://i.ytimg.com/vi/HJWHdzUzvpA/maxresdefault.jpg",
+    thumbnail: "https://www.youtube.com/watch?app=desktop&v=HJWHdzUzvpA",
+    price: 1099000,
+    createdAt: "2023-09-20T00:00:00.000Z",
+    startDate: "2023-12-23T00:00:00.000Z",
+    endDate: "2024-01-23T00:00:00.000Z",
+    category: ["phát triển bản thân", "phong cách sống"],
+    type: "online",
+    address: {},
+    short_description: `Quý Cô Thanh Lịch - Hành trình trở thành một phiên bản rực rỡ tuy không quá khó và đòi hỏi đầu tư nhiều về tiền bạc, nhưng việc thông tin có sẵn trên internet thường không áp dụng được vào thực tiễn cho thị trường Việt Nam khiến chị em phụ nữ dễ bối rối trước những nguồn thông tin này.`,
+    description: `
+    <ul>
+  <li>Maggie Maggie - Tác giả 2 quyển sách đã xuất bản bởi Bachviet Books và Bloom Books.</li>
+  <li>Với kinh nghiệm hơn 10 năm làm việc ở vị trí quản lý cấp cao tại những ngành nghề phong cách sống cao cấp, Maggie sẽ hướng dẫn các bạn những những kiến thức thực tiễn để giúp bạn tiến bước tiếp theo trong hành trình trở thành quý cô thanh lịch, trí thức và hiện đại được đồng nghiệp, khách hàng và những người xung quanh yêu mến. Từ đó mở ra những cơ hội mới trong công việc và cuộc sống cho tương lai của bạn.</li>
+  <li>Khóa học này được biên soạn dựa trên kinh nghiệm thực tiễn và sắp xếp theo nhu cầu thực tế. Bạn chỉ cần dành ra 30 phút thực hành trong 15 ngày để những bài tập này trở thành một phần trong đời sống giao tiếp xã hội của bạn.</li>
+</ul>
+  `,
+    requirement: `<ul>
+    <li>Sinh viên mới ra trường hoặc những người mới đi làm chưa nắm vững những quy tắc giao tiếp, ứng xử xã hội.</li>
+    <li>Những chị em phụ nữ mong muốn thay đổi bản thân để tiếp cận những công việc tốt hơn đòi hỏi kỹ năng giao tiếp.</li>
+    <li>Những chị em mong muốn có một cuộc sống xã hội vui vẻ và tích cực, tạo được mối quan hệ tốt đẹp với những người xung quanh.</li>
+    <li>Những chị em vừa thay đổi môi trường sống – những nơi đòi hỏi sự tinh tế về ngoại hình và kỹ năng giao tiếp.</li>
+  </ul>`,
+    schedule: [
+      {
+        id: "85287",
+        title: "Trở Thành Quý Cô Thanh Lịch cùng Tác Giả Sách Maggie Maggie",
+        start: "2023-11-26T10:00:00.000Z",
+        end: "2023-11-26T11:30:00.000Z",
+      },
+      {
+        id: "22254",
+        title: "Trở Thành Quý Cô Thanh Lịch cùng Tác Giả Sách Maggie Maggie",
+        start: "2023-12-03T10:00:00.000Z",
+        end: "2023-12-03T11:30:00.000Z",
+      },
+      {
+        id: "30200",
+        title: "Trở Thành Quý Cô Thanh Lịch cùng Tác Giả Sách Maggie Maggie",
+        start: "2023-12-10T10:00:00.000Z",
+        end: "2023-12-10T11:30:00.000Z",
+      },
+    ],
+    total_rating: 0,
+    total_student: 10,
+    total_enroll: 0,
+    student_Ids: [],
+    status: "PUBLIC",
+  },
+  {
+    _id: "course_6",
+    name: "Chỉnh sửa ảnh, cắt ghép ảnh với Photoshop",
+    user_id: "user_6",
+    image: "https://i.ytimg.com/vi/B_kfBjEF9ko/maxresdefault.jpg",
+    thumbnail: "https://www.youtube.com/watch?v=RTBCj0bImF0",
+    price: 439000,
+    createdAt: "2023-09-20T00:00:00.000Z",
+    startDate: "2023-12-23T00:00:00.000Z",
+    endDate: "2024-01-23T00:00:00.000Z",
+    category: ["thiết kế"],
+    type: "online",
+    address: {},
+    short_description: `Khóa học Chỉnh sửa ảnh, cắt ghép ảnh với Photoshop sẽ hướng dẫn bạn chỉnh sửa ảnh chân dung và một số thể loại khác như chụp phong cảnh, chụp ảnh động vật, chụp ảnh đám cưới, chụp thể thao… Ngoài ra khóa học sẽ cung cấp cho các bạn những kỹ năng về cắt ghép ảnh chuyên nghiệp với phần mềm Photoshop.`,
+    description: `
+    <ul>
+  <li>Khóa học này được thiết kế để làm việc trên phiên bản Photoshop mới nhất, nhưng các kỹ năng bạn học được cũng sẽ áp dụng được trên các phiên bản cũ hơn của Photoshop.</li>
+  <li>Điểm khác biệt của khóa học này là chúng tôi cung cấp cho các bạn những kỹ năng từ những công việc thực tế, không đi sâu vào giới thiệu vào các công cụ, chức năng trong photoshop mà thông qua các bài thực hành cụ thể giúp các bạn làm chủ các công cụ và chức năng trong phần mềm chuyên nghiệp này.</li>
+  <li>Trong khóa học, bạn sẽ được hướng dẫn các kỹ năng sau:</li>
+  <ul>
+    <li>Cách sử dụng các công cụ cơ bản của Photoshop để chỉnh sửa ảnh, bao gồm công cụ crop, resize, brightness/contrast, và levels và nhiều công cụ khác.</li>
+    <li>Cách tạo lớp và sử dụng các công cụ chọn trong Photoshop để cắt ghép ảnh.</li>
+    <li>Cách sử dụng công cụ trong Photoshop để sửa chữa các vết bẩn, trầy xước và các khuyết điểm khác trên ảnh.</li>
+    <li>Cách tạo hiệu ứng màu sắc và ánh sáng cho ảnh.</li>
+    <li>Cách cắt ghép ảnh chuyên nghiệp với các công cụ có sẵn trong Photoshop.</li>
+    <li>Các cách ghép ảnh chân thực trong thực tế.</li>
+    <li>Cách tạo một số hiệu ứng ảnh đẹp mắt.</li>
+  </ul>
+</ul>
+  `,
+    requirement: `Những bạn thích chụp ảnh, thích chỉnh sửa ảnh và đam mê về nhiếp ảnh`,
+    schedule: [
+      {
+        id: "85287",
+        title: "Chỉnh sửa ảnh, cắt ghép ảnh với Photoshop",
+        start: "2023-11-26T10:00:00.000Z",
+        end: "2023-11-26T11:30:00.000Z",
+      },
+      {
+        id: "22254",
+        title: "Chỉnh sửa ảnh, cắt ghép ảnh với Photoshop",
+        start: "2023-12-03T10:00:00.000Z",
+        end: "2023-12-03T11:30:00.000Z",
+      },
+      {
+        id: "30200",
+        title: "Chỉnh sửa ảnh, cắt ghép ảnh với Photoshop",
+        start: "2023-12-10T10:00:00.000Z",
+        end: "2023-12-10T11:30:00.000Z",
+      },
+    ],
+    total_rating: 0,
+    total_student: 10,
+    total_enroll: 0,
+    student_Ids: [],
+    status: "PUBLIC",
+  },
+  {
+    _id: "course_7",
+    name: "Dòng tiền (cashflow) và tài chính cá nhân",
+    user_id: "user_2",
+    image:
+      "https://anvest.vn/wp-content/uploads/2023/05/Feature-Image_Cashflow-trong-tai-chinh-ca-nhan_1200x628.png",
+    thumbnail: "",
+    price: 500000,
+    createdAt: "2023-09-20T00:00:00.000Z",
+    startDate: "2023-12-23T00:00:00.000Z",
+    endDate: "2024-01-23T00:00:00.000Z",
+    category: ["tài chính", "phát triển bản thân"],
+    type: "online",
+    address: {},
+    short_description: `Quản lý dòng tiền là khái niệm ta thường gặp đối với một doanh nghiệp. Tuy nhiên, mỗi người cũng có thể quản lý dòng tiền cá nhân của mình sao cho hiệu quả để dòng tiền phát huy giá trị cao nhất.`,
+    description: ``,
+    requirement: ``,
+    schedule: [
+      {
+        id: "85287",
+        title: "Dòng tiền (cashflow) và tài chính cá nhân",
+        start: "2023-11-26T10:00:00.000Z",
+        end: "2023-11-26T11:30:00.000Z",
+      },
+      {
+        id: "22254",
+        title: "Dòng tiền (cashflow) và tài chính cá nhân",
+        start: "2023-12-03T10:00:00.000Z",
+        end: "2023-12-03T11:30:00.000Z",
+      },
+      {
+        id: "30200",
+        title: "Dòng tiền (cashflow) và tài chính cá nhân",
+        start: "2023-12-10T10:00:00.000Z",
+        end: "2023-12-10T11:30:00.000Z",
+      },
+    ],
+    total_rating: 0,
+    total_student: 10,
+    total_enroll: 0,
+    student_Ids: [],
+    status: "PUBLIC",
+  },
+  {
+    _id: "course_8",
+    name: "Trái phiếu là gì? Những điều cần biết trước khi đầu tư trái phiếu",
+    user_id: "user_2",
+    image:
+      "https://anvest.vn/wp-content/uploads/2023/05/Feature-Image_Bond-Trai-phieu_1200x628.png",
+    thumbnail: "",
+    price: 500000,
+    createdAt: "2023-09-20T00:00:00.000Z",
+    startDate: "2023-12-23T00:00:00.000Z",
+    endDate: "2024-01-23T00:00:00.000Z",
+    category: ["tài chính", "phát triển bản thân"],
+    type: "online",
+    address: {},
+    short_description: `Đầu tư trái phiếu dạo gần đây là kênh được các nhà đầu tư tin tưởng để “giao phó” khoản tiền của mình. Dù vậy, không hẳn ai trong chúng ta cũng đều hiểu đúng và đủ về trái phiếu và những lợi ích, rủi ro khi đầu tư trái phiếu.`,
+    description: ``,
+    requirement: ``,
+    schedule: [
+      {
+        id: "85287",
+        title:
+          "Trái phiếu là gì? Những điều cần biết trước khi đầu tư trái phiếu",
+        start: "2023-11-26T10:00:00.000Z",
+        end: "2023-11-26T11:30:00.000Z",
+      },
+      {
+        id: "22254",
+        title:
+          "Trái phiếu là gì? Những điều cần biết trước khi đầu tư trái phiếu",
+        start: "2023-12-03T10:00:00.000Z",
+        end: "2023-12-03T11:30:00.000Z",
+      },
+      {
+        id: "30200",
+        title:
+          "Trái phiếu là gì? Những điều cần biết trước khi đầu tư trái phiếu",
+        start: "2023-12-10T10:00:00.000Z",
+        end: "2023-12-10T11:30:00.000Z",
+      },
+    ],
+    total_rating: 0,
+    total_student: 10,
+    total_enroll: 0,
+    student_Ids: [],
+    status: "PUBLIC",
+  },
+  {
+    _id: "course_9",
+    name: "Tài chính cá nhân",
+    user_id: "user_2",
+    image:
+      "https://anvest.vn/wp-content/uploads/2023/05/Feature-Image_Tai-chinh-ca-nhan-la-gi_1200x628.png",
+    thumbnail: "",
+    price: 500000,
+    createdAt: "2023-09-20T00:00:00.000Z",
+    startDate: "2023-12-23T00:00:00.000Z",
+    endDate: "2024-01-23T00:00:00.000Z",
+    category: ["tài chính", "phát triển bản thân"],
+    type: "online",
+    address: {},
+    short_description: `Tài chính cá nhân là vấn đề được nhiều người quan tâm. Trên hành trình đến với thành công một trong những điều bạn cần làm và làm một cách tốt nhất là quản lý tài chính của bản thân hiệu quả. `,
+    description: ``,
+    requirement: ``,
+    schedule: [
+      {
+        id: "85287",
+        title: "Tài chính cá nhân",
+        start: "2023-11-26T10:00:00.000Z",
+        end: "2023-11-26T11:30:00.000Z",
+      },
+      {
+        id: "22254",
+        title: "Tài chính cá nhân",
+        start: "2023-12-03T10:00:00.000Z",
+        end: "2023-12-03T11:30:00.000Z",
+      },
+      {
+        id: "30200",
+        title: "Tài chính cá nhân",
+        start: "2023-12-10T10:00:00.000Z",
+        end: "2023-12-10T11:30:00.000Z",
+      },
+    ],
+    total_rating: 0,
+    total_student: 10,
+    total_enroll: 0,
+    student_Ids: [],
+    status: "PUBLIC",
+  },
+  {
+    _id: "course_10",
+    name: "Nền tảng An tâm tài chính cá nhân",
+    user_id: "user_2",
+    image:
+      "https://anvest.vn/wp-content/uploads/2023/03/workshop-enjoy-money-game.webp",
+    thumbnail: "",
+    price: 500000,
+    createdAt: "2023-04-23T00:00:00.000Z",
+    startDate: "2023-05-23T00:00:00.000Z",
+    endDate: "2023-06-23T00:00:00.000Z",
+    category: ["tài chính", "phát triển bản thân"],
+    type: "online",
+    address: {},
+    short_description: `Tài chính cá nhân là vấn đề được nhiều người quan tâm. Trên hành trình đến với thành công một trong những điều bạn cần làm và làm một cách tốt nhất là quản lý tài chính của bản thân hiệu quả. `,
+    description: ``,
+    requirement: ``,
+    schedule: [
+      {
+        id: "85287",
+        title: "Nền tảng An tâm tài chính cá nhân",
+        start: "2023-11-26T10:00:00.000Z",
+        end: "2023-11-26T11:30:00.000Z",
+      },
+      {
+        id: "22254",
+        title: "Nền tảng An tâm tài chính cá nhân",
+        start: "2023-12-03T10:00:00.000Z",
+        end: "2023-12-03T11:30:00.000Z",
+      },
+      {
+        id: "30200",
+        title: "Nền tảng An tâm tài chính cá nhân",
+        start: "2023-12-10T10:00:00.000Z",
+        end: "2023-12-10T11:30:00.000Z",
+      },
+    ],
+    total_rating: 0,
+    total_student: 10,
+    total_enroll: 0,
+    student_Ids: [
+      "user_1",
+      "user_3",
+      "user_4",
+      "user_5",
+      "user_6",
+      "user_7",
+      "user_8",
+    ],
+    status: "COMPELETD",
+  },
+  {
+    _id: "course_11",
+    name: "Xây dựng chiến lược và vận hành B2B marketing",
+    user_id: "user_1",
+    image:
+      "https://www.cask.vn/wwwroot/resources/img/product/11-2023/2-ngang%20d%C6%B0%E1%BB%9Bi%201mb.png",
+    thumbnail: "",
+    price: 5600000,
+    createdAt: "2023-09-20T00:00:00.000Z",
+    startDate: "2023-12-24T00:00:00.000Z",
+    endDate: "2024-01-11T00:00:00.000Z",
+    category: ["kinh doanh", "marketing"],
+    type: "offline",
+    address: {
+      name: "238 Đ. Nam Kỳ Khởi Nghĩa, HCM",
+      lat: 10.787979437710913,
+      lng: 106.6855432232891,
+    },
+    short_description: "",
+    description: `
+    <ul>
+    <li>6 ĐIỀU CẦM VỀ
+      <ol>
+        <li>PHƯƠNG PHÁP XÁC ĐỊNH PHÂN KHÚC NGÀNH HÀNG & THẤU HIỂU KHÁCH HÀNG B2B<br>Thấu hiểu hành vi, xu hướng khách hàng trong từng phân khúc ngành hàng để đánh giá tiềm năng, xác định thứ tự ưu tiên & lựa chọn phân khúc phù hợp.</li>
+        <li>NẮM VỮNG CÁC BƯỚC THIẾT KẾ & XÂY DỰNG CHIẾN LƯỢC SẢN PHẨM CẠNH TRANH<br>Nắm vững trình tự nghiên cứu và phương pháp xác định giá trị khác biệt so với đối thủ trong cùng phân khúc. Từ đó dễ dàng xây dựng chiến lược Offering & Product Portfolio hiệu quả.</li>
+        <li>LÀM CHỦ NGHỆ THUẬT TRUYỀN THÔNG VỚI QUY TRÌNH XÂY DỰNG KẾ HOẠCH MARKETING BÀI BẢN, CHUYÊN SÂU<br>Dựa trên sự thấu hiểu đặc thù về Inbound Marketing và các kênh truyền thông, định hướng nên những hoạt động truyền thông phù hợp dựa với đặc điểm từng phân khúc ngành hàng.</li>
+        <li>HIỂU & SỬ DỤNG CÁC CÔNG CỤ HỖ TRỢ QUẢN LÝ LEAD THEO FUNNEL VÀ CRM DATABASE<br>Biết cách sử dụng các công cụ hỗ trợ quản lý LEAD theo Funnel và CRM Database để tối ưu được hiệu quả mang lại, đồng thời tránh rủi ro thất thoát thông tin.</li>
+        <li>'CẦM VỀ' CÁC MARKETING FRAMEWORK & TOOLKIT THỰC TIỄN<br>Nắm vững cách sử dụng thuần thục các framework & toolkit để xây dựng các B2B Marketing Campaign, Media Plan, Launch Plan... một cách đồng nhất và hiệu quả.</li>
+        <li>TỰ TAY XÂY DỰNG MỘT B2B MARKETING PLAN HOÀN CHỈNH TỪ CHIẾN LƯỢC ĐẾN THỰC THI<br>Được tự tay xây dựng 1 B2B Marketing Plan hoàn chỉnh dưới sự hướng dẫn trực tiếp từ chuyên gia.</li>
+      </ol>
+    </li>
+  </ul>
+  `,
+    requirement: "",
+    schedule: [
+      {
+        id: "85287",
+        title: "Xây dựng chiến lược và vận hành B2B marketing",
+        start: "2023-11-26T10:00:00.000Z",
+        end: "2023-11-26T11:30:00.000Z",
+      },
+      {
+        id: "22254",
+        title: "Xây dựng chiến lược và vận hành B2B marketing",
+        start: "2023-12-03T10:00:00.000Z",
+        end: "2023-12-03T11:30:00.000Z",
+      },
+      {
+        id: "30200",
+        title: "Xây dựng chiến lược và vận hành B2B marketing",
+        start: "2023-12-10T10:00:00.000Z",
+        end: "2023-12-10T11:30:00.000Z",
+      },
+    ],
+    total_rating: 0,
+    total_student: 10,
+    total_enroll: 0,
+    student_Ids: [],
+    status: "PUBLIC",
+  },
 ];
 
 export const reviews: Review[] = [
   {
     _id: "review_1",
     isUnnamed: false,
-    user_id: "user_1",
+    user_id: "user_2",
     course_id: "course_1",
-    createdAt: "2023-10-29T14:00:20.444Z",
-    content: "Khóa học rất thú vị và bổ ích, giúp tôi tiến bộ rõ rệt!",
+    createdAt: "2023-12-14T14:00:20.444Z",
+    content:
+      "Khoá học mang đến góc nhìn mới về nhóm đối tượng B2B, khả năng tiếp cận, thấu hiểu và những phương án để thay đổi hành vi, quyết định của họ. Những kiến thức học được giúp mình phân khúc khách hàng hiệu quả hơn, cung cấp nhiều ý tưởng để khai thác những nhóm khách hàng mới, từ đó xây dựng chiến lược phù hợp cho từng phân khúc.",
     rating: 5,
-    sentiment: [0.05521459025727542, 0.7365636903740137, 0.20822171936871087],
+    sentiment: [0.004077334888279438, 0.988004744052887, 0.007917926646769047],
   },
   {
     _id: "review_2",
     isUnnamed: false,
-    user_id: "user_2",
+    user_id: "user_3",
     course_id: "course_1",
-    createdAt: "2023-12-13T03:29:41.834Z",
-    content: "Nội dung chi tiết và dễ hiểu, giảng viên rất tận tâm.",
-    rating: 1,
-    sentiment: [0.5725246190130701, 0.20903698556162878, 0.21843839542530116],
+    createdAt: "2023-12-14T00:00:20.444Z",
+    content:
+      "Kiến thức khóa học thực tế,mình có thể ứng dụng được ngay vào doanh nghiệp. Giảng nhiệt tình, giải đáp mọi thắc mắc theo cách thực tiễn, đi thẳng trọng tâm chứ không chỉ là lý thuyết suông. Nội dung bài giảng được biên soạn theo trình tự rõ ràng, tích hợp được nhiều nội dung quan trọng.",
+    rating: 5,
+    sentiment: [0.013725182972848415, 0.9684061408042908, 0.017868727445602417],
   },
   {
     _id: "review_3",
     isUnnamed: false,
-    user_id: "user_3",
+    user_id: "user_4",
     course_id: "course_1",
-    createdAt: "2023-11-23T14:03:35.158Z",
-    content: "Tôi hài lòng với sự đa dạng và sâu sắc của nội dung khóa học.",
-    rating: 4,
-    sentiment: [0.07919356644329423, 0.5816131277424808, 0.33919330581422497],
+    createdAt: "2023-12-12T01:00:20.444Z",
+    content:
+      "Khóa học đi sâu vào kiến thức, các bài tập có tính thực tiễn cao, giải quyết trực tiếp bài toán của thương hiệu. Khi tham gia khóa học, Thủy cùng team đã có cơ hội nhìn nhận lại một cách rõ nét về portfolio sản phẩm và chuỗi giá trị cũng như những phân khúc khách hàng mà thương hiệu Kompa đang nhắm đến. Đối với Thủy, kiến thức về phân khúc khách hàng, CVP & FAB thật sự rất đắt giá vì nó là bộ ba công cụ nồng cốt giúp thương hiệu xây dựng kế hoạch và thực thi B2B Marketing hiệu quả.",
+    rating: 5,
+    sentiment: [
+      0.0032907428685575724, 0.9895110726356506, 0.007198183331638575,
+    ],
   },
   {
     _id: "review_4",
     isUnnamed: false,
-    user_id: "user_4",
+    user_id: "user_5",
     course_id: "course_1",
-    createdAt: "2023-09-19T09:57:53.950Z",
-    content: "Khóa học mang lại cái nhìn mới mẻ về lĩnh vực mà tôi quan tâm.",
-    rating: 1,
-    sentiment: [0.13132802458201764, 0.13389982412753443, 0.7347721512904479],
+    createdAt: "2023-12-12T01:00:20.444Z",
+    content:
+      "Giảng viên rất có tâm, bài giảng thiết kế chuyên sâu, rất hữu ích cho những bạn muốn đào sâu kiến thức chuyên môn về marketing từ kinh nghiệm những anh chị senior trong ngành !",
+    rating: 5,
+    sentiment: [0.001929483376443386, 0.9926538467407227, 0.005416760221123695],
   },
   {
     _id: "review_5",
     isUnnamed: false,
-    user_id: "user_5",
+    user_id: "user_6",
     course_id: "course_1",
-    createdAt: "2023-11-09T13:49:16.168Z",
-    content:
-      "Nội dung khóa học phong phú, giúp tôi có cái nhìn tổng quan và chi tiết về chủ đề.",
-    rating: 1,
-    sentiment: [0.19391047708024414, 0.23291975135892892, 0.5731697715608269],
+    createdAt: "2023-12-12T09:00:20.444Z",
+    content: "Thời gian ít, thông tin quá nhiều",
+    rating: 3,
+    sentiment: [0.07322478294372559, 0.3151547312736511, 0.6116204261779785],
   },
   {
     _id: "review_6",
     isUnnamed: false,
-    user_id: "user_6",
+    user_id: "user_7",
     course_id: "course_1",
-    createdAt: "2023-09-26T16:47:14.450Z",
-    content:
-      "Tôi rất ấn tượng với sự chuyên nghiệp và kiến thức sâu rộng của giảng viên.",
-    rating: 4,
-    sentiment: [0.038859339682049375, 0.09623179236158932, 0.8649088679563613],
+    createdAt: "2023-12-12T08:00:20.444Z",
+    content: "Không đúng nhu cầu",
+    rating: 2,
+    sentiment: [0.9502519965171814, 0.007324289996176958, 0.04242374375462532],
   },
   {
     _id: "review_7",
     isUnnamed: false,
-    user_id: "user_7",
-    course_id: "course_1",
-    createdAt: "2023-09-05T22:25:45.196Z",
-    content:
-      "Khóa học không chỉ cung cấp kiến thức mà còn khuyến khích thái độ tích cực trong học tập.",
-    rating: 2,
-    sentiment: [0.20220724246349053, 0.051608118952628936, 0.7461846385838805],
-  },
-  {
-    _id: "review_8",
-    isUnnamed: false,
     user_id: "user_8",
     course_id: "course_1",
-    createdAt: "2023-09-19T23:36:30.969Z",
-    content:
-      "Tôi học được rất nhiều điều bổ ích từ khóa học này, cảm ơn giảng viên!",
-    rating: 2,
-    sentiment: [0.040015744373640756, 0.3307801322717755, 0.6292041233545838],
-  },
-  {
-    _id: "review_9",
-    isUnnamed: false,
-    user_id: "user_9",
-    course_id: "course_1",
-    createdAt: "2023-11-05T00:32:28.888Z",
-    content: "Nội dung rất đặc sắc, phù hợp với nhu cầu học tập của tôi.",
-    rating: 1,
-    sentiment: [0.6529612656688554, 0.05698267512925343, 0.29005605920189115],
-  },
-  {
-    _id: "review_10",
-    isUnnamed: false,
-    user_id: "user_10",
-    course_id: "course_1",
-    createdAt: "2023-12-03T06:05:05.851Z",
-    content: "Tôi cảm thấy khóa học này rất thú vị và hữu ích.",
-    rating: 1,
-    sentiment: [0.5610326458919798, 0.28235891844453476, 0.15660843566348542],
-  },
-  {
-    _id: "review_11",
-    isUnnamed: false,
-    user_id: "user_11",
-    course_id: "course_2",
-    createdAt: "2023-10-20T08:35:57.859Z",
-    content: "Giảng viên rất am hiểu và phong cách giảng dạy rất thân thiện.",
-    rating: 1,
-    sentiment: [0.13415958705609066, 0.6425646537733052, 0.2232757591706042],
-  },
-  {
-    _id: "review_12",
-    isUnnamed: false,
-    user_id: "user_12",
-    course_id: "course_2",
-    createdAt: "2023-10-21T03:48:01.253Z",
-    content:
-      "Khóa học có nhiều bài tập thực hành, giúp tôi nắm vững kiến thức.",
-    rating: 1,
-    sentiment: [0.3617245024599526, 0.2450025165626847, 0.39327298097736274],
-  },
-  {
-    _id: "review_13",
-    isUnnamed: false,
-    user_id: "user_13",
-    course_id: "course_2",
-    createdAt: "2023-11-05T01:14:58.502Z",
-    content: "Nội dung rất thực tế và áp dụng được vào công việc hàng ngày.",
-    rating: 2,
-    sentiment: [0.25634856629986097, 0.6076603500793969, 0.13599108362074208],
-  },
-  {
-    _id: "review_14",
-    isUnnamed: false,
-    user_id: "user_14",
-    course_id: "course_2",
-    createdAt: "2023-10-09T21:43:08.817Z",
-    content:
-      "Tôi rất hạnh phúc khi đã tham gia khóa học này, đáng giá đồng tiền.",
-    rating: 4,
-    sentiment: [0.3517169964680408, 0.4743828068712212, 0.17390019666073792],
-  },
-  {
-    _id: "review_15",
-    isUnnamed: false,
-    user_id: "user_15",
-    course_id: "course_2",
-    createdAt: "2023-09-20T21:03:58.169Z",
-    content:
-      "Giảng viên rất tận tâm, sẵn sàng giải đáp mọi thắc mắc của học viên.",
-    rating: 5,
-    sentiment: [0.2714644250858835, 0.36323248281140946, 0.36530309210270706],
-  },
-  {
-    _id: "review_16",
-    isUnnamed: false,
-    user_id: "user_16",
-    course_id: "course_2",
-    createdAt: "2023-11-24T16:33:00.352Z",
-    content: "Khóa học rất linh hoạt, phù hợp với mọi đối tượng học viên.",
+    createdAt: "2023-12-12T07:00:20.444Z",
+    content: "Tạm được",
     rating: 3,
-    sentiment: [
-      0.000013751190741874761, 0.853709816967509, 0.14627643184174915,
-    ],
-  },
-  {
-    _id: "review_17",
-    isUnnamed: false,
-    user_id: "user_17",
-    course_id: "course_2",
-    createdAt: "2023-09-23T06:35:51.295Z",
-    content:
-      "Tôi đã áp dụng được nhiều kỹ năng học được từ khóa học vào công việc.",
-    rating: 1,
-    sentiment: [0.3243357601706522, 0.3363074954731506, 0.3393567443561972],
-  },
-  {
-    _id: "review_18",
-    isUnnamed: false,
-    user_id: "user_18",
-    course_id: "course_2",
-    createdAt: "2023-11-18T14:04:17.456Z",
-    content: "Khóa học rất thông tin và có cơ sở lý thuyết chặt chẽ.",
-    rating: 1,
-    sentiment: [0.014972669230701579, 0.7237880251785739, 0.2612393055907245],
-  },
-  {
-    _id: "review_19",
-    isUnnamed: false,
-    user_id: "user_19",
-    course_id: "course_2",
-    createdAt: "2023-12-11T03:51:32.983Z",
-    content:
-      "Tôi đã tìm thấy những câu trả lời cho những thắc mắc từ khóa học này.",
-    rating: 3,
-    sentiment: [0.33099752371413926, 0.39895703051957987, 0.27004544576628076],
-  },
-  {
-    _id: "review_20",
-    isUnnamed: false,
-    user_id: "user_20",
-    course_id: "course_2",
-    createdAt: "2023-09-04T04:15:53.891Z",
-    content: "Giảng viên rất thân thiện và hỗ trợ nhiệt tình, rất cảm kích!",
-    rating: 4,
-    sentiment: [0.4761883001783925, 0.09310276443527818, 0.4307089353863293],
+    sentiment: [0.026447631418704987, 0.11868280172348022, 0.8548696041107178],
   },
 ];
 
 export const users: User[] = [
   {
-    _id: "admin",
+    _id: "user_100",
     name: "Admin",
     avatar: "",
     email: "admin@gmail.com",
@@ -571,7 +911,7 @@ export const users: User[] = [
     _id: "user_8",
     name: "Trình Nguyễn",
     avatar: "https://img-c.udemycdn.com/user/200_H/141816232_0983.jpg",
-    email: "user7@gmail.com",
+    email: "user8@gmail.com",
     password: "$2b$10$aVOznr8hHsB45XAyULQPkebRK5sRahP7NdeEY21PUZ7eQxDwy51za",
     role: ["user"],
     bio: ``,
@@ -600,165 +940,4 @@ export const certificates: Certificate[] = [
   },
 ];
 
-export const feedbacks: FeedBack[] = [
-  {
-    _id: "fb_1",
-    user_id: "user_1",
-    createdAt: "2023-12-03T09:37:23.799Z",
-    course_id: "course_4",
-    content: "Nội dung không rõ ràng",
-    status: "PENDING",
-  },
-  {
-    _id: "fb_2",
-    user_id: "user_2",
-    createdAt: "2023-12-15T01:06:40.445Z",
-    course_id: "course_4",
-    content: "Chất lượng khóa học thấp",
-    status: "PENDING",
-  },
-  {
-    _id: "fb_3",
-    user_id: "user_3",
-    createdAt: "2023-12-01T16:12:33.723Z",
-    course_id: "course_4",
-    content: "Hướng dẫn viên không chuyên nghiệp",
-    status: "PENDING",
-  },
-  {
-    _id: "fb_4",
-    user_id: "user_4",
-    createdAt: "2023-12-01T20:22:03.151Z",
-    course_id: "course_4",
-    content: "Không hài lòng với trải nghiệm học tập",
-    status: "PENDING",
-  },
-  {
-    _id: "fb_5",
-    user_id: "user_5",
-    createdAt: "2023-12-10T00:13:02.705Z",
-    course_id: "course_4",
-    content: "Thời lượng khóa học không đủ",
-    status: "PENDING",
-  },
-  {
-    _id: "fb_6",
-    user_id: "user_6",
-    createdAt: "2023-12-19T00:11:35.665Z",
-    course_id: "course_4",
-    content: "Không có phản hồi từ giảng viên",
-    status: "PENDING",
-  },
-  {
-    _id: "fb_7",
-    user_id: "user_7",
-    createdAt: "2023-12-11T14:32:30.768Z",
-    course_id: "course_4",
-    content: "Hỗ trợ kỹ thuật không hiệu quả",
-    status: "PENDING",
-  },
-  {
-    _id: "fb_8",
-    user_id: "user_8",
-    createdAt: "2023-12-19T12:57:44.485Z",
-    course_id: "course_4",
-    content: "Tài liệu không được cập nhật",
-    status: "PENDING",
-  },
-  {
-    _id: "fb_9",
-    user_id: "user_9",
-    createdAt: "2023-12-02T13:52:00.916Z",
-    course_id: "course_4",
-    content: "Khóa học không phù hợp với mong đợi",
-    status: "PENDING",
-  },
-  {
-    _id: "fb_10",
-    user_id: "user_10",
-    createdAt: "2023-12-12T00:38:34.058Z",
-    course_id: "course_4",
-    content: "Công cụ học tập không dễ sử dụng",
-    status: "PENDING",
-  },
-  {
-    _id: "fb_11",
-    user_id: "user_11",
-    createdAt: "2023-12-11T21:32:23.503Z",
-    course_id: "course_4",
-    content: "Giá thành không xứng đáng với chất lượng",
-    status: "PENDING",
-  },
-  {
-    _id: "fb_12",
-    user_id: "user_12",
-    createdAt: "2023-12-02T14:04:41.107Z",
-    course_id: "course_4",
-    content: "Lịch học không linh hoạt",
-    status: "PENDING",
-  },
-  {
-    _id: "fb_13",
-    user_id: "user_13",
-    createdAt: "2023-12-08T09:56:00.672Z",
-    course_id: "course_4",
-    content: "Chất lượng video/kết nối không tốt",
-    status: "PENDING",
-  },
-  {
-    _id: "fb_14",
-    user_id: "user_14",
-    createdAt: "2023-12-13T17:18:26.871Z",
-    course_id: "course_4",
-    content: "Thời gian học không linh hoạt",
-    status: "PENDING",
-  },
-  {
-    _id: "fb_15",
-    user_id: "user_15",
-    createdAt: "2023-12-09T14:56:00.890Z",
-    course_id: "course_4",
-    content: "Phương pháp giảng dạy không hiệu quả",
-    status: "PENDING",
-  },
-  {
-    _id: "fb_16",
-    user_id: "user_16",
-    createdAt: "2023-12-03T05:05:01.198Z",
-    course_id: "course_4",
-    content: "Đội ngũ hỗ trợ không thân thiện",
-    status: "PENDING",
-  },
-  {
-    _id: "fb_17",
-    user_id: "user_17",
-    createdAt: "2023-12-21T00:55:16.004Z",
-    course_id: "course_4",
-    content: "Chất lượng bài giảng không tốt",
-    status: "PENDING",
-  },
-  {
-    _id: "fb_18",
-    user_id: "user_18",
-    createdAt: "2023-12-07T01:36:06.923Z",
-    course_id: "course_4",
-    content: "Nội dung không cập nhật theo thực tế",
-    status: "PENDING",
-  },
-  {
-    _id: "fb_19",
-    user_id: "user_19",
-    createdAt: "2023-12-01T11:38:08.820Z",
-    course_id: "course_4",
-    content: "Khóa học không thú vị",
-    status: "PENDING",
-  },
-  {
-    _id: "fb_20",
-    user_id: "user_20",
-    createdAt: "2023-12-15T16:41:25.566Z",
-    course_id: "course_4",
-    content: "Không giống với thực tế",
-    status: "PENDING",
-  },
-];
+export const feedbacks: FeedBack[] = [];

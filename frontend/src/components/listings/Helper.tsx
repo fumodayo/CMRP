@@ -38,23 +38,8 @@ const columns: ColumnsType<DataType> = [
   },
 ];
 
-const Helper = () => {
-  const items = [
-    {
-      _id: "0122",
-      createdAt: "09-10-2023",
-      status: "Đang xử lý",
-      content: "Hủy đăng ký khóa học",
-    },
-    {
-      _id: "0122",
-      createdAt: "09-10-2023",
-      status: "Đang xử lý",
-      content: "Nội dung không giống như quảng cáo",
-    },
-  ];
-
-  return <Table columns={columns} dataSource={items} />;
+const Helper = ({ feedbacks }) => {
+  return <Table columns={columns} dataSource={feedbacks} />;
 };
 
 export default Helper;

@@ -17,8 +17,8 @@ const columns: ColumnsType<Review> = [
   },
   {
     title: "Khóa học",
-    dataIndex: "name",
-    key: "name",
+    dataIndex: "course_name",
+    key: "course_name",
   },
   {
     title: "Đánh giá",
@@ -32,24 +32,7 @@ const columns: ColumnsType<Review> = [
   },
 ];
 
-const ReviewHistory = () => {
-  const reviews = [
-    {
-      _id: "review_1",
-      createdAt: "10-02-2023",
-      name: "Đánh Thức Năng Lực Giao Tiếp Trong Bạn",
-      rating: 3.4,
-      content: "Không hay",
-    },
-    {
-      _id: "review_2",
-      createdAt: "15-02-2023",
-      name: "Chỉnh sửa ảnh, cắt ghép ảnh với Photoshop",
-      rating: 4.3,
-      content: "Cũng ổn",
-    },
-  ];
-
+const ReviewHistory = ({ reviews }) => {
   return <Table columns={columns} dataSource={reviews} />;
 };
 

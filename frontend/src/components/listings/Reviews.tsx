@@ -64,6 +64,16 @@ const Reviews = () => {
         console.error(error);
       });
 
+    const review = {
+      course_id: "course_1",
+      sentiment: point,
+      content: comment,
+    };
+    
+    await axios.post(`http://localhost:8080/api/user/post-comment`, review, {
+      withCredentials: true,
+    });
+
     console.log("comment", comment);
     console.log("rating", convertToRating(point));
   };

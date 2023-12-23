@@ -95,66 +95,17 @@ courseRouter.get(
   })
 );
 
-/** CREATE COURSE */
-courseRouter.post(
-  "/",
-  expressAsyncHandler(async (req, res) => {
-    const {
-      author,
-      name,
-      image,
-      category,
-      price,
-      requirement,
-      short_description,
-      thumbnail,
-      total_student,
-      type,
-      schedule,
-      lesson,
-      startDate,
-      endDate,
-    } = req.body;
-
-    try {
-      await CourseModel.create({
-        _id: uuidv4(),
-        author,
-        name,
-        image,
-        category,
-        price,
-        requirement,
-        short_description,
-        thumbnail,
-        total_student,
-        type,
-        schedule,
-        lesson,
-        startDate,
-        endDate,
-      });
-
-      res.status(201).json("Tạo khóa học thành công");
-    } catch (error) {
-      res.status(500).json({ message: "Lỗi server" });
-    }
-  })
-);
-
 /** GET SIMILAR COURSE */
 courseRouter.post(
   "/similar",
   expressAsyncHandler(async (req, res) => {
-    const { _id } = req.body;
+    const { different_Ids } = req.body;
 
     let query = {
       status: { $in: ["PUBLIC"] },
+      _id: { $nin: different_Ids }, // Loại bỏ các khóa học có _id trong mảng different_Ids
+      category: { $in: ["tài chính", "kinh doanh"] }, // Chỉ lấy các khóa học có category là 'tài chính' hoặc 'kinh doanh'
     };
-
-    if (_id) {
-      query._id = { $nin: _id };
-    }
 
     const similarCourses = await CourseModel.find(query).limit(4);
 
@@ -168,7 +119,6 @@ courseRouter.post(
             isCertificate: instructor.isCertificate,
           };
         }
-
         return { ...course.toObject(), avatar: null, name: null };
       })
     );
