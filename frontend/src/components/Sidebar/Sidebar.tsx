@@ -51,7 +51,7 @@ const Sidebar = ({ role, sidebarItems }) => {
     <nav className="fixed top-0 left-0 h-screen w-[250px] bg-white border border-r-slate-100 shadow-sm">
       <div className="flex items-center justify-center m-5">
         <div
-          onClick={() => navigate(`/${role}`)}
+          onClick={() => navigate(`/`)}
           className="flex flex-start items-center text-slate-500 text-sm font-bold cursor-pointer"
         >
           <img

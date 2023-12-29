@@ -43,7 +43,7 @@ const Chip: React.FC<ChipProps> = ({
           return (
             <div
               key={item.value || item}
-              className={`flex items-center justify-center px-4 py-2 font-medium min-w-[100px] cursor-pointer
+              className={`flex items-center justify-center px-4 py-2 font-medium min-w-[100px] cursor-pointer uppercase
                 ${
                   isActive
                     ? "text-white bg-emerald-400 hover:shadow-md"

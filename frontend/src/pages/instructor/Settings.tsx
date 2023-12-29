@@ -110,7 +110,7 @@ const Settings = () => {
               <div className="min-h-[200px] bg-neutral-50 p-5 text-neutral-400">
                 {bio}
               </div>
-              <Button onClick={() => navigate("/instructor/certificate")}>
+              <Button onClick={() => navigate("/certificate")}>
                 Gửi xác thực
               </Button>
             </div>

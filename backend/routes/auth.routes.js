@@ -25,7 +25,9 @@ authRouter.post(
     }
 
     if (user.status === "INACTIVE") {
-      return res.status(401).send({ message: "Tài khoản đã bị khóa, hãy liên hệ SĐT: 037631478" });
+      return res
+        .status(401)
+        .send({ message: "Tài khoản đã bị khóa, hãy liên hệ SĐT: 037631478" });
     } else {
       sendToken(res, user, 200, "Login successful");
     }
@@ -36,7 +38,7 @@ authRouter.post(
 authRouter.post(
   "/signup",
   expressAsyncHandler(async (req, res) => {
-    const { email, password, role, name } = req.body;
+    const { email, password } = req.body;
 
     if (!email || !password) {
       return res
@@ -55,7 +57,6 @@ authRouter.post(
       _id: uuidv4(),
       email,
       password,
-      role,
       name: email,
     };
 

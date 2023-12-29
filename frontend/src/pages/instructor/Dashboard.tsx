@@ -76,8 +76,8 @@ const Dashboard = () => {
   //   setIsOpenEditScheduleModal(true);
   // };
 
-  const handleNonpublicCourse = async (course_id) => {
-    const body = { status: "NONPUBLIC" };
+  const handleNonpublicCourse = async (course_id, status) => {
+    const body = { status: status };
     await axios.put(
       `http://localhost:8080/api/instructor/course/${course_id}`,
       body,
@@ -86,16 +86,16 @@ const Dashboard = () => {
       }
     );
 
-    // const updatedData = courseData.map((item) => {
-    //   if (item._id === course_id) {
-    //     return {
-    //       ...item,
-    //       status: "NONPUBLIC",
-    //     };
-    //   }
-    //   return item;
-    // });
-    // setCourseData(updatedData);
+    const updatedData = courseData.map((item) => {
+      if (item._id === course_id) {
+        return {
+          ...item,
+          status: status,
+        };
+      }
+      return item;
+    });
+    setCourseData(updatedData);
 
     toast.success("Ẩn thành công");
   };
@@ -270,13 +270,13 @@ const Dashboard = () => {
         if (record.status === "PENDING") {
           return (
             <Space>
-              <Button
+              {/* <Button
                 type="primary"
                 ghost
                 onClick={() => handleSelectedEditCourse(_id)}
               >
                 Chỉnh sửa thông tin
-              </Button>
+              </Button> */}
               {/* <Button
                 type="primary"
                 ghost
@@ -292,9 +292,20 @@ const Dashboard = () => {
               <Button
                 type="primary"
                 danger
-                onClick={() => handleNonpublicCourse(_id)}
+                onClick={() => handleNonpublicCourse(_id, "NONPUBLIC")}
               >
                 Ẩn khóa học
+              </Button>
+            </Space>
+          );
+        } else if (record.status === "NONPUBLIC") {
+          return (
+            <Space>
+              <Button
+                type="primary"
+                onClick={() => handleNonpublicCourse(_id, "PUBLIC")}
+              >
+                Hiện khóa học
               </Button>
             </Space>
           );
@@ -361,7 +372,7 @@ const Dashboard = () => {
         <div className="flex justify-between">
           <h1 className="font-medium text-2xl">Khóa học</h1>
           <Button>
-            <Link to={"/instructor/create-course"}>Tạo khóa học mới</Link>
+            <Link to={"/create-course"}>Tạo khóa học mới</Link>
           </Button>
         </div>
         <Table columns={columns} dataSource={courseData} />

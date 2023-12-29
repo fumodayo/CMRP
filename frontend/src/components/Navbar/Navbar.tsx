@@ -45,8 +45,8 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="sticky z-50 top-0 bg-white h-[90px] w-full border border-b-slate-100 shadow-sm cursor-pointer">
-      <div className="mx-[90px] 2xl:mx-[280px] my-5">
+    <nav className="sticky z-50 top-0 bg-white h-[90px] w-full border border-b-slate-100 shadow-lg cursor-pointer">
+      <div className="mx-[90px] 2xl:mx-[200px] my-5">
         <ul className="flex items-center justify-between my-5 list-none">
           <li
             onClick={() => navigate("/")}
@@ -88,12 +88,9 @@ const Navbar = () => {
               >
                 Mở khóa học mới
               </div>
-              <IconButton aria-label="cart">
+              <IconButton aria-label="cart" onClick={() => navigate("/cart")}>
                 <StyledBadge badgeContent={cartItems.length} color="secondary">
-                  <ShoppingCartIcon
-                    onClick={() => navigate("/cart")}
-                    className="cursor-pointer"
-                  />
+                  <ShoppingCartIcon className="cursor-pointer" />
                 </StyledBadge>
               </IconButton>
             </div>

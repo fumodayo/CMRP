@@ -152,7 +152,8 @@ const Review = () => {
             <div className="flex bg-zinc-200 px-7 py-5 space-x-5">
               <div className="flex flex-col items-center">
                 <p className="text-xl font-medium">
-                  <span className="text-4xl">{averageRating}</span> trên 5
+                  <span className="text-4xl">{averageRating?.toFixed(1)}</span>
+                  trên 5
                 </p>
                 <Rating
                   name="half-rating-read"

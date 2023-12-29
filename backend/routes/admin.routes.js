@@ -10,15 +10,86 @@ const adminRouter = express.Router();
 
 /** GET USERS */
 adminRouter.get(
-  "/user",
-  isAdmin,
+  "/users",
+  isAuth,
   expressAsyncHandler(async (req, res) => {
-    const users = await UserModel.find({});
-    if (users) {
-      return res.status(200).send(users);
-    }
+    try {
+      const users = await UserModel.find({
+        role: { $nin: ["admin"] }, // Loại bỏ người dùng có vai trò là admin
+      });
 
-    return res.status(501).send({ message: "Authentication" });
+      if (!users || users.length === 0) {
+        return res.status(404).json({ message: "Không tìm thấy người dùng" });
+      }
+
+      const data = [];
+
+      for (const user of users) {
+        const feedback = await FeedbackModel.find({
+          user_id: user._id,
+        });
+
+        const userData = {
+          ...user.toObject(),
+          feedbacks:
+            feedback && feedback.length > 0
+              ? feedback.map((item) => item.toObject())
+              : [], // Nếu có feedback, chuyển đổi thành plain JavaScript object, nếu không, trả về mảng rỗng
+        };
+
+        data.push(userData);
+      }
+
+      return res.status(200).json(data);
+    } catch (error) {
+      return res.status(500).json({
+        message: "Đã xảy ra lỗi khi lấy dữ liệu người dùng và feedback",
+        error: error.message,
+      });
+    }
+  })
+);
+
+/** GET COURSES */
+adminRouter.get(
+  "/courses",
+  isAuth,
+  expressAsyncHandler(async (req, res) => {
+    try {
+      const courses = await CourseModel.find({});
+
+      if (!courses || courses.length === 0) {
+        return res.status(404).json({ message: "Không tìm thấy người dùng" });
+      }
+
+      const data = [];
+
+      for (const course of courses) {
+        const feedback = await FeedbackModel.find({
+          course_id: course._id,
+        });
+
+        const user = await UserModel.findById(course.user_id);
+
+        const userData = {
+          ...course.toObject(),
+          author: user.name,
+          feedbacks:
+            feedback && feedback.length > 0
+              ? feedback.map((item) => item.toObject())
+              : [], // Nếu có feedback, chuyển đổi thành plain JavaScript object, nếu không, trả về mảng rỗng
+        };
+
+        data.push(userData);
+      }
+
+      return res.status(200).json(data);
+    } catch (error) {
+      return res.status(500).json({
+        message: "Đã xảy ra lỗi khi lấy dữ liệu người dùng và feedback",
+        error: error.message,
+      });
+    }
   })
 );
 

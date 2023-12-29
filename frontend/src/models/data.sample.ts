@@ -5,6 +5,7 @@ import {
   User,
   Certificate,
   FeedBack,
+  CartItem,
 } from "./../types/index";
 
 export const categories: Category[] = [
@@ -52,6 +53,11 @@ export const categories: Category[] = [
     _id: "cat_9",
     name: "thiết kế",
     value: "thiết kế",
+  },
+  {
+    _id: "cat_10",
+    name: "ngoại ngữ",
+    value: "ngoại ngữ",
   },
 ];
 
@@ -1004,3 +1010,61 @@ export const certificates: Certificate[] = [
 ];
 
 export const feedbacks: FeedBack[] = [];
+
+
+export const cart: CartItem[] = [
+  {
+    _id: "cart_1",
+    user_id: "user_2",
+    course_id: "course_1",
+    createdAt: "2023-11-18T06:39:00.745Z",
+  },
+  {
+    _id: "cart_2",
+    user_id: "user_3",
+    course_id: "course_1",
+    createdAt: "2023-11-18T06:39:00.745Z",
+  },
+  {
+    _id: "cart_3",
+    user_id: "user_4",
+    course_id: "course_1",
+    createdAt: "2023-11-18T06:39:00.745Z",
+  },
+  {
+    _id: "cart_4",
+    user_id: "user_5",
+    course_id: "course_1",
+    createdAt: "2023-11-18T06:39:00.745Z",
+  },
+  {
+    _id: "cart_5",
+    user_id: "user_6",
+    course_id: "course_1",
+    createdAt: "2023-11-18T06:39:00.745Z",
+  },
+  {
+    _id: "cart_6",
+    user_id: "user_7",
+    course_id: "course_1",
+    createdAt: "2023-11-18T06:39:00.745Z",
+  },
+  {
+    _id: "cart_7",
+    user_id: "user_8",
+    course_id: "course_1",
+    createdAt: "2023-11-18T06:39:00.745Z",
+  },
+  {
+    _id: "cart_8",
+    user_id: "user_50",
+    course_id: "course_1",
+    createdAt: "2023-11-18T06:39:00.745Z",
+  },
+  {
+    _id: "cart_9",
+    user_id: "user_51",
+    course_id: "course_1",
+    createdAt: "2023-11-18T06:39:00.745Z",
+  },
+];

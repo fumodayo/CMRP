@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "lightbox.js-react/dist/index.css";
 import { Tag, Table, Space, Button, Input, InputRef } from "antd";
 import AdminLayout from "../../layouts/AdminLayout";
@@ -17,45 +17,19 @@ import axios from "axios";
 type UserIndex = keyof User;
 
 const AdminDashboard = () => {
-  const [data, setData] = useState<User[]>([
-    {
-      _id: "ce_1",
-      name: "Thảo Nguyễn",
-      status: "ACTIVE",
-      role: ["user", "instructor"],
-      createdAt: "2024-11-26T00:00:00.000Z",
-      feedbacks: [
-        {
-          _id: "0122",
-          createdAt: "2023-11-26T00:00:00.000Z",
-          status: "PENDING",
-          content: "Hủy đăng ký khóa học",
-        },
-        {
-          _id: "0123",
-          createdAt: "2023-11-25T00:00:00.000Z",
-          status: "DONE",
-          content: "Nội dung không giống như quảng cáo",
-        },
-      ],
-    },
-    {
-      _id: "ce_2",
-      name: "Hacker",
-      status: "INACTIVE",
-      role: ["user"],
-      createdAt: "2023-11-26T00:00:00.000Z",
-      feedbacks: [],
-    },
-    {
-      _id: "ce_3",
-      name: "admin",
-      status: "INACTIVE",
-      role: ["user", "admin"],
-      createdAt: "2023-11-26T00:00:00.000Z",
-      feedbacks: [],
-    },
-  ]);
+  const [data, setData] = useState<User[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const { data } = await axios.get("http://localhost:8080/api/admin/users", {
+        withCredentials: true,
+      });
+      setData(data);
+    };
+    fetchData();
+  }, []);
+
+  console.log(data);
 
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
@@ -325,7 +299,7 @@ const AdminDashboard = () => {
       dataIndex: "feedbacks",
       sorter: (a, b) => a.feedbacks.length - b.feedbacks.length,
       render: (_, record) => {
-        const pendingFeedbacks = record.feedbacks.filter(
+        const pendingFeedbacks = record && record.feedbacks.filter(
           (feedback) => feedback.status === "PENDING"
         );
 

@@ -65,11 +65,11 @@ const Reviews = () => {
       });
 
     const review = {
-      course_id: "course_1",
+      course_id: id,
       sentiment: point,
       content: comment,
     };
-    
+
     await axios.post(`http://localhost:8080/api/user/post-comment`, review, {
       withCredentials: true,
     });

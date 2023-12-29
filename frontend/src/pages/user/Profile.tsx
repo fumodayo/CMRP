@@ -12,6 +12,7 @@ import { User, CartItem, Review, FeedBack } from "../../types";
 import { Input, Modal, Select } from "antd";
 import toast from "react-hot-toast";
 import { extractUsername } from "../../utils/extractUsername";
+import { useNavigate } from "react-router-dom";
 
 const { TextArea } = Input;
 
@@ -28,6 +29,7 @@ interface CourseItemProps {
   rating?: number;
   total_students?: number;
   time?: string;
+  status?: string;
 }
 
 type Individual = {
@@ -46,11 +48,14 @@ export const CourseItem: React.FC<CourseItemProps> = ({
   rating,
   total_students,
   time,
+  status,
 }) => {
-  const [status, setStatus] = useState(false);
-  const [daysCountdown, setDaysCountdown] = useState(0);
+  // const [status, setStatus] = useState(false);
+  // const [daysCountdown, setDaysCountdown] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [comment, setComment] = useState("");
+
+  const navigator = useNavigate();
 
   const handleConfirm = async () => {
     const body = {
@@ -70,22 +75,22 @@ export const CourseItem: React.FC<CourseItemProps> = ({
     setIsModalOpen(false);
   };
 
-  useEffect(() => {
-    if (time) {
-      const currentDate = new Date();
-      const startDateTime = new Date(time);
+  // useEffect(() => {
+  //   if (time) {
+  //     const currentDate = new Date();
+  //     const startDateTime = new Date(time);
 
-      const timeDiff = startDateTime.getTime() - currentDate.getTime();
-      const daysRemaining = Math.ceil(timeDiff / (1000 * 3600 * 24));
+  //     const timeDiff = startDateTime.getTime() - currentDate.getTime();
+  //     const daysRemaining = Math.ceil(timeDiff / (1000 * 3600 * 24));
 
-      if (daysRemaining > 0) {
-        setStatus(false);
-        setDaysCountdown(daysRemaining);
-      } else {
-        setStatus(true);
-      }
-    }
-  }, [time]);
+  //     if (daysRemaining > 0) {
+  //       setStatus(false);
+  //       setDaysCountdown(daysRemaining);
+  //     } else {
+  //       setStatus(true);
+  //     }
+  //   }
+  // }, [time]);
 
   return (
     <div className="flex items-center cursor-pointer">
@@ -112,12 +117,14 @@ export const CourseItem: React.FC<CourseItemProps> = ({
           </div>
         </div>
         <span className="flex items-center justify-start font-medium">
-          {status ? "Đang học" : `Còn ${daysCountdown} ngày nữa khai giảng`}
+          {/* {status ? "Đang học" : `Còn ${daysCountdown} ngày nữa khai giảng`} */}
         </span>
         <span className="flex items-center justify-start text-red-500 font-medium hover:underline">
-          {status ? (
+          {status === "IN_PROGRESS" ? (
             <p onClick={() => setIsModalOpen(true)}>Yêu cầu trợ giúp</p>
-          ) : null}
+          ) : (
+            <p onClick={() => navigator(`/course/${_id}`)}>Đánh giá khóa học</p>
+          )}
           <Modal
             title="Gửi yêu cầu trợ giúp"
             okText="Gửi"
@@ -236,6 +243,7 @@ const Profile = () => {
                     type={item.course_details.type}
                     rating={item.course_details.total_rating}
                     total_students={item.course_details.total_student}
+                    status={item.course_details.status}
                   />
                 ))}
               </div>

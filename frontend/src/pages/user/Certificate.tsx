@@ -124,7 +124,6 @@ const Certificate = () => {
       await axios.post(`http://localhost:8080/api/user/cccd`, body, {
         withCredentials: true,
       });
-      toast.success("Gửi xác thực thành công");
     } else {
       const body = { certificates: certificateData };
       await axios.post(`http://localhost:8080/api/user/certificate`, body, {

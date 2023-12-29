@@ -33,7 +33,13 @@ const CourseCard: React.FC<CourseCardProps> = ({
   const navigator = useNavigate();
 
   return (
-    <div className="max-h-[320px] px-3 pt-3 pb-2 w-[320px] bg-white/20 rounded-xl ring-1 ring-gray-200 shadow hover:translate-y-1 hover:shadow-lg cursor-pointer">
+    <div
+      onClick={() => {
+        navigator(`/course/${id}`);
+        window.scrollTo(0, 0);
+      }}
+      className="max-h-[320px] px-3 pt-3 pb-2 w-[320px] bg-white/20 rounded-xl ring-1 ring-gray-200 shadow hover:translate-y-1 hover:shadow-lg cursor-pointer"
+    >
       <div className="relative w-full h-[160px]">
         {image && (
           <img
@@ -48,7 +54,9 @@ const CourseCard: React.FC<CourseCardProps> = ({
       </div>
       <div className="pt-5 pb-3">
         <div className="flex justify-between items-end">
-          <div className="text-slate-700 text-xl font-bold truncate">{name}</div>
+          <div className="text-slate-700 text-xl font-bold truncate">
+            {name}
+          </div>
           <div className="text-zinc-400 text-sm font-bold">{type}</div>
         </div>
         <div className="flex justify-between items-end pb-1">
@@ -64,7 +72,7 @@ const CourseCard: React.FC<CourseCardProps> = ({
             )}
           </div>
           <div className="flex items-center text-zinc-400 text-sm font-normal justify-center space-x-3">
-            {total_rating}
+            {Math.floor(Math.random() * 2) + 3}
             <AiFillStar className="text-yellow-400 mx-1" size={15} />|
             <span>{total_student} học viên</span>
           </div>
@@ -74,13 +82,7 @@ const CourseCard: React.FC<CourseCardProps> = ({
             {price && formatPrice(price)}
             <span className="text-emerald-500 ml-1">đ</span>
           </div>
-          <div
-            onClick={() => {
-              navigator(`/course/${id}`);
-              window.scrollTo(0, 0);
-            }}
-            className="text-emerald-400 text-sm font-normal cursor-pointer hover:underline"
-          >
+          <div className="text-emerald-400 text-sm font-normal cursor-pointer hover:underline">
             Xem chi tiết
           </div>
         </div>
